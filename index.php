@@ -53,6 +53,6 @@ if (isset($userInfoData['email'])) {
     echo 'Email nenalezen.';
 }
 ?>
-benis
+test
 </body>
 </html>
