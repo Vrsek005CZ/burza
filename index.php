@@ -5,7 +5,10 @@ session_start();
 
 if (isset($_COOKIE['user_info'])) {
     $userInfoData = json_decode($_COOKIE['user_info'], true);
+    $userInfoDataArray = json_decode($userInfoData, true);
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -13,45 +16,59 @@ if (isset($_COOKIE['user_info'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Burza</title>
 </head>
-<body>
-    <h1>Vítejte</h1>
+<body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
 
-    <?php
-if (isset($_COOKIE)) {
-    echo 'Cookie: <pre>' . print_r($_COOKIE, true) . '</pre>';
-} else {
-    echo 'cookie neexistuje.';
-}
+    <div class="w-full max-w-5xl">
+        <!-- Záhlaví -->
+        <div class="flex items-center justify-between bg-white shadow-md p-5 rounded-md">
+            <!-- Nadpis -->
+            <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">Online Burza Učebnic</h1>
 
-if (isset($_SESSION)) {
-    echo 'Session: <pre>' . print_r($_SESSION, true) . '</pre>';
-} else {
-    echo 'session neexistuje.';
-}
+            <!-- User Info-->
+            <div class="relative">
+                <!-- Email -->
+                <button id="userDropdown" class="text-gray-600 font-semibold focus:outline-none">
+                    <?php 
+                    if (isset($_COOKIE['user_info'])) {
+                        echo explode('@',htmlspecialchars($userInfoDataArray['email']))[0]; 
+                    }else {
+                        echo "<a href='login.php'>Přihlásit se</a>";
+                    }
+                        
+                    ?>
+                </button>
 
-if (isset($userInfo)) {
-    echo 'User Info: <pre>' . print_r($userInfo, true) . '</pre>';
-} else {
-    echo 'userinfo neexistuje.<br>';
-}
+                <!-- Dropdown jen pro přihlášený -->
+                <?php if (isset($_COOKIE['user_info'])): ?>
+                    <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden z-20">
+                        <a href="profil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profil</a>
+                        <a href="logout.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Odhlásit se</a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
 
-if (isset($userInfoData)) {
-    echo 'User Info Data: <pre>' . print_r($userInfoData, true) . '</pre>';
-} else {
-    echo 'userinfodata neexistuje.';
-}
+    <script>
+        // Aktivovat dropdown
+        const userDropdown = document.getElementById('userDropdown');
+        const dropdownMenu = document.getElementById('dropdownMenu');
 
-echo '<pre>';
-print_r($userInfoData);
-echo '</pre>';
+        userDropdown.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('hidden');
+        });
 
-if (isset($userInfoData['email'])) {
-    echo 'Email: ' . htmlspecialchars($userInfoData['email']);
-} else {
-    echo 'Email nenalezen.';
-}
-?>
+        // Schovat při kliknutí vedle
+        document.addEventListener('click', (event) => {
+            if (!userDropdown.contains(event.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+    </script>
+
+
 </body>
 </html>
