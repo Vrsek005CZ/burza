@@ -1,6 +1,6 @@
 <?php
 session_start();
-//include("connect.php");
+include("connect.php");
 
 
 if (isset($_COOKIE['user_info'])) {
@@ -56,8 +56,7 @@ if (isset($_COOKIE['user_info'])) {
         <!-- Kniha z SQL -->
         <?php
 
-            include 'connect.php';
-            $query ="SELECT nu.nazev AS ucebnice_nazev, ucebnice.foto, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, COUNT(pu.id) AS pocet_ks, ROUND(AVG(pu.cena)) AS avg_cena FROM ucebnice
+            $query ="SELECT ucebnice.id, nu.nazev AS ucebnice_nazev, ucebnice.foto, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, COUNT(pu.id) AS pocet_ks, ROUND(AVG(pu.cena)) AS avg_cena FROM ucebnice
             INNER JOIN nu ON ucebnice.jmeno_id=nu.id
             INNER JOIN kategorie ON ucebnice.kategorie_id=kategorie.id
             INNER JOIN typ ON ucebnice.typ_id=typ.id
@@ -69,7 +68,8 @@ if (isset($_COOKIE['user_info'])) {
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    echo '<a href="kniha.php" class="bg-gray-200 p-4 items-center rounded-md">';
+                    $knihaID = $row['id']; 
+                    echo '<a href="kniha.php?knihaID=' . $knihaID . '" class="bg-gray-200 p-4 items-center rounded-md">';
                     echo '    <div class="bg-gray-100 rounded-md">';
                     echo '        <div class="text-l text-center font-semibold m-1 p-1 h-12">' . htmlspecialchars($row['ucebnice_nazev']) . '</div>';
                     echo '        <img src="foto/ucebnice/' . htmlspecialchars($row['foto']) . '" class="rounded-lg p-1 w-full h-48 object-cover">';
