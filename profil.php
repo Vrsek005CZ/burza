@@ -1,31 +1,11 @@
 <?php
 session_start();
 include("connect.php");
-
-if (isset($_COOKIE['user_info'])) {
-    $userInfoData = json_decode($_COOKIE['user_info'], true);
-    $userInfoDataArray = json_decode($userInfoData, true);
-    $email = $conn->real_escape_string($userInfoDataArray['email']);
-
-    // Načtení informací o uživateli z tabulky user
-    $query = "SELECT * FROM user WHERE email='$email'";
-    $result = $conn->query($query);
-
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-    } else {
-        echo "Uživatel nenalezen.";
-        exit;
-    }
-} else {
-    header("Location: login.php");
-    exit;
-}
+include("userinfo.php");
 
 // Zpracování výběru třídy
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['trida_id'])) {
     $selectedTrida = intval($_POST['trida_id']);
-    $userId = $user['id'];
     
     $updateQuery = "UPDATE user SET trida_id=$selectedTrida WHERE id=$userId";
     if ($conn->query($updateQuery) === TRUE) {

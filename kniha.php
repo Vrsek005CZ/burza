@@ -1,12 +1,32 @@
 <?php
 session_start();
 include("connect.php");
-            
+include("userinfo.php");
+    
 if (isset($_GET['knihaID'])) {
     $knihaID = $_GET['knihaID'];
 } else {
     echo("Chyba: Nezadali jste ID knihy.");
 }
+
+if (isset($_GET['updateKoupil'])) {
+    $id = intval($_GET['updateKoupil']); // Proti SQL injection
+
+    $conn_update = $conn->prepare("UPDATE pu SET koupil = ? WHERE id = ? AND koupil = 0");
+    $conn_update->bind_param("ii", $userId, $id); //i = integer, proti injection
+    $conn_update->execute();
+    
+    if ($conn_update->affected_rows > 0) {
+        echo "Povedlo se";
+    } else {
+        echo "Nepodařilo se aktualizovat záznam. Možná již byl zakoupen nebo kniha neexistuje.";
+    }
+    
+
+    $conn_update->close();
+    exit; 
+}
+
 
 $query ="SELECT ucebnice.id, nu.nazev AS ucebnice_nazev, ucebnice.foto, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev
     FROM ucebnice
@@ -36,15 +56,26 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        
         function potvrdit(id) {
             document.getElementById(`reserveButton-${id}`).classList.add('hidden');
             document.getElementById(`confirmButton-${id}`).classList.remove('hidden');
         }
 
         function rezervovat(id) {
-            document.getElementById(`confirmButton-${id}`).classList.add('hidden');
-            document.getElementById(`messageButton-${id}`).classList.remove('hidden');
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById(`messageButton-${id}`).classList.remove('hidden');
+                    document.getElementById(`confirmButton-${id}`).classList.add('hidden');
+                }
+            };
+
+            xmlhttp.open("GET", `?updateKoupil=${id}`, true); // Volání self-referential stránky s parametrem
+            xmlhttp.send();
         }
+
 
     </script>
     <title>Kniha</title>
@@ -104,6 +135,7 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
             </div>
         </div>
     </div>
+    <div class="text-xl">!!!FOTKY!!!</div>
 
         
 

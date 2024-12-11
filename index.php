@@ -1,13 +1,7 @@
 <?php
 session_start();
 include("connect.php");
-
-
-if (isset($_COOKIE['user_info'])) {
-    $userInfoData = json_decode($_COOKIE['user_info'], true);
-    $userInfoDataArray = json_decode($userInfoData, true);
-}
-
+include("userinfo.php");
 
 ?>
 
@@ -33,7 +27,7 @@ if (isset($_COOKIE['user_info'])) {
                 <button id="userDropdown" class="text-gray-600 font-semibold focus:outline-none">
                     <?php 
                     if (isset($_COOKIE['user_info'])) {
-                        echo explode('@',htmlspecialchars($userInfoDataArray['email']))[0]; 
+                        echo explode('@',htmlspecialchars($email))[0]; 
                     }else {
                         echo "<a href='login.php'>Přihlásit se</a>";
                     }
@@ -56,7 +50,7 @@ if (isset($_COOKIE['user_info'])) {
         <!-- Kniha z SQL -->
         <?php
 
-            $query ="SELECT ucebnice.id, nu.nazev AS ucebnice_nazev, ucebnice.foto, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, COUNT(pu.id) AS pocet_ks, ROUND(AVG(pu.cena)) AS avg_cena FROM ucebnice
+            $query ="SELECT ucebnice.id, nu.nazev AS ucebnice_nazev, ucebnice.foto, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, COUNT(CASE WHEN pu.koupil = 0 THEN 1 END) AS pocet_ks, ROUND(AVG(CASE WHEN pu.koupil = 0 THEN pu.cena END)) AS avg_cena FROM ucebnice
             INNER JOIN nu ON ucebnice.jmeno_id=nu.id
             INNER JOIN kategorie ON ucebnice.kategorie_id=kategorie.id
             INNER JOIN typ ON ucebnice.typ_id=typ.id
