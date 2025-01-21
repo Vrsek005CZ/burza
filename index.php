@@ -17,14 +17,14 @@ include("userinfo.php");
 
     <div class="w-full max-w-5xl">
         <!-- Záhlaví -->
-        <div class="flex items-center justify-between bg-white shadow-md p-5 rounded-md">
+        <div class="relative items-center justify-between bg-white shadow-md p-5 rounded-md">
             <!-- Nadpis -->
             <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">Online Burza Učebnic</h1>
 
             <!-- User Info-->
-            <div class="relative">
+            <div class="absolute top-6 right-3">
                 <!-- Email -->
-                <button id="userDropdown" class="text-gray-600 font-semibold focus:outline-none">
+                <button id="userDropdown" class="text-gray-600 font-semibold focus:outline-none p">
                     <?php 
                     if (isset($_COOKIE['user_info'])) {
                         echo explode('@',htmlspecialchars($email))[0]; 
@@ -50,8 +50,7 @@ include("userinfo.php");
         <!-- Kniha z SQL -->
         <?php
 
-            $query ="SELECT ucebnice.id, nu.nazev AS ucebnice_nazev, ucebnice.foto, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, COUNT(CASE WHEN pu.koupil = 0 THEN 1 END) AS pocet_ks, ROUND(AVG(CASE WHEN pu.koupil = 0 THEN pu.cena END)) AS avg_cena FROM ucebnice
-            INNER JOIN nu ON ucebnice.jmeno_id=nu.id
+            $query ="SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, COUNT(CASE WHEN pu.koupil = 0 THEN 1 END) AS pocet_ks, ROUND(AVG(CASE WHEN pu.koupil = 0 THEN pu.cena END)) AS avg_cena FROM ucebnice
             INNER JOIN kategorie ON ucebnice.kategorie_id=kategorie.id
             INNER JOIN typ ON ucebnice.typ_id=typ.id
             INNER JOIN pu ON ucebnice.id=pu.id_ucebnice
@@ -66,7 +65,7 @@ include("userinfo.php");
                     echo '<a href="kniha.php?knihaID=' . $knihaID . '" class="bg-gray-200 p-4 items-center rounded-md">';
                     echo '    <div class="bg-gray-100 rounded-md">';
                     echo '        <div class="text-l text-center font-semibold m-1 p-1 h-12">' . htmlspecialchars($row['ucebnice_nazev']) . '</div>';
-                    echo '        <img src="foto/ucebnice/' . htmlspecialchars($row['foto']) . '" class="rounded-lg p-1 w-full h-48 object-cover">';
+                    echo '        <img src="foto/ucebnice/' . htmlspecialchars($row['id']) . '.jpg" class="rounded-lg p-1 w-full h-48 object-cover">';
                     echo '        <div class="text-s m-1 p-1">';
                     echo '            počet ks: <span class="font-medium">' . htmlspecialchars($row['pocet_ks']) . '</span><br>';
                     echo '            avg cena: <span class="font-medium">' . number_format($row['avg_cena'], 0, ',', '.') . ',-</span>';

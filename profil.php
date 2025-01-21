@@ -23,8 +23,8 @@ $tridyResult = $conn->query($tridyQuery);
 
 // Načtení prodávaných učebnic, definovani aliasu
 $prodavaneUcebniceQuery = 
-"   SELECT nu.nazev AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil FROM pu
-    JOIN nu ON pu.id_ucebnice = nu.id
+"   SELECT ucebnice.jmeno AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil FROM pu
+    JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
     WHERE pu.id_prodejce = {$user['id']}
 ";
 $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
