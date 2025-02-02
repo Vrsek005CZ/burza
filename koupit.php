@@ -55,24 +55,115 @@ $result = $conn->query($query);
                 <div>vhodné pro <?php echo htmlspecialchars($row['trida_id'])?>. ročník</div>
             </div>
         </div>
-    <div class='flex gap-1 border border-red-500 '>
+
+        <div class='flex flex-wrap col-span-4 gap-1'>
     <?php
     $cesta = "foto/pu/$puID/";
-
-    $files = glob($cesta . "*.jpg");
+    $files = glob($cesta . "*.jpg"); //vrátí všechny hodnoty v uvedené cestě, které končí na .jpg
+    $files_json = json_encode($files); // poslaní do js
 
     if ($files) {
-        foreach ($files as $file) {
-            echo "<img src='$file' class='h-48 aspect-auto border border-blue-500' />";
+        foreach ($files as $index => $file) { //oznaci indexi obrazku a projde pro kazdy obrazek
+            echo "<img src='$file' class='h-48 aspect-auto cursor-pointer' onclick='otevritOkno($index)' />";
         }
     } else {
         echo "Nejsou k dispozici žádné fotky.";
     }
     ?>
-    </div>
-    </div>
+</div>
 
-<h1>Dodělat obrázky, možnost rozkliknout a zvětšit obrázky, koupit, vypsat informace o danné prodávané učebnici</h1>
+<div id="okno" class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center hidden">
+    <button class="absolute top-2 right-2 bg-gray-300 hover:bg-gray-400 p-2 rounded-full shadow" onclick="zavritOkno()">✖</button>
+    <div class="relative p-4 flex items-center justify-center max-w-4xl w-full h-[85vh]">
+
+        <button onclick="predchoziObrazek()" class="bg-gray-300 hover:bg-gray-400 text-4xl p-2 rounded-lg shadow-lg flex items-center justify-center w-[3vh] h-full">
+            ⯇
+        </button>
+
+        <div class="relative bg-gray-300 p-4 rounded-lg shadow-lg flex items-center justify-center w-full h-full mx-1">
+            <img id="oknoImg" src="foto/ucebnice/1.jpg" class="object-contain w-full h-auto"/>
+        </div>
+
+        <button onclick="dalsiObrazek()" class="bg-gray-300 hover:bg-gray-400 text-4xl p-2 rounded-lg shadow-lg flex items-center justify-center w-[3vh] h-full">
+            ⯈
+        </button>
+        
+    </div>
+</div>
+
+
+
+<script>
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+      zavritOkno();
+    }
+  });
+
+let aktualniIndex = 0;
+let obrazky = <?php echo $files_json; ?>;
+
+function otevritOkno(index) {
+    aktualniIndex = index;
+    document.getElementById("oknoImg").src = obrazky[aktualniIndex];
+    document.getElementById("okno").classList.remove("hidden");
+    nactiObrazek();
+}
+
+function zavritOkno() {
+    document.getElementById("okno").classList.add("hidden");
+}
+
+function dalsiObrazek() {
+    if (aktualniIndex < obrazky.length - 1) {
+        aktualniIndex++;
+    } else {
+        aktualniIndex = 0;
+    }
+    velikostObrazku(aktualniIndex)
+    document.getElementById("oknoImg").src = obrazky[aktualniIndex];
+    nactiObrazek();
+}
+
+function predchoziObrazek() {
+    if (aktualniIndex > 0) {
+        aktualniIndex--;
+    } else {
+        aktualniIndex = obrazky.length - 1;
+    }
+    velikostObrazku(aktualniIndex)
+    document.getElementById("oknoImg").src = obrazky[aktualniIndex];
+    nactiObrazek();
+}
+
+function nactiObrazek() {
+    let oknoImg = document.getElementById("oknoImg");
+    oknoImg.src = obrazky[aktualniIndex];
+
+    let img = new Image();
+    img.src = obrazky[aktualniIndex];
+    img.onload = function () {
+        velikostObrazku(img);
+    };
+}
+
+function velikostObrazku(img){
+    let oknoImg = document.getElementById("oknoImg");
+
+    if (img.height > img.width) {
+        oknoImg.classList.remove("w-full");
+        oknoImg.classList.add("h-full");
+    } else {
+        oknoImg.classList.remove("h-full");
+        oknoImg.classList.add("w-full");
+    }
+}
+
+</script>
+
+
+<h1>Dodělat koupit, vypsat informace o danné prodávané učebnici</h1>
 </div>
 
 </body>
