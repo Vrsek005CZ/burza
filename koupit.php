@@ -10,12 +10,12 @@ if (isset($_GET['puID'])) {
 }
 
 
-$query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev AS kategorie_nazev, 
-           ucebnice.trida_id, typ.nazev AS typ_nazev
+$query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, user.user AS prodejce, pu.poznamky, user.id AS prodejce_id
     FROM pu
     INNER JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
     INNER JOIN kategorie ON ucebnice.kategorie_id = kategorie.id
     INNER JOIN typ ON ucebnice.typ_id = typ.id
+    INNER JOIN user ON pu.id_prodejce = user.id
     WHERE pu.id = $puID
 ";
 
@@ -44,32 +44,52 @@ $result = $conn->query($query);
     </div>
     <br> 
 
+<div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
     <?php $row = $result->fetch_assoc(); ?>
-    <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto grid gap-4 p-4 grid-cols-4">
-        <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.jpg" class="rounded-lg p-1 h-48 object-cover justify-self-center bg-gray-300">
-        <div class="col-span-3">
+    <div class="flex gap-4">
+        <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.jpg" class="rounded-lg p-1 h-48 object-cover bg-gray-300 flex-shrink-0">
+        <div class="flex flex-col w-full">
             <div class="text-lg font-bold"><?php echo htmlspecialchars($row['ucebnice_nazev']); ?></div>
-            <div class="text-sm text-slate-700">
-                <div><?php echo htmlspecialchars($row['typ_nazev'])?></div>
-                <div><?php echo htmlspecialchars($row['kategorie_nazev'])?></div>
-                <div>vhodné pro <?php echo htmlspecialchars($row['trida_id'])?>. ročník</div>
+            <div class="text-sm">
+                <div class="flex gap-4">
+                    <div class="w-32 flex-auto  text-slate-700"><?php echo htmlspecialchars($row['typ_nazev'])?></div>
+                    <div class="w-32 flex-auto"><?php echo htmlspecialchars($row['rok_tisku'])?></div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-auto w-32  text-slate-700"><?php echo htmlspecialchars($row['kategorie_nazev'])?></div>
+                    <div class="flex-auto w-32"><?php echo htmlspecialchars($row['stav'])?>/10</div>
             </div>
+                <div class="flex gap-4">
+                    <div class="flex-auto w-32  text-slate-700">vhodné pro <?php echo htmlspecialchars($row['trida_id'])?>. ročník</div>
+                    <div class="flex-auto w-32">
+                        <a href="user.php?profileID=<?php echo htmlspecialchars($row['prodejce_id']); ?>" 
+                            class="text-gray-600 italic">
+                            <?php echo htmlspecialchars($row['prodejce']); ?>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-100 shadow-md rounded-md"><?php echo htmlspecialchars($row['poznamky'])?></div>
         </div>
+    </div>
 
-        <div class='flex flex-wrap col-span-4 gap-1'>
-    <?php
-    $cesta = "foto/pu/$puID/";
-    $files = glob($cesta . "*.jpg"); //vrátí všechny hodnoty v uvedené cestě, které končí na .jpg
-    $files_json = json_encode($files); // poslaní do js
+<br>
 
-    if ($files) {
-        foreach ($files as $index => $file) { //oznaci indexi obrazku a projde pro kazdy obrazek
-            echo "<img src='$file' class='h-48 aspect-auto cursor-pointer' onclick='otevritOkno($index)' />";
+    <div class='flex flex-wrap col-span-8 gap-1 bg-gray-200 shadow-md p-5 rounded-md w-full'>
+        <?php
+        $cesta = "foto/pu/$puID/";
+        $files = glob($cesta . "*.jpg"); //vrátí všechny hodnoty v uvedené cestě, které končí na .jpg
+        $files_json = json_encode($files); // poslaní do js
+
+        if ($files) {
+            foreach ($files as $index => $file) { //oznaci indexi obrazku a projde pro kazdy obrazek
+                echo "<img src='$file' class='h-48 aspect-auto cursor-pointer' onclick='otevritOkno($index)' />";
+            }
+        } else {
+            echo "Nejsou k dispozici žádné fotky.";
         }
-    } else {
-        echo "Nejsou k dispozici žádné fotky.";
-    }
-    ?>
+        ?>
+    </div>
 </div>
 
 <div id="okno" class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center hidden">
@@ -163,7 +183,6 @@ function velikostObrazku(img){
 </script>
 
 
-<h1>Dodělat koupit, vypsat informace o danné prodávané učebnici</h1>
 </div>
 
 </body>

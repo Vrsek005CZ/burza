@@ -62,27 +62,32 @@ include("userinfo.php");
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     $knihaID = $row['id']; 
-                    echo '<a href="kniha.php?knihaID=' . $knihaID . '" class="bg-gray-200 p-4 items-center rounded-md">';
-                    echo '    <div class="bg-gray-100 rounded-md">';
-                    echo '        <div class="text-l text-center font-semibold m-1 p-1 h-12">' . htmlspecialchars($row['ucebnice_nazev']) . '</div>';
-                    echo '        <img src="foto/ucebnice/' . htmlspecialchars($row['id']) . '.jpg" class="rounded-lg p-1 w-full h-48 object-cover">';
-                    echo '        <div class="text-s m-1 p-1">';
-                    echo '            počet ks: <span class="font-medium">' . htmlspecialchars($row['pocet_ks']) . '</span><br>';
-                    echo '            avg cena: <span class="font-medium">' . number_format($row['avg_cena'], 0, ',', '.') . ',-</span>';
-                    echo '        </div>';
-                    echo '    </div>';
-                    echo '    <div class="text-xs p-1">';
-                    echo '        ' . htmlspecialchars($row['kategorie_nazev']) . '<br>';
-                    echo '        ' . htmlspecialchars($row['trida_id']) . '. ročník<br>';
-                    echo '        ' . htmlspecialchars($row['typ_nazev']) . '<br>';
-                    echo '    </div>';
-                    echo '</a>'; 
+                    ?>
+                    <a href="kniha.php?knihaID=<?php echo $knihaID; ?>" class="bg-gray-200 p-4 items-center rounded-md">
+                        <div class="bg-gray-100 rounded-md">
+                            <div class="text-l text-center font-semibold m-1 p-1 h-12">
+                                <?php echo htmlspecialchars($row['ucebnice_nazev']); ?>
+                            </div>
+                            <div class="h-50">
+                                <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id']); ?>.jpg" class="rounded-lg p-1 w-full h-48 object-cover">
+                            </div>
+                            <div class="text-s m-1 p-1">
+                                počet ks: <span class="font-medium"><?php echo htmlspecialchars($row['pocet_ks']); ?></span><br>
+                                avg cena: <span class="font-medium"><?php echo number_format($row['avg_cena'], 0, ',', '.'); ?>,-</span>
+                            </div>
+                        </div>
+                        <div class="text-xs p-1">
+                            <?php echo htmlspecialchars($row['kategorie_nazev']); ?><br>
+                            <?php echo htmlspecialchars($row['trida_id']); ?>. ročník<br>
+                            <?php echo htmlspecialchars($row['typ_nazev']); ?><br>
+                        </div>
+                    </a>
+                    <?php
                 }
             } else {
                 echo '<p>Žádné učebnice k dispozici.</p>';
             }
-
-        ?>
+            ?>
         </div>
         
         

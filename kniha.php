@@ -41,8 +41,10 @@ $query ="SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev A
 $result = $conn->query($query); 
 
 $prodavaneUcebniceQuery = 
-"   SELECT ucebnice.jmeno AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil, pu.id_prodejce, pu.id FROM pu
+"   SELECT ucebnice.jmeno AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil, pu.id_prodejce, pu.id, user.user AS prodejce, user.id AS prodejce_id
+    FROM pu
     JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
+    INNER JOIN user ON pu.id_prodejce = user.id
     WHERE pu.id_ucebnice = $knihaID && pu.koupil = 0
 ";
 $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
@@ -87,8 +89,9 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
                     <tr class="bg-gray-200">
                         <th class="p-4 text-left w-[7%]">Stav</th>
                         <th class="p-4 text-left w-[7%]">Rok tisku</th>
-                        <th class="p-4 text-left w-[10%]">Cena</th>
-                        <th class="p-4 text-left w-[57%]">Poznámky</th>
+                        <th class="p-4 text-left w-[8%]">Cena</th>
+                        <th class="p-4 text-left w-[8%]">Prodejce</th>
+                        <th class="p-4 text-left w-[51%]">Poznámky</th>
                         <th class="p-4 text-left w-[19%]">Koupit</th>
                     </tr>
                 </thead>
@@ -98,6 +101,12 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
                             <td class="p-4"><?php echo htmlspecialchars($ucebnice['stav']); ?>/10</td>
                             <td class="p-4"><?php echo htmlspecialchars($ucebnice['rok_tisku']); ?></td>
                             <td class="p-4"><?php echo htmlspecialchars($ucebnice['cena']); ?> Kč</td>
+                            <td class="p-4">
+                                <a href="user.php?profileID=<?php echo htmlspecialchars($ucebnice['prodejce_id']); ?>" 
+                                    class="text-gray-600 italic">
+                                    <?php echo htmlspecialchars($ucebnice['prodejce']); ?>
+                                </a>
+                            </td>
                             <td class="p-4"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
                             <td class="p-4 text-green-600 font-semibold">
                                 <a id="viewHref-<?php echo htmlspecialchars($ucebnice['id']); ?>" 

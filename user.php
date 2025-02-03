@@ -3,31 +3,30 @@ session_start();
 include("connect.php");
 include("userinfo.php");
 
-// Zpracování výběru třídy
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['trida_id'])) {
-    $selectedTrida = intval($_POST['trida_id']);
-    
-    $updateQuery = "UPDATE user SET trida_id=$selectedTrida WHERE id=$userId";
-    if ($conn->query($updateQuery) === TRUE) {
-        $user['trida_id'] = $selectedTrida; // Aktualizujeme hodnotu i lokálně
-        header("Location: profil.php"); // Přesměrování po uložení
-        exit;
-    } else {
-        echo "Chyba při ukládání třídy: " . $conn->error;
-    }
-}
 
-// Načtení tříd pro výběr
-$tridyQuery = "SELECT trida_id FROM user";
-$tridyResult = $conn->query($tridyQuery);
+if (isset($_GET['profileID'])) {
+    $profileID = isset($_GET['profileID']) ? intval($_GET['profileID']) : 0;  // proti sql injekci
+} else {
+    echo("Chyba: Nezadali jste ID knihy.");
+}
 
 // Načtení prodávaných učebnic, definovani aliasu
 $prodavaneUcebniceQuery = 
 "   SELECT pu.id, ucebnice.jmeno AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil FROM pu
     JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
-    WHERE pu.id_prodejce = {$user['id']}
+    WHERE pu.id_prodejce = $profileID
 ";
 $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
+
+$profilQuery = 
+"   SELECT user.user, user.email, user.jmeno, user.prijmeni, user.trida_id
+    FROM user
+    WHERE user.id = $profileID
+";
+
+$profil = $conn->query($profilQuery);
+
+
 
 ?>
 
@@ -37,7 +36,7 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Profil</title>
+    <title>Uzivatel</title>
 </head>
 
 <body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
@@ -52,9 +51,9 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
         </div>
         <br>
     
-
+        <?php $row = $profil->fetch_assoc(); ?>
         <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6 ">Můj Profil</h1>
+            <h1 class="text-3xl font-bold text-gray-800 mb-6 ">Profil</h1>
 
             <div class="flex">
                 <div class="w-1/5 border-r pr-8">
@@ -62,48 +61,29 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
                     
                     <div class="mb-4">
                         <span class="font-bold text-gray-600">Jméno:</span>
-                        <p class="text-gray-800"><?php echo htmlspecialchars($user['jmeno']); ?></p>
+                        <p class="text-gray-800"><?php echo htmlspecialchars($row['jmeno']); ?></p>
                     </div>
 
                     <div class="mb-4">
                         <span class="font-bold text-gray-600">Příjmení:</span>
-                        <p class="text-gray-800"><?php echo htmlspecialchars($user['prijmeni']); ?></p>
+                        <p class="text-gray-800"><?php echo htmlspecialchars($row['prijmeni']); ?></p>
                     </div>
 
                     <div class="mb-4">
                         <span class="font-bold text-gray-600">Email:</span>
-                        <p class="text-gray-800"><?php echo htmlspecialchars($user['email']); ?></p>
+                        <p class="text-gray-800"><?php echo htmlspecialchars($row['email']); ?></p>
                     </div>
 
                     <div class="mb-4">
                         <span class="font-bold text-gray-600">Uživatelské jméno:</span>
-                        <p class="text-gray-800"><?php echo htmlspecialchars($user['user']); ?></p>
+                        <p class="text-gray-800"><?php echo htmlspecialchars($row['user']); ?></p>
                     </div>
 
 
                     <div class="mb-4">
-        <span class="font-bold text-gray-600">Ročník:</span>
-        <?php if ($user['trida_id'] == 0): ?>
-            <!-- Formulář pro výběr třídy -->
-            <form method="POST">
-                <select name="trida_id" class="border rounded p-2">
-                    <option value="" disabled selected>Vyberte třídu</option>
-                    <option value="1" <?php if ($user['trida_id'] == 1) echo "selected"; ?>>1. Ročník (1.A)</option>
-                    <option value="2" <?php if ($user['trida_id'] == 2) echo "selected"; ?>>2. Ročník (2.A)</option>
-                    <option value="3" <?php if ($user['trida_id'] == 3) echo "selected"; ?>>3. Ročník (3.A,1.B)</option>
-                    <option value="4" <?php if ($user['trida_id'] == 3) echo "selected"; ?>>4. Ročník (4.A,2.B)</option>
-                    <option value="5" <?php if ($user['trida_id'] == 3) echo "selected"; ?>>5. Ročník (5.A,3.B,1.C)</option>
-                    <option value="6" <?php if ($user['trida_id'] == 3) echo "selected"; ?>>6. Ročník (6.A,4.B,2.C,6.E)</option>
-                    <option value="7" <?php if ($user['trida_id'] == 3) echo "selected"; ?>>7. Ročník (7.A,5.B,3.C,7.E)</option>
-                    <option value="8" <?php if ($user['trida_id'] == 3) echo "selected"; ?>>8. Ročník (8.A,6.B,4.C,8.E)</option>
-                </select>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Uložit</button>
-            </form>
-        <?php else: ?>
-            <!-- Zobrazení ID třídy, pokud je nastavena -->
-            <p class="text-gray-800"><?php echo htmlspecialchars($user['trida_id']).".ročník"; ?></p>
-        <?php endif; ?>
-    </div>
+                    <span class="font-bold text-gray-600">Ročník:</span>
+                    <p class="text-gray-800"><?php echo htmlspecialchars($row['trida_id']); ?>. ročník</p>
+                    </div>
                 </div>
 
                 <div class="w-full lg:w-2/3 mx-auto">
