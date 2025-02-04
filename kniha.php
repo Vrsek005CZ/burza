@@ -86,13 +86,13 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
             <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">Prodávané učebnice</h2>
             <table class="w-full bg-gray-50 shadow-md rounded-lg">
                 <thead>
-                    <tr class="bg-gray-200">
-                        <th class="p-4 text-left w-[7%]">Stav</th>
-                        <th class="p-4 text-left w-[7%]">Rok tisku</th>
-                        <th class="p-4 text-left w-[8%]">Cena</th>
-                        <th class="p-4 text-left w-[8%]">Prodejce</th>
-                        <th class="p-4 text-left w-[51%]">Poznámky</th>
-                        <th class="p-4 text-left w-[19%]">Koupit</th>
+                    <tr class="bg-gray-200 text-left">
+                        <th class="p-4 w-[7%]">Stav</th>
+                        <th class="p-4 w-[7%]">Rok tisku</th>
+                        <th class="p-4 w-[10%]">Cena</th>
+                        <th class="p-4 w-[8%]">Prodejce</th>
+                        <th class="p-4 w-[49%]">Poznámky</th>
+                        <th class="p-4 w-[19%]">Koupit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -107,7 +107,7 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
                                     <?php echo htmlspecialchars($ucebnice['prodejce']); ?>
                                 </a>
                             </td>
-                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
+                            <td class="p-4 break-words" style="word-break: break-word;"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
                             <td class="p-4 text-green-600 font-semibold">
                                 <a id="viewHref-<?php echo htmlspecialchars($ucebnice['id']); ?>" 
                                     href="koupit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" 
