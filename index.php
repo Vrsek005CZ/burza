@@ -92,6 +92,7 @@ include("userinfo.php");
         </div>
         
         
+    <h1>Nejde na mobily, chyba v souboru userinfo.ph. Doladit web, jako třeba šipku zpět</h1>
 
 </div>
 

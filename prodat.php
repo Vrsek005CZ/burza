@@ -28,7 +28,7 @@ $result = $conn->query($sql);
     <br>
 
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
-        <form method="POST" action="pridat_ucebnici.php">
+        <form method="POST" action="pridat_ucebnici.php" enctype="multipart/form-data">
             <table class="w-full bg-gray-50 shadow-md rounded-lg">
                 <thead class="text-left bg-gray-200">
                     <tr>
@@ -71,9 +71,72 @@ $result = $conn->query($sql);
                     </tr>
                 </tbody>
             </table>
+            <input type="file" id="fotky" name="fotky[]" accept="image/*" multiple class="border p-2 w-full">
+            <div id="preview" class="flex flex-wrap gap-2 mt-2"></div>
         </form>
     </div>
+    <h1>Doladit grafiku, nezobrazuje nahled .heic</h1>
+
 </div>
+
+
+
+<script>
+// Přidáme posluchače události 'change' pro input, kdy uživatel vybere soubory
+document.getElementById('fotky').addEventListener('change', function(event) {
+    // Najdeme element, do kterého budeme vkládat náhledy obrázků
+    const preview = document.getElementById('preview');
+    // Vyčistíme předchozí náhledy, aby nedocházelo k duplikaci
+    preview.innerHTML = "";
+    
+    // Převod FileList (event.target.files) na pole pro snadnější manipulaci
+    const files = Array.from(event.target.files);
+    
+    // Projdeme všechny vybrané soubory
+    files.forEach((file, index) => {
+        // Zkontrolujeme, zda je typ souboru fot
+        if (file.type === "image/*") {
+            // Vytvoříme nový FileReader pro načtení souboru
+            const reader = new FileReader();
+            
+            // Definujeme, co se stane, když bude soubor načten
+            reader.onload = function(e) {
+                // Vytvoříme nový <img> element
+                const img = document.createElement('img');
+                // Nastavíme zdroj obrázku na načtená data (data URL)
+                img.src = e.target.result;
+                // Přidáme CSS třídy pro stylování obrázku (velikost, okraj, kurzor)
+                img.classList.add("h-[24vh]", "object-cover", "border", "cursor-pointer", "hover:opacity-70");
+                // Přidáme datový atribut pro uložení indexu souboru
+                img.setAttribute("data-index", index);
+                
+                // Přidáme posluchače události, který umožní odstranění obrázku při kliknutí
+                img.addEventListener("click", function() {
+                    // Odstraníme soubor z pole files pomocí jeho indexu
+                    files.splice(index, 1);
+                    
+                    // Vytvoříme nový DataTransfer objekt pro sestavení nového FileListu
+                    const dt = new DataTransfer();
+                    // Přidáme všechny zbývající soubory do DataTransfer objektu
+                    files.forEach(file => dt.items.add(file));
+                    
+                    // Aktualizujeme seznam souborů v inputu tak, aby neobsahoval odstraněný soubor
+                    event.target.files = dt.files;
+                    
+                    // Odstraníme náhled obrázku z DOM (zobrazení)
+                    img.remove();
+                });
+    
+                // Přidáme vytvořený obrázek do preview kontejneru, aby byl viditelný
+                preview.appendChild(img);
+            };
+            
+            // Spustíme asynchronní načítání souboru a převedení na data URL
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
 
 </body>
 </html>

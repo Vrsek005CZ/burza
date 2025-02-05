@@ -47,7 +47,7 @@ $result = $conn->query($query);
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
     <?php $row = $result->fetch_assoc(); ?>
     <div class="flex gap-4">
-        <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.jpg" class="rounded-lg p-1 h-48 object-cover bg-gray-300 flex-shrink-0">
+        <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" class="rounded-lg p-1 h-48 object-cover bg-gray-300 flex-shrink-0">
         <div class="flex flex-col w-full">
             <div class="text-lg font-bold"><?php echo htmlspecialchars($row['ucebnice_nazev']); ?></div>
             <div class="text-sm">
@@ -78,7 +78,7 @@ $result = $conn->query($query);
     <div class='flex flex-wrap col-span-8 gap-1 bg-gray-200 shadow-md p-5 rounded-md w-full'>
         <?php
         $cesta = "foto/pu/$puID/";
-        $files = glob($cesta . "*.jpg"); //vrátí všechny hodnoty v uvedené cestě, které končí na .jpg
+        $files = glob($cesta . "*.webp"); //vrátí všechny hodnoty v uvedené cestě, které končí na .webp
         $files_json = json_encode($files); // poslaní do js
 
         if ($files) {
@@ -101,7 +101,7 @@ $result = $conn->query($query);
         </button>
 
         <div class="relative bg-gray-300 p-4 rounded-lg shadow-lg flex items-center justify-center w-full h-full mx-1">
-            <img id="oknoImg" src="foto/ucebnice/1.jpg" class="object-contain w-full h-auto"/>
+            <img id="oknoImg" src="foto/ucebnice/1.webp" class="object-contain w-full h-auto"/>
         </div>
 
         <button onclick="dalsiObrazek()" class="bg-gray-300 hover:bg-gray-400 text-4xl p-2 rounded-lg shadow-lg flex items-center justify-center w-[3vh] h-full">
