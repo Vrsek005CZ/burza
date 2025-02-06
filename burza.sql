@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Počítač: 127.0.0.1
--- Vytvořeno: Pon 03. úno 2025, 22:49
+-- Vytvořeno: Čtv 06. úno 2025, 21:04
 -- Verze serveru: 10.4.32-MariaDB
 -- Verze PHP: 8.2.12
 
@@ -54,7 +54,6 @@ CREATE TABLE `pu` (
   `stav` int(2) NOT NULL,
   `cena` int(8) NOT NULL,
   `koupil` int(4) NOT NULL,
-  `foto_slozka` varchar(32) NOT NULL,
   `poznamky` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -62,14 +61,55 @@ CREATE TABLE `pu` (
 -- Vypisuji data pro tabulku `pu`
 --
 
-INSERT INTO `pu` (`id`, `id_ucebnice`, `id_prodejce`, `rok_tisku`, `stav`, `cena`, `koupil`, `foto_slozka`, `poznamky`) VALUES
-(1, 1, 4, 2014, 6, 300, 0, '1', 'ošoupaná, semtam popsaná, ohlé rohy'),
-(2, 1, 4, 2013, 7, 350, 0, '2', 'ošoupaná, semtam popsaná, ohlé rohy'),
-(3, 1, 4, 2017, 8, 450, 0, '3', 'ošoupaná, semtam popsaná, ohlé rohy'),
-(4, 1, 5, 2015, 7, 400, 0, '4', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. sNulla facilisi. Quisque vel felis eu orci tincidunt tristique. Donec convallis sem ut sapien tincidunt, nec aliquam nisi bibendum. Ut non risus vel metus sollicitudin pulvinar non eget ligula. ssss\n'),
-(5, 2, 4, 2014, 7, 100, 0, '2', 'pěkný stav'),
-(6, 2, 5, 2013, 8, 125, 0, '2', 'pěkný stav'),
-(7, 2, 5, 2013, 10, 150, 0, '2', 'nová');
+INSERT INTO `pu` (`id`, `id_ucebnice`, `id_prodejce`, `rok_tisku`, `stav`, `cena`, `koupil`, `poznamky`) VALUES
+(1, 1, 4, 2014, 6, 300, 0, 'ošoupaná, semtam popsaná, ohlé rohy'),
+(2, 1, 4, 2013, 7, 350, 0, 'ošoupaná, semtam popsaná, ohlé rohy'),
+(3, 1, 4, 2017, 8, 450, 0, 'ošoupaná, semtam popsaná, ohlé rohy'),
+(4, 1, 5, 2015, 7, 400, 0, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. sNulla facilisi. Quisque vel felis eu orci tincidunt tristique. Donec convallis sem ut sapien tincidunt, nec aliquam nisi bibendum. Ut non risus vel metus sollicitudin pulvinar non eget ligula. ssss\n'),
+(5, 2, 4, 2014, 7, 100, 0, 'pěkný stav'),
+(6, 2, 5, 2013, 8, 125, 0, 'pěkný stav'),
+(7, 2, 5, 2013, 10, 150, 0, 'nová'),
+(8, 2, 4, 1900, 4, 1, 0, 'test'),
+(9, 2, 4, 1900, 1, 2, 0, 'test2'),
+(10, 1, 4, 1900, 1, 1, 0, 'test3'),
+(11, 1, 4, 1900, 5, 5, 0, 'test'),
+(12, 1, 7, 1900, 1, 2, 0, 'test user'),
+(13, 2, 7, 1900, 1, 1, 0, 'test 2'),
+(14, 1, 7, 0, 0, 0, 0, 'fdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfg'),
+(15, 1, 4, 1900, 1, 1, 0, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. sNulla facilisi. Quisque vel felis eu orci tincidunt tristique. Donec convallis sem ut sapien tincidunt, nec aliquam nisi bibendum. Ut non risus vel metus sollicitudin pulvinar non eget ligula. ssssL'),
+(16, 1, 4, 2025, 10, 9999, 0, '554'),
+(17, 1, 4, 9999, 5, 5, 0, '5'),
+(18, 1, 0, 1900, 1, 0, 0, '5555'),
+(19, 1, 0, 1900, 1, 0, 0, '5555'),
+(20, 1, 0, 1900, 1, 0, 0, '5555'),
+(21, 1, 4, 1900, 1, 0, 0, '5555'),
+(22, 1, 4, 1900, 1, 0, 0, '5555'),
+(23, 1, 4, 1900, 1, 0, 0, '5555'),
+(24, 1, 4, 1900, 1, 0, 0, '5555'),
+(25, 1, 4, 1900, 1, 0, 0, '5555'),
+(26, 1, 4, 1900, 1, 0, 0, '5555'),
+(27, 1, 4, 1900, 1, 0, 0, '555'),
+(28, 1, 4, 1900, 1, 0, 0, '555'),
+(29, 2, 4, 1900, 5, 4, 0, 'test'),
+(30, 1, 4, 1900, 1, 1, 0, '41'),
+(31, 1, 4, 1900, 1, 1, 0, 'iojagi'),
+(32, 1, 4, 1900, 1, 1, 0, 'sdasda'),
+(33, 1, 4, 1900, 1, 1, 0, 'sdasda'),
+(34, 1, 4, 1900, 1, 1, 0, 'sdasda'),
+(35, 1, 4, 1900, 1, 1, 0, '1'),
+(36, 1, 4, 1900, 1, 1, 0, '1'),
+(37, 1, 4, 1900, 1, 1, 0, '1'),
+(38, 1, 4, 1900, 1, 1, 0, 's'),
+(39, 1, 4, 1900, 1, 1, 0, 'ssa'),
+(40, 1, 4, 1900, 1, 1, 0, 'ssa'),
+(41, 2, 4, 1900, 1, 1, 0, '4'),
+(42, 2, 4, 1900, 1, 1, 0, 'sdas'),
+(43, 2, 4, 1900, 1, 1, 0, 'sdas'),
+(44, 2, 4, 1900, 1, 1, 0, 'sdas'),
+(45, 2, 4, 1900, 1, 1, 0, '555'),
+(46, 2, 4, 2010, 10, 100, 0, '666'),
+(47, 1, 4, 1900, 1, 0, 0, '1'),
+(48, 1, 4, 1900, 1, 0, 0, '151451');
 
 -- --------------------------------------------------------
 
@@ -186,7 +226,7 @@ ALTER TABLE `kategorie`
 -- AUTO_INCREMENT pro tabulku `pu`
 --
 ALTER TABLE `pu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT pro tabulku `typ`

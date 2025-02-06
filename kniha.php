@@ -73,7 +73,7 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
 
         <?php $row = $result->fetch_assoc(); ?>
         <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto grid gap-4 p-4 grid-cols-4">
-          <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.jpg" class="rounded-lg p-1 h-48 object-cover justify-self-center bg-gray-300">
+          <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.jpg" class="rounded-lg p-1 w-48 object-cover justify-self-center bg-gray-300">
           <div class="col-span-3">
               <div class="text-lg font-bold"><?php echo htmlspecialchars($row['ucebnice_nazev']); ?></div>
               <div class="text-sm text-slate-700">

@@ -47,7 +47,9 @@ $result = $conn->query($query);
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
     <?php $row = $result->fetch_assoc(); ?>
     <div class="flex gap-4">
-        <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" class="rounded-lg p-1 h-48 object-cover bg-gray-300 flex-shrink-0">
+        <a href="kniha.php?knihaID=<?php echo htmlspecialchars($row['id'])?>" class="">
+            <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" class="rounded-lg p-1 w-56 object-cover justify-self-center bg-gray-300">
+        </a>
         <div class="flex flex-col w-full">
             <div class="text-lg font-bold"><?php echo htmlspecialchars($row['ucebnice_nazev']); ?></div>
             <div class="text-sm">
