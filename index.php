@@ -27,7 +27,7 @@ include("userinfo.php");
                 <button id="userDropdown" class="text-gray-600 font-semibold focus:outline-none p">
                     <?php 
                     if (isset($_COOKIE['user_info'])) {
-                        echo explode('@',htmlspecialchars($email))[0]; 
+                        echo explode('@',htmlspecialchars($email))[0]." ⋮"; 
                     }else {
                         echo "<a href='login.php'>Přihlásit se</a>";
                     }
@@ -66,7 +66,7 @@ include("userinfo.php");
                     ?>
                     <a href="kniha.php?knihaID=<?php echo $knihaID; ?>" class="bg-gray-200 p-4 items-center rounded-md">
                         <div class="bg-gray-100 rounded-md">
-                            <div class="text-l text-center font-semibold m-1 p-1 h-12">
+                            <div class="text-l text-center font-semibold m-1 p-1 h-12 hover:h-full">
                                 <?php echo htmlspecialchars($row['ucebnice_nazev']); ?>
                             </div>
                             <div class="h-50">
