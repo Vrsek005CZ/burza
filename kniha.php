@@ -49,6 +49,8 @@ $prodavaneUcebniceQuery =
 ";
 $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
 
+include("order_kniha.php");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,7 +75,7 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
 
         <?php $row = $result->fetch_assoc(); ?>
         <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto grid gap-4 p-4 grid-cols-4">
-          <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.jpg" class="rounded-lg p-1 w-48 object-cover justify-self-center bg-gray-300">
+          <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" class="rounded-lg p-1 w-48 object-cover justify-self-center bg-gray-300">
           <div class="col-span-3">
               <div class="text-lg font-bold"><?php echo htmlspecialchars($row['ucebnice_nazev']); ?></div>
               <div class="text-sm text-slate-700">
@@ -94,6 +96,30 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
                         <th class="p-4 w-[49%]">Poznámky</th>
                         <th class="p-4 w-[19%]">Koupit</th>
                     </tr>
+                    <tr class="bg-gray-300 text-left h-[5px] text-blue-600">
+                        <th class="p-2 w-[7%]">
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=desc" class="sort-arrow hover:cursor-pointer">🠵</a>
+                        </th>
+                        <th class="p-2 w-[7%]">
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=desc" class="sort-arrow hover:cursor-pointer">🠵</a>
+                        </th>
+                        <th class="p-2 w-[10%]">
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=desc" class="sort-arrow hover:cursor-pointer">🠵</a>
+                        </th>
+                        <th class="p-2 w-[8%]">
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=desc" class="sort-arrow hover:cursor-pointer">🠵</a>
+                        </th>
+                        <th class="p-2 w-[49%]">
+                        </th>
+                        <th class="p-2 w-[19%] ">
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=koupit&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
+                        </th>
+                    </tr>
+
                 </thead>
                 <tbody>
                     <?php while ($ucebnice = $prodavaneUcebnice->fetch_assoc()): ?>
@@ -138,13 +164,19 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
             </table>
         </div>
         </div>
-    <div class="text-xl">FILTRY/RAZENI</div>
+    <div class="text-xl">RAZENI PRO KOUPIT</div>
 
         
+<script>
+function sortTable(column, order) {
+    // Nastavení URL parametrů a přesměrování
+    const params = new URLSearchParams(window.location.search);
+    params.set("order", column);
+    params.set("sort", order);
+    window.location.search = params.toString();
+}
 
-
-        
-
+</script>
 
         
 

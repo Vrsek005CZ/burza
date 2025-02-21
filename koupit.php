@@ -52,28 +52,36 @@ $result = $conn->query($query);
         </a>
         <div class="flex flex-col w-full">
             <div class="text-lg font-bold"><?php echo htmlspecialchars($row['ucebnice_nazev']); ?></div>
-            <div class="text-sm">
-                <div class="flex gap-4">
-                    <div class="w-32 flex-auto  text-slate-700"><?php echo htmlspecialchars($row['typ_nazev'])?></div>
-                    <div class="w-32 flex-auto"><?php echo htmlspecialchars($row['rok_tisku'])?></div>
-                </div>
-                <div class="flex gap-4">
-                    <div class="flex-auto w-32  text-slate-700"><?php echo htmlspecialchars($row['kategorie_nazev'])?></div>
-                    <div class="flex-auto w-32"><?php echo htmlspecialchars($row['stav'])?>/10</div>
-            </div>
-                <div class="flex gap-4">
-                    <div class="flex-auto w-32  text-slate-700">vhodné pro <?php echo htmlspecialchars($row['trida_id'])?>. ročník</div>
-                    <div class="flex-auto w-32">
-                        <a href="user.php?profileID=<?php echo htmlspecialchars($row['prodejce_id']); ?>" 
-                            class="text-gray-600 italic">
-                            <?php echo htmlspecialchars($row['prodejce']); ?>
-                        </a>
+            <div class="text-sm flex">
+                <div class="flex flex-col flex-grow gap-2">
+                    <div class="flex gap-4">
+                        <div class="w-32 flex-auto text-slate-700"><?php echo htmlspecialchars($row['typ_nazev'])?></div>
+                        <div class="w-32 flex-auto"><?php echo htmlspecialchars($row['rok_tisku'])?></div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-auto w-32 text-slate-700"><?php echo htmlspecialchars($row['kategorie_nazev'])?></div>
+                        <div class="flex-auto w-32"><?php echo htmlspecialchars($row['stav'])?>/10</div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-auto w-32 text-slate-700">vhodné pro <?php echo htmlspecialchars($row['trida_id'])?>. ročník</div>
+                        <div class="flex-auto w-32">
+                            <a href="user.php?profileID=<?php echo htmlspecialchars($row['prodejce_id']); ?>" class="text-gray-600 italic">
+                                <?php echo htmlspecialchars($row['prodejce']); ?>
+                            </a>
+                        </div>
                     </div>
                 </div>
+                <div class="flex items-center">
+                    <a href="koupit.php?knihaID=<?php echo htmlspecialchars($row['id']) ?>" id="koupitButton" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition">
+                        Koupit
+                    </a>
+                </div>
             </div>
-            <div class="bg-gray-100 shadow-md rounded-md"><?php echo htmlspecialchars($row['poznamky'])?></div>
+            <br>
+            <div class="bg-gray-100 shadow-md rounded-md p-2 mt-2"><?php echo htmlspecialchars($row['poznamky'])?></div>
         </div>
     </div>
+
 
 <br>
 
@@ -113,9 +121,17 @@ $result = $conn->query($query);
     </div>
 </div>
 
-
-
 <script>
+    var UserId = <?php echo $userId; ?>;
+    var prodejceId = <?php echo htmlspecialchars($row['prodejce_id']); ?>;
+    // Funkce pro skrytí tlačítka rezervace, pokud je uživatel prodávající
+    if (prodejceId === UserId) {
+        var button = document.getElementById('koupitButton')
+        button.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'transition', 'cursor-pointer');
+        button.classList.add('bg-gray-400', 'cursor-not-allowed');
+        button.removeAttribute("href");
+    }
+
 
 document.addEventListener("keydown", function(event) {
     if (event.key === "Escape") {
@@ -184,7 +200,7 @@ function velikostObrazku(img){
 
 </script>
 
-
+<div class="text-xl">KOUPIT</div>
 </div>
 
 </body>

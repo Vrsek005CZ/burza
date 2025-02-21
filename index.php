@@ -40,7 +40,10 @@ include("userinfo.php");
                     <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden z-20">
                         <a href="profil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profil</a>
                         <a href="prodat.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Prodat knihu</a>
-                        <a href="logout.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Odhlásit se</a>
+                        <?php if ($user['type'] > 0): ?>
+                            <a href="admin.php" class="block px-4 py-2 text-yellow-600 hover:bg-gray-100">Administrace</a>
+                        <?php endif; ?>
+                        <a href="logout.php" class="block px-4 py-2 text-red-800 hover:bg-gray-100">Odhlásit se</a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -70,7 +73,7 @@ include("userinfo.php");
                                 <?php echo htmlspecialchars($row['ucebnice_nazev']); ?>
                             </div>
                             <div class="h-50">
-                                <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id']); ?>.jpg" class="rounded-lg p-1 w-full h-48 object-cover">
+                                <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id']); ?>.webp" class="rounded-lg p-1 w-full h-48 object-cover">
                             </div>
                             <div class="text-s m-1 p-1">
                                 počet ks: <span class="font-medium"><?php echo htmlspecialchars($row['pocet_ks']); ?></span><br>
