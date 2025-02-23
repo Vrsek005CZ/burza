@@ -51,6 +51,7 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
 
 include("order_kniha.php");
 
+$selfBoo = 1
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +61,7 @@ include("order_kniha.php");
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Kniha</title>
 </head>
-
+<script>let selfBoo=1;</script>
 <body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
 
     <div class="w-full max-w-5xl">
@@ -96,27 +97,40 @@ include("order_kniha.php");
                         <th class="p-4 w-[49%]">Poznámky</th>
                         <th class="p-4 w-[19%]">Koupit</th>
                     </tr>
-                    <tr class="bg-gray-300 text-left h-[5px] text-blue-600">
+                    <tr class="bg-gray-300 text-left h-[5px] text-gray-600">
                         <th class="p-2 w-[7%]">
-                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
-                            <a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=desc" class="sort-arrow hover:cursor-pointer">🠵</a>
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=asc&selfbook=<?php echo $selfBoo; ?>" 
+                                class="<?php echo ($order == 'stav' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=desc" 
+                                class="<?php echo ($order == 'stav' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
                         </th>
+
                         <th class="p-2 w-[7%]">
-                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
-                            <a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=desc" class="sort-arrow hover:cursor-pointer">🠵</a>
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=asc" 
+                                class="<?php echo ($order == 'rok_tisku' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=desc" 
+                                class="<?php echo ($order == 'rok_tisku' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
                         </th>
+
                         <th class="p-2 w-[10%]">
-                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
-                            <a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=desc" class="sort-arrow hover:cursor-pointer">🠵</a>
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=asc" 
+                                class="<?php echo ($order == 'cena' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=desc" 
+                                class="<?php echo ($order == 'cena' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
                         </th>
+
                         <th class="p-2 w-[8%]">
-                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
-                            <a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=desc" class="sort-arrow hover:cursor-pointer">🠵</a>
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=asc" 
+                                class="<?php echo ($order == 'prodejce' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=desc" 
+                                class="<?php echo ($order == 'prodejce' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
                         </th>
+
                         <th class="p-2 w-[49%]">
                         </th>
+                        
                         <th class="p-2 w-[19%] ">
-                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=koupit&sort=asc" class="sort-arrow hover:cursor-pointer">🠷</a>&nbsp;
+                            &nbsp;&nbsp;<button onclick="BooChange()" class="hover:cursor-pointer">🠷</button>&nbsp;
                         </th>
                     </tr>
 
@@ -168,12 +182,13 @@ include("order_kniha.php");
 
         
 <script>
-function sortTable(column, order) {
-    // Nastavení URL parametrů a přesměrování
-    const params = new URLSearchParams(window.location.search);
-    params.set("order", column);
-    params.set("sort", order);
-    window.location.search = params.toString();
+
+function test(){
+    console.log("test123")
+}
+
+function BooChange(){
+    let selfBoo = selfBoo * -1;   
 }
 
 </script>
