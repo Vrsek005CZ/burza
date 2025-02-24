@@ -45,13 +45,18 @@ $prodavaneUcebniceQuery =
     FROM pu
     JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
     INNER JOIN user ON pu.id_prodejce = user.id
-    WHERE pu.id_ucebnice = $knihaID && pu.koupil = 0
+    WHERE pu.id_ucebnice = $knihaID AND pu.koupil = 0
 ";
 $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
 
 include("order_kniha.php");
 
-$selfBoo = 1
+
+
+
+
+$selfbook = isset($_GET['selfbook']) ? intval($_GET['selfbook']) : -1;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,7 +66,6 @@ $selfBoo = 1
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Kniha</title>
 </head>
-<script>let selfBoo=1;</script>
 <body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
 
     <div class="w-full max-w-5xl">
@@ -99,38 +103,39 @@ $selfBoo = 1
                     </tr>
                     <tr class="bg-gray-300 text-left h-[5px] text-gray-600">
                         <th class="p-2 w-[7%]">
-                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=asc&selfbook=<?php echo $selfBoo; ?>" 
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=asc&selfbook=<?php echo $selfbook; ?>" 
                                 class="<?php echo ($order == 'stav' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
-                            <a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=desc" 
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=desc&selfbook=<?php echo $selfbook; ?>" 
                                 class="<?php echo ($order == 'stav' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
                         </th>
 
                         <th class="p-2 w-[7%]">
-                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=asc" 
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=asc&selfbook=<?php echo $selfbook; ?>" 
                                 class="<?php echo ($order == 'rok_tisku' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
-                            <a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=desc" 
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=desc&selfbook=<?php echo $selfbook; ?>" 
                                 class="<?php echo ($order == 'rok_tisku' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
                         </th>
 
                         <th class="p-2 w-[10%]">
-                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=asc" 
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=asc&selfbook=<?php echo $selfbook; ?>" 
                                 class="<?php echo ($order == 'cena' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
-                            <a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=desc" 
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=desc&selfbook=<?php echo $selfbook; ?>" 
                                 class="<?php echo ($order == 'cena' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
                         </th>
 
                         <th class="p-2 w-[8%]">
-                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=asc" 
+                            &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=asc&selfbook=<?php echo $selfbook; ?>" 
                                 class="<?php echo ($order == 'prodejce' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
-                            <a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=desc" 
+                            <a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=desc&selfbook=<?php echo $selfbook; ?>" 
                                 class="<?php echo ($order == 'prodejce' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
                         </th>
 
                         <th class="p-2 w-[49%]">
+                            <div class="text-right">Zobrazit vlastní knihy:</div>
                         </th>
                         
                         <th class="p-2 w-[19%] ">
-                            &nbsp;&nbsp;<button onclick="BooChange()" class="hover:cursor-pointer">🠷</button>&nbsp;
+                            &nbsp;&nbsp;<button onclick="BookChange()" id ="bookButton" class="hover:cursor-pointer <?php echo ($selfbook == 1) ? 'text-blue-600' : ''; ?> hover:text-blue-500">◇</button>&nbsp;
                         </th>
                     </tr>
 
@@ -178,8 +183,6 @@ $selfBoo = 1
             </table>
         </div>
         </div>
-    <div class="text-xl">RAZENI PRO KOUPIT</div>
-
         
 <script>
 
@@ -187,13 +190,27 @@ function test(){
     console.log("test123")
 }
 
-function BooChange(){
-    let selfBoo = selfBoo * -1;   
+function BookChange(){
+    const url = new URL(window.location.href);
+    let a = parseInt(url.searchParams.get('selfbook')) || 1; // Načteme hodnotu nebo použijeme výchozí 1
+    a *= -1; // Přepneme mezi 1 a -1
+    url.searchParams.set('selfbook', a);
+    window.location.href = url.toString();
 }
 
-</script>
+const urlParams = new URLSearchParams(window.location.search);
+        const selfbook = urlParams.get('selfbook');
 
-        
+        // Pokud je 'selfbook' rovno 1, změníme text tlačítka
+        if (selfbook == '1') {
+            document.getElementById("bookButton").innerHTML = "◆";
+        }
+        else {
+            document.getElementById("bookButton").innerHTML = "◇";
+        }
+
+
+</script>        
 
 </body>
 </html>

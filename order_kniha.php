@@ -1,5 +1,18 @@
 <?php
+include ("userinfo.php");
+
 $knihaID = $_GET['knihaID'];
+
+global $prodavaneUcebniceQuery;
+
+if (isset($_GET['selfbook'])){
+    $selfbook = $_GET['selfbook'];
+    if ($selfbook == -1){
+        $selfbooksql = " AND pu.id_prodejce != $userId ";
+        $prodavaneUcebniceQuery .= "$selfbooksql";
+    }
+}
+
 
 
 if (isset($_GET['order']) && isset($_GET['sort'])) {
@@ -14,10 +27,9 @@ if (isset($_GET['order']) && isset($_GET['sort'])) {
         $orderBy = "ORDER BY pu." . $order . " " . strtoupper($sort);   
     }
 
-    global $prodavaneUcebniceQuery;
     $prodavaneUcebniceQuery .= "$orderBy";
-    $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
-
 }
+$prodavaneUcebnice = $conn->query(query: $prodavaneUcebniceQuery);
+
 
 ?>
