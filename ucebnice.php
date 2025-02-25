@@ -55,7 +55,7 @@ include("order_kniha.php");
 
 
 
-$selfbook = isset($_GET['selfbook']) ? intval($_GET['selfbook']) : -1;
+$selfbook = isset($_GET['selfbook']) ? intval($_GET['selfbook']) : 1;
 
 ?>
 <!DOCTYPE html>
@@ -135,7 +135,7 @@ $selfbook = isset($_GET['selfbook']) ? intval($_GET['selfbook']) : -1;
                         </th>
                         
                         <th class="p-2 w-[19%] ">
-                            &nbsp;&nbsp;<button onclick="BookChange()" id ="bookButton" class="hover:cursor-pointer <?php echo ($selfbook == 1) ? 'text-blue-600' : ''; ?> hover:text-blue-500">◇</button>&nbsp;
+                            &nbsp;&nbsp;<button onclick="BookChange()" id ="bookButton" class="hover:cursor-pointer <?php echo ($selfbook !== 1) ? 'text-blue-600' : ''; ?> hover:text-blue-500">◇</button>&nbsp;
                         </th>
                     </tr>
 
@@ -186,28 +186,28 @@ $selfbook = isset($_GET['selfbook']) ? intval($_GET['selfbook']) : -1;
         
 <script>
 
-function test(){
-    console.log("test123")
-}
-
-function BookChange(){
+function BookChange() {
     const url = new URL(window.location.href);
-    let a = parseInt(url.searchParams.get('selfbook')) || 1; // Načteme hodnotu nebo použijeme výchozí 1
-    a *= -1; // Přepneme mezi 1 a -1
+    let a = url.searchParams.get('selfbook');
+    if (a === null) {
+        a = -1;
+    } else {
+        a = parseInt(a) * -1; // Přepnutí mezi 1 a -1
+    }
+
     url.searchParams.set('selfbook', a);
     window.location.href = url.toString();
 }
-
 const urlParams = new URLSearchParams(window.location.search);
-        const selfbook = urlParams.get('selfbook');
+const selfbook = urlParams.get('selfbook');
 
-        // Pokud je 'selfbook' rovno 1, změníme text tlačítka
-        if (selfbook == '1') {
-            document.getElementById("bookButton").innerHTML = "◆";
-        }
-        else {
-            document.getElementById("bookButton").innerHTML = "◇";
-        }
+// Pokud je 'selfbook' rovno 1, změníme text tlačítka
+if (selfbook == '-1') {
+    document.getElementById("bookButton").innerHTML = "◆";
+}
+else {
+    document.getElementById("bookButton").innerHTML = "◇";
+}
 
 
 </script>        

@@ -28,7 +28,7 @@ $result = $conn->query($sql);
     <br>
 
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
-        <form method="POST" action="pridat_ucebnici.php" enctype="multipart/form-data">
+        <form method="POST" action="pridat_knihu.php" enctype="multipart/form-data">
             <table class="w-full bg-gray-50 shadow-md rounded-lg">
                 <thead class="text-left bg-gray-200">
                     <tr>
@@ -43,12 +43,13 @@ $result = $conn->query($sql);
                 <tbody>
                     <tr>
                         <td class="p-4">
-                            <select name="id_ucebnice" class="border p-2 w-full" required>
+                            <select id = "ucebniceSelect" name="id_ucebnice" class="border p-2 w-full" required>
                                 <?php while ($row = $result->fetch_assoc()) { ?>
                                     <option value="<?php echo $row['id']; ?>">
                                         <?php echo htmlspecialchars($row['jmeno']); ?>
                                     </option>
                                 <?php } ?>
+                                <option value="redirect" class="bg-gray-200 text-center">---- Vložit novou učebnici ----</option>
                             </select>
                         </td>
                         <td class="p-1">
@@ -138,6 +139,14 @@ document.getElementById('fotky').addEventListener('change', function(event) {
         }
     });
 });
+
+
+document.getElementById("ucebniceSelect").addEventListener("change", function() {
+    if (this.value === "redirect") {
+        window.location.href = "nova.php";
+    }
+})
+
 </script>
 
 

@@ -2,7 +2,7 @@
 
 include("connect.php");
 include("userinfo.php");
-include("upravit_ucebnici.php");
+include("upravit_knihu.php");
 
 if (!isset($_GET['puID'])) {
     die("Chybějící ID učebnice.");
@@ -53,7 +53,7 @@ $existingImages = glob("$dir/*.{jpg,jpeg,png,webp,gif}", GLOB_BRACE);
     <br>
     
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
-      <form method="post" enctype="multipart/form-data" action="upravit_ucebnici.php?puID=<?= $puID ?>">
+      <form method="post" enctype="multipart/form-data" action="upravit_knihu.php?puID=<?= $puID ?>">
         <table class="w-full bg-gray-50 shadow-md rounded-lg">
           <thead class="text-left bg-gray-200">
             <tr>

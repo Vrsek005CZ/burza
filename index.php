@@ -67,7 +67,7 @@ include("userinfo.php");
                 while ($row = $result->fetch_assoc()) {
                     $knihaID = $row['id']; 
                     ?>
-                    <a href="kniha.php?knihaID=<?php echo $knihaID; ?>" class="bg-gray-200 p-4 items-center rounded-md">
+                    <a href="ucebnice.php?knihaID=<?php echo $knihaID; ?>" class="bg-gray-200 p-4 items-center rounded-md">
                         <div class="bg-gray-100 rounded-md">
                             <div class="text-l text-center font-semibold m-1 p-1 h-12 hover:h-full">
                                 <?php echo htmlspecialchars($row['ucebnice_nazev']); ?>

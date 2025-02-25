@@ -1,7 +1,6 @@
 <?php
 session_start();
 include("connect.php");
-include("userinfo.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
     $id_ucebnice = intval($_POST['id_ucebnice']);
@@ -9,9 +8,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
     $rok_tisku = intval($_POST['rok_tisku']);
     $cena = intval($_POST['cena']);
     $poznamky = $conn->real_escape_string($_POST['poznamky']);
-
-    // ID přihlášeného uživatele jako prodejce (přidat kontrolu přihlášení)
-    $id_prodejce = $userId; // 4 = výchozí hodnota, pokud není přihlášen
 
     $sql = "INSERT INTO pu (id_ucebnice, id_prodejce, rok_tisku, stav, cena, koupil, poznamky) 
             VALUES ($id_ucebnice, $id_prodejce, $rok_tisku, $stav, $cena, 0, '$poznamky')";
