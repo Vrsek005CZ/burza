@@ -34,14 +34,14 @@ $resultTyp = $conn->query($sqlTyp);
     </div>
     <br>
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
-        <form method="POST" action="pridat_uecbnici.php" enctype="multipart/form-data">
+        <form method="POST" action="pridat_ucebnici.php" enctype="multipart/form-data">
             <table class="w-full bg-gray-50 shadow-md rounded-lg">
                 <thead class="text-left bg-gray-200">
                     <tr>
                         <th class="p-4 w-[25%]">Název učebnice</th>
                         <th class="p-4 w-[15%]">Kategorie</th>
                         <th class="p-4 w-[15%]">Typ</th>
-                        <th class="p-4 w-[15%]">Ročník</th>
+                        <th class="p-4 w-[15%]">Určeno pro ročník</th>
                         <th class="p-4 w-[15%] text-center">Vystavit</th>
                     </tr>
                 </thead>
@@ -88,7 +88,7 @@ $resultTyp = $conn->query($sqlTyp);
             <br>
             <div class="bg-gray-100 shadow-md rounded-md p-8 mx-auto">
                 <div class="text-center font-bold">Sem můžete nahrát fotky. Při použití fotek heif/heif formátu nefunguje náhled</div>
-                <input type="file" id="fotky" name="fotky[]" accept="image/*" class="p-2 w-full"><hr>
+                <input type="file" id="fotky" name="fotky[]" accept="image/*" required class="p-2 w-full"><hr>
                 <div id="preview" class="flex flex-wrap gap-2 mt-2"></div>
             </div>
         </form>
@@ -120,6 +120,7 @@ document.getElementById('fotky').addEventListener('change', function(event) {
         reader.readAsDataURL(file);
     }
 });
+
 
 </script>
 </html>

@@ -3,41 +3,29 @@ session_start();
 include("connect.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
-    $id_ucebnice = intval($_POST['id_ucebnice']);
-    $stav = intval($_POST['stav']);
-    $rok_tisku = intval($_POST['rok_tisku']);
-    $cena = intval($_POST['cena']);
-    $poznamky = $conn->real_escape_string($_POST['poznamky']);
+    $nazev_ucebnice = $conn->real_escape_string($_POST['nazev_ucebnice']);
+    $kategorie_id = intval($_POST['kategorie_id']);
+    $typ_id = intval($_POST['typ_id']);
+    $trida_id = intval($_POST['trida_id']);
 
-    $sql = "INSERT INTO pu (id_ucebnice, id_prodejce, rok_tisku, stav, cena, koupil, poznamky) 
-            VALUES ($id_ucebnice, $id_prodejce, $rok_tisku, $stav, $cena, 0, '$poznamky')";
-    
+    $sql = "INSERT INTO ucebnice (jmeno, kategorie_id, typ_id, trida_id, schvaleno) 
+            VALUES ('$nazev_ucebnice', $kategorie_id, $typ_id, $trida_id, 1)";
+
     if ($conn->query($sql) === TRUE) {
-        $puID = $conn->insert_id; // Získání ID nově přidaného záznamu
-
-        // Vytvoření složky pro fotky
-        $targetDir = "foto/pu/$puID/";
-        if (!file_exists($targetDir)) {
-            mkdir($targetDir, 0777, true);
-        }
+        $id = $conn->insert_id; // Získání ID nově přidaného záznamu
 
         // Zpracování nahraných fotek
         if (!empty($_FILES['fotky']) && isset($_FILES['fotky']['tmp_name']) && is_array($_FILES['fotky']['tmp_name'])) {
             foreach ($_FILES['fotky']['tmp_name'] as $key => $tmp_name) {
                 if (!empty($tmp_name)) { // Kontrola, zda soubor existuje
-                    $fileName = pathinfo($_FILES['fotky']['name'][$key], PATHINFO_FILENAME); // Název souboru bez přípony
-                    $targetDir = "E:/Other/XAMPP/htdocs/burza/foto/pu/$puID/"; // Cesta ke složce
+                    $fileName = $id; // Název souboru bez přípony
+                    $targetDir = "E:/Other/XAMPP/htdocs/burza/foto/ucebnice/"; // Cesta ke složce
                     $targetFilePath = $targetDir . $fileName . ".webp"; // Výstupní cesta
-        
-                    // 🔹 Ověření, že složka existuje, jinak ji vytvoříme
-                    if (!file_exists($targetDir)) {
-                        mkdir($targetDir, 0777, true);
-                    }
         
                     try {
                         $image = new Imagick($tmp_name);
                         $image->setImageFormat('webp');  // Nastavení formátu WebP
-                        $image->setImageCompressionQuality(80); // Nastavení kvality
+                        $image->setImageCompressionQuality(90); // Nastavení kvality
                         $image->writeImage($targetFilePath); // Uložení obrázku
                         $image->clear();
                         $image->destroy();
@@ -47,17 +35,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
                         echo "❌ Chyba při konverzi obrázku: " . $e->getMessage();
                     }
                 } else {
-                    echo "❌ Soubor neexistuje nebo je prázdný.<br>";
+                    echo "❌ Fotka neexistuje nebo jste žádnou nevložili.<br>";
                 }
             }
-        } else {
-            echo "❌ Žádné soubory k nahrání.<br>";
         }
-        
 
-        echo "Učebnice byla úspěšně přidána!";
-    } else {
-        echo "Chyba: " . $conn->error;
     }
+    echo "Učebnice byla úspěšně přidána!";
+}
+
+else {
+    echo "Chyba: " . $conn->error;
 }
 ?>

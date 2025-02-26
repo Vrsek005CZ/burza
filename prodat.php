@@ -4,6 +4,10 @@ include("connect.php");
 $current_year = date("Y");
 // Získání seznamu učebnic
 $sql = "SELECT id, jmeno FROM ucebnice";
+$sql = "SELECT ucebnice.id, ucebnice.jmeno, kategorie.nazev AS kategorie 
+        FROM ucebnice
+        JOIN kategorie ON ucebnice.kategorie_id = kategorie.id
+        ORDER BY kategorie.nazev, ucebnice.jmeno"; 
 $result = $conn->query($sql);
 ?>
 
@@ -14,6 +18,15 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Prodat</title>
+    
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+
+    <!-- jQuery (pokud ještě není) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 </head>
 
 <body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
@@ -32,25 +45,38 @@ $result = $conn->query($sql);
             <table class="w-full bg-gray-50 shadow-md rounded-lg">
                 <thead class="text-left bg-gray-200">
                     <tr>
-                        <th class="p-4 w-[25%]">Učebnice</th>
+                        <th class="p-4 w-[28%]">Učebnice</th>
                         <th class="p-4 w-[8%]">Stav</th>
                         <th class="p-4 w-[8%]">Rok tisku</th>
                         <th class="p-4 w-[8%]">Cena</th>
-                        <th class="p-4 w-[38%]">Poznámky</th>
+                        <th class="p-4 w-[35%]">Poznámky</th>
                         <th class="p-4 w-[15%] text-center">Vystavit</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td class="p-4">
-                            <select id = "ucebniceSelect" name="id_ucebnice" class="border p-2 w-full" required>
-                                <?php while ($row = $result->fetch_assoc()) { ?>
-                                    <option value="<?php echo $row['id']; ?>">
-                                        <?php echo htmlspecialchars($row['jmeno']); ?>
-                                    </option>
-                                <?php } ?>
-                                <option value="redirect" class="bg-gray-200 text-center">---- Vložit novou učebnici ----</option>
-                            </select>
+                        <select id="ucebniceSelect" name="id_ucebnice" class="border p-2 w-full select2" required>
+                            <?php 
+                            $currentCategory = null;
+                            while ($row = $result->fetch_assoc()) { 
+                                // Pokud se kategorie změnila, zavři předchozí optgroup a otevři nový
+                                if ($currentCategory !== $row['kategorie']) {
+                                    if ($currentCategory !== null) {
+                                        echo "</optgroup>"; // Zavřít předchozí skupinu
+                                    }
+                                    echo "<optgroup label='" . htmlspecialchars($row['kategorie']) . "'>"; // Otevřít novou skupinu
+                                    $currentCategory = $row['kategorie'];
+                                }
+                            ?>
+                                <option value="<?php echo $row['id']; ?>">
+                                    <?php echo htmlspecialchars($row['jmeno']); ?>
+                                </option>
+                            <?php } ?>
+                            </optgroup> <!-- Zavře poslední otevřenou kategorii -->
+                            
+                            <option value="redirect" class="bg-gray-200 text-center">Vložit novou učebnici</option>
+                        </select>
                         </td>
                         <td class="p-1">
                             <input type="number" name="stav" min="1" max="10" class="border p-2 w-full" required>
@@ -141,11 +167,29 @@ document.getElementById('fotky').addEventListener('change', function(event) {
 });
 
 
-document.getElementById("ucebniceSelect").addEventListener("change", function() {
-    if (this.value === "redirect") {
-        window.location.href = "nova.php";
-    }
-})
+$(document).ready(function() {
+    $('#ucebniceSelect').select2({
+        placeholder: "Vyberte učebnici...",
+        allowClear: true,
+        templateResult: function(option) {
+            if (!option.id) {
+                return option.text;
+            }
+            if (option.id === 'redirect') {
+                return $('<span class="bg-gray-200 text-center block px-2 py-1 text-italic font-semibold">Vložit novou učebnici</span>');
+            }
+            return option.text;
+        }
+    });
+
+    // Přesměrování na "nova.php", pokud se vybere poslední možnost
+    $('#ucebniceSelect').on('change', function() {
+        if ($(this).val() === 'redirect') {
+            window.location.href = 'nova.php';
+        }
+    });
+});
+
 
 </script>
 
