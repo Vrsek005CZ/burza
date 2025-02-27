@@ -5,8 +5,8 @@ session_start();
 include("connect.php");
 
 //OAUTH 2.0 hodnoty
-$clientID = '938699442792-h42ebsvio387jmb3i0bo7oqiubqaunvl.apps.googleusercontent.com';
-$clientSecret = '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';
+$clientID = '273280823406-4v7ooveqdojua0blmfmcdhvmeds3ambo.apps.googleusercontent.com';
+$clientSecret = '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';
 $redirectUri = 'http://localhost/burza/login.php';
 $tokenRevocationUrl = "https://oauth2.googleapis.com/revoke";
 

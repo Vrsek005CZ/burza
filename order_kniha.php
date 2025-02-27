@@ -7,11 +7,16 @@ global $prodavaneUcebniceQuery;
 
 if (isset($_GET['selfbook'])){
     $selfbook = $_GET['selfbook'];
-    if ($selfbook == -1){
-        $selfbooksql = " AND pu.id_prodejce != $userId ";
-        $prodavaneUcebniceQuery .= "$selfbooksql";
-    }
+
+}else {
+    $selfbook = 1;
 }
+if ($selfbook == 1){
+    $selfbooksql = " AND pu.id_prodejce != $userId ";
+    $prodavaneUcebniceQuery .= "$selfbooksql";
+}
+    
+
 
 
 
