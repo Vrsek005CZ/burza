@@ -10,7 +10,7 @@ if (isset($_GET['puID'])) {
 }
 
 
-$query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, user.user AS prodejce, pu.poznamky, user.id AS prodejce_id
+$query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, user.user AS prodejce, pu.poznamky, user.id AS prodejce_id, pu.koupil as koupil
     FROM pu
     INNER JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
     INNER JOIN kategorie ON ucebnice.kategorie_id = kategorie.id
@@ -72,9 +72,14 @@ $result = $conn->query($query);
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <a href="koupit.php?knihaID=<?php echo htmlspecialchars($row['id']) ?>" id="koupitButton" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition">
+                    <button id="koupitButton" onclick="koupit()" class="bg-green-600 text-white font-bold py-3 w-24 rounded-lg shadow-md hover:bg-green-700 transition">
                         Koupit
-                    </a>
+                    </button>
+                    <form id="myForm" action="objednat.php" method="POST">
+                        <button type="submit" name="objednat" value="<?php echo $puID; ?>" id="potvrditButton" class="bg-yellow-600 text-white font-bold py-3 w-24 rounded-lg shadow-md hover:bg-yellow-700 transition hidden">
+                            Potvrdit
+                        </button>
+                    </form>
                 </div>
             </div>
             <br>
@@ -122,15 +127,23 @@ $result = $conn->query($query);
 </div>
 
 <script>
-    var UserId = <?php echo $userId; ?>;
-    var prodejceId = <?php echo htmlspecialchars($row['prodejce_id']); ?>;
-    // Funkce pro skrytí tlačítka rezervace, pokud je uživatel prodávající
-    if (prodejceId === UserId) {
-        var button = document.getElementById('koupitButton')
-        button.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'transition', 'cursor-pointer');
-        button.classList.add('bg-gray-400', 'cursor-not-allowed');
-        button.removeAttribute("href");
-    }
+
+function koupit(){
+    document.getElementById('koupitButton').classList.add('hidden')
+    document.getElementById('potvrditButton').classList.remove('hidden')
+}
+
+var UserId = <?php echo $userId; ?>;
+var prodejceId = <?php echo htmlspecialchars($row['prodejce_id']); ?>;
+var koupil = <?php echo htmlspecialchars($row['koupil']); ?>
+// Funkce pro skrytí tlačítka rezervace, pokud je uživatel prodávající
+if (prodejceId === UserId || koupil !== 0) {
+    var button = document.getElementById('koupitButton')
+    button.classList.remove('bg-green-600', 'hover:bg-green-700', 'transition', 'cursor-pointer');
+    button.classList.add('bg-gray-400', 'cursor-not-allowed');
+    button.removeAttribute("href");
+    button.removeAttribute("onclick");
+}
 
 
 document.addEventListener("keydown", function(event) {

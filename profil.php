@@ -91,11 +91,11 @@ $prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
             <tbody>
                 <?php while ($ucebnice = $prodavaneUcebnice->fetch_assoc()): ?>
                     <tr class="even:bg-gray-100">
-                        <td class="p-4"><?php echo htmlspecialchars($ucebnice['ucebnice']); ?></td>
+                        <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['ucebnice']); ?></td>
                         <td class="p-4"><?php echo htmlspecialchars($ucebnice['rok_tisku']); ?></td>
                         <td class="p-4"><?php echo htmlspecialchars($ucebnice['stav']); ?></td>
                         <td class="p-4"><?php echo htmlspecialchars($ucebnice['cena']); ?> Kč</td>
-                        <td class="p-4"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
+                        <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
                         <td class="p-4">
                             <a href="koupit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="font-semibold italic <?php echo ($ucebnice['koupil'] != 0) ? 'text-red-600' : 'text-green-600'; ?>">
                                 <?php echo ($ucebnice['koupil'] != 0) ? 'Prodáno' : 'Neprodáno'; ?>

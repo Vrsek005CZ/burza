@@ -34,7 +34,7 @@ include("userinfo.php");
                     <a href="profil.php" class="block px-4 py-2 hover:bg-gray-100">Profil</a>
                     <a href="prodat.php" class="block px-4 py-2 hover:bg-gray-100">Prodat knihu</a>
                     <?php if ($user['type'] > 0): ?>
-                        <a href="admin.php" class="block px-4 py-2 text-yellow-600 hover:bg-gray-100">Administrace</a>
+                        <a href="superadmin.php" class="block px-4 py-2 text-yellow-600 hover:bg-gray-100">Administrace</a>
                     <?php endif; ?>
                     <a href="logout.php" class="block px-4 py-2 text-red-800 hover:bg-gray-100">Odhlásit se</a>
                 </div>

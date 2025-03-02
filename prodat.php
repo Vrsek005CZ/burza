@@ -106,7 +106,7 @@ $result = $conn->query($sql);
             </div>
         </form>
     </div>
-    <h1>nezobrazuje nahled .heic, upravit echos</h1>
+    <h1>otaci fotky na mobilu</h1>
 
 </div>
 
