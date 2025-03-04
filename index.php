@@ -32,6 +32,7 @@ include("userinfo.php");
             <?php if (isset($_COOKIE['user_info'])): ?>
                 <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
                     <a href="profil.php" class="block px-4 py-2 hover:bg-gray-100">Profil</a>
+                    <a href="objednavky.php" class="block px-4 py-2 hover:bg-gray-100">Objednávky</a>
                     <a href="prodat.php" class="block px-4 py-2 hover:bg-gray-100">Prodat knihu</a>
                     <?php if ($user['type'] > 0): ?>
                         <a href="superadmin.php" class="block px-4 py-2 text-yellow-600 hover:bg-gray-100">Administrace</a>
@@ -115,7 +116,7 @@ include("userinfo.php");
     </div>
     
 
-    <h1>Nejde spustit jinde nez na serveru > v googlu odkaz na localhost, ale v jinde 10.0.0.13 . Doladit web, jako třeba šipku zpět</h1>
+    <h1>Nejde spustit jinde nez na serveru > v googlu odkaz na localhost, ale v jinde 10.0.0.13 . Doladit web, jako třeba šipku zpět. Všude pro sql pridat bind params</h1>
 
 </div>
 

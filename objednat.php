@@ -4,41 +4,57 @@ include("connect.php");
 include("userinfo.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Získání hodnoty z POST a validace
     if (isset($_POST['objednat']) && is_numeric($_POST['objednat'])) {
-        $puID = intval($_POST['objednat']); // ID objednávky
-        $cas = time(); // Unix timestamp pro aktuální čas
+        $puID = intval($_POST['objednat']);
+        $cas = time();
 
-        // Pokud $userId není nastaveno nebo platné
         if (!isset($userId) || $userId <= 0) {
             echo "Chyba: Neplatný uživatel.";
             exit;
         }
 
-        // Připravený SQL dotaz pro aktualizaci
-        $sql = "UPDATE pu SET koupil = ?, cas = ? WHERE id = ?";
+        // Spustíme transakci
+        $conn->begin_transaction();
 
-        // Příprava a bindování parametrů
+        // První dotaz - aktualizace tabulky `pu`
+        $sql = "UPDATE pu SET koupil = ? WHERE id = ?";
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("iii", $userId, $cas, $puID);
-
-            // Spuštění dotazu a kontrola, zda byl úspěšný
-            if ($stmt->execute()) {
-                echo "Objednávka byla úspěšně aktualizována!";
-            } else {
-                echo "Chyba při provádění dotazu: " . $stmt->error;
+            $stmt->bind_param("ii", $userId, $puID);
+            if (!$stmt->execute()) {
+                $conn->rollback();
+                echo "Chyba při aktualizaci objednávky: " . $stmt->error;
+                exit;
             }
-
             $stmt->close();
         } else {
-            echo "Chyba při přípravě dotazu: " . $conn->error;
+            echo "Chyba při přípravě prvního dotazu: " . $conn->error;
+            exit;
         }
+
+        // Druhý dotaz - vložení do tabulky `orders`
+        $sql_orders = "INSERT INTO orders (puID, cas) VALUES (?, ?)";
+        if ($stmt = $conn->prepare($sql_orders)) {
+            $stmt->bind_param("ii", $puID, $cas);
+            if (!$stmt->execute()) {
+                $conn->rollback();
+                echo "Chyba při vkládání do orders: " . $stmt->error;
+                exit;
+            }
+            $stmt->close();
+        } else {
+            echo "Chyba při přípravě druhého dotazu: " . $conn->error;
+            exit;
+        }
+
+        // Pokud vše proběhlo v pořádku, potvrdíme změny
+        $conn->commit();
+        echo "Objednávka byla úspěšně zpracována!";
     } else {
-        echo "Chyba: Neplatný ID objednávky.";
+        echo "Chyba: Neplatné ID objednávky.";
     }
 } else {
     echo "Chyba: Neplatná metoda požadavku.";
 }
 
-$conn->close(); // Zavření spojení s databází
+$conn->close();
 ?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Počítač: 127.0.0.1
--- Vytvořeno: Ned 02. bře 2025, 17:47
+-- Vytvořeno: Stř 05. bře 2025, 00:04
 -- Verze serveru: 10.4.32-MariaDB
 -- Verze PHP: 8.2.12
 
@@ -45,6 +45,31 @@ INSERT INTO `kategorie` (`id`, `nazev`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktura tabulky `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `puID` int(11) NOT NULL,
+  `cas` int(32) NOT NULL,
+  `complete` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Vypisuji data pro tabulku `orders`
+--
+
+INSERT INTO `orders` (`id`, `puID`, `cas`, `complete`) VALUES
+(1, 56, 1741030190, 0),
+(2, 10, 1741111490, 1),
+(3, 11, 1741111494, 0),
+(4, 15, 1741111497, 0),
+(5, 9, 1741111504, 0),
+(6, 6, 1741111528, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabulky `pu`
 --
 
@@ -56,7 +81,6 @@ CREATE TABLE `pu` (
   `stav` int(2) NOT NULL,
   `cena` int(8) NOT NULL,
   `koupil` int(4) NOT NULL,
-  `cas` int(11) DEFAULT NULL,
   `poznamky` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -64,66 +88,66 @@ CREATE TABLE `pu` (
 -- Vypisuji data pro tabulku `pu`
 --
 
-INSERT INTO `pu` (`id`, `id_ucebnice`, `id_prodejce`, `rok_tisku`, `stav`, `cena`, `koupil`, `cas`, `poznamky`) VALUES
-(4, 1, 5, 2015, 7, 400, 4, 1740759220, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. sNulla facilisi. Quisque vel felis eu orci tincidunt tristique. Donec convallis sem ut sapien tincidunt, nec aliquam nisi bibendum. Ut non risus vel metus sollicitudin pulvinar non eget ligula. ssss\n'),
-(5, 2, 4, 2014, 7, 100, 0, NULL, 'pěkný stavvvvv'),
-(6, 2, 5, 2013, 8, 125, 0, NULL, 'pěkný stav'),
-(7, 2, 5, 2013, 10, 150, 0, NULL, 'nová'),
-(8, 2, 4, 1900, 4, 1, 0, NULL, 'test'),
-(9, 2, 4, 1900, 1, 2, 0, NULL, 'test2'),
-(10, 1, 4, 1900, 1, 1, 0, NULL, 'test3'),
-(11, 1, 4, 1900, 5, 5, 0, NULL, 'test'),
-(12, 1, 7, 1900, 1, 2, 0, NULL, 'test user'),
-(13, 2, 7, 1900, 1, 1, 0, NULL, 'test 2'),
-(14, 1, 7, 0, 0, 0, 0, NULL, 'fdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfg'),
-(15, 1, 4, 1900, 1, 1, 0, NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. sNulla facilisi. Quisque vel felis eu orci tincidunt tristique. Donec convallis sem ut sapien tincidunt, nec aliquam nisi bibendum. Ut non risus vel metus sollicitudin pulvinar non eget ligula. ssssL'),
-(16, 1, 4, 2025, 10, 9999, 0, NULL, '554'),
-(17, 1, 4, 9999, 5, 5, 0, NULL, '5'),
-(18, 1, 0, 1900, 1, 0, 0, NULL, '5555'),
-(19, 1, 0, 1900, 1, 0, 0, NULL, '5555'),
-(20, 1, 0, 1900, 1, 0, 0, NULL, '5555'),
-(21, 1, 4, 1900, 1, 0, 0, NULL, '5555'),
-(22, 1, 4, 1900, 1, 0, 0, NULL, '5555'),
-(23, 1, 4, 1900, 1, 0, 0, NULL, '5555'),
-(24, 1, 4, 1900, 1, 0, 0, NULL, '5555'),
-(25, 1, 4, 1900, 1, 0, 0, NULL, '5555'),
-(26, 1, 4, 1900, 1, 0, 0, NULL, '5555'),
-(27, 1, 4, 1900, 1, 0, 0, NULL, '555'),
-(28, 1, 4, 1900, 1, 0, 0, NULL, '555'),
-(29, 2, 4, 1900, 5, 4, 0, NULL, 'test'),
-(30, 1, 4, 1900, 1, 1, 0, NULL, '41'),
-(31, 1, 4, 1900, 1, 1, 0, NULL, 'iojagi'),
-(32, 1, 4, 1900, 1, 1, 0, NULL, 'sdasda'),
-(33, 1, 4, 1900, 1, 1, 0, NULL, 'sdasda'),
-(34, 1, 4, 1900, 1, 1, 0, NULL, 'sdasda'),
-(35, 1, 4, 1900, 1, 1, 0, NULL, '1'),
-(36, 1, 4, 1900, 1, 1, 0, NULL, '1'),
-(37, 1, 4, 1900, 1, 1, 0, NULL, '1'),
-(38, 1, 4, 1900, 1, 1, 0, NULL, 's'),
-(39, 1, 4, 1900, 1, 1, 0, NULL, 'ssa'),
-(40, 1, 4, 1900, 1, 1, 0, NULL, 'ssa'),
-(41, 2, 4, 1900, 1, 1, 0, NULL, '4'),
-(42, 2, 4, 1900, 1, 1, 0, NULL, 'sdas'),
-(43, 2, 4, 1900, 1, 1, 0, NULL, 'sdas'),
-(44, 2, 4, 1900, 1, 1, 0, NULL, 'sdas'),
-(45, 2, 4, 1900, 1, 1, 0, NULL, '555'),
-(46, 2, 4, 2010, 10, 100, 0, NULL, '666'),
-(47, 1, 4, 1900, 1, 0, 0, NULL, '1'),
-(48, 1, 4, 1900, 1, 0, 0, NULL, '151451'),
-(50, 1, 4, 1900, 1, 1, 0, NULL, 'test kniha\r\n'),
-(51, 4, 4, 1900, 1, 1, 0, NULL, 'sss'),
-(52, 4, 4, 1900, 1, 1, 0, NULL, '1'),
-(53, 4, 4, 1901, 3, 2, 0, NULL, '4'),
-(54, 4, 4, 1901, 3, 2, 0, NULL, '4'),
-(55, 8, 4, 1900, 1, 1, 0, NULL, '1'),
-(56, 7, 4, 1900, 4, 4, 0, NULL, '4'),
-(57, 8, 4, 1900, 4, 4, 0, NULL, '4'),
-(58, 8, 4, 1900, 4, 4, 0, NULL, '4'),
-(59, 8, 4, 1900, 4, 4, 0, NULL, ''),
-(60, 8, 4, 1900, 4, 4, 0, NULL, ''),
-(61, 4, 4, 1900, 7, 277, 0, NULL, 'Mobil'),
-(62, 4, 4, 1900, 7, 277, 0, NULL, 'Mobil'),
-(63, 4, 4, 1900, 7, 277, 0, NULL, 'Mobil');
+INSERT INTO `pu` (`id`, `id_ucebnice`, `id_prodejce`, `rok_tisku`, `stav`, `cena`, `koupil`, `poznamky`) VALUES
+(4, 1, 5, 2015, 7, 400, 4, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. sNulla facilisi. Quisque vel felis eu orci tincidunt tristique. Donec convallis sem ut sapien tincidunt, nec aliquam nisi bibendum. Ut non risus vel metus sollicitudin pulvinar non eget ligula. ssss'),
+(5, 2, 4, 2014, 7, 100, 0, 'pěkný stavvvvv'),
+(6, 2, 5, 2013, 8, 125, 4, 'pěkný stav'),
+(7, 2, 5, 2013, 10, 150, 0, 'nová'),
+(8, 2, 4, 1900, 4, 1, 0, 'test'),
+(9, 2, 4, 1900, 1, 2, 7, 'test2'),
+(10, 1, 4, 1900, 1, 1, 7, 'test3'),
+(11, 1, 4, 1900, 5, 5, 7, 'test'),
+(12, 1, 7, 1900, 1, 2, 0, 'test user'),
+(13, 2, 7, 1900, 1, 1, 0, 'test 2'),
+(14, 1, 7, 0, 0, 0, 0, 'fdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfgsjdfzgoujisdfgojipsdfgjoisdfgjiosdfjoigdsfgjfdgdfg'),
+(15, 1, 4, 1900, 1, 1, 7, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. sNulla facilisi. Quisque vel felis eu orci tincidunt tristique. Donec convallis sem ut sapien tincidunt, nec aliquam nisi bibendum. Ut non risus vel metus sollicitudin pulvinar non eget ligula. ssssL'),
+(16, 1, 4, 2025, 10, 9999, 0, '554'),
+(17, 1, 4, 9999, 5, 5, 0, '5'),
+(18, 1, 0, 1900, 1, 0, 0, '5555'),
+(19, 1, 0, 1900, 1, 0, 0, '5555'),
+(20, 1, 0, 1900, 1, 0, 0, '5555'),
+(21, 1, 4, 1900, 1, 0, 0, '5555'),
+(22, 1, 4, 1900, 1, 0, 0, '5555'),
+(23, 1, 4, 1900, 1, 0, 0, '5555'),
+(24, 1, 4, 1900, 1, 0, 0, '5555'),
+(25, 1, 4, 1900, 1, 0, 0, '5555'),
+(26, 1, 4, 1900, 1, 0, 0, '5555'),
+(27, 1, 4, 1900, 1, 0, 0, '555'),
+(28, 1, 4, 1900, 1, 0, 0, '555'),
+(29, 2, 4, 1900, 5, 4, 0, 'test'),
+(30, 1, 4, 1900, 1, 1, 0, '41'),
+(31, 1, 4, 1900, 1, 1, 0, 'iojagi'),
+(32, 1, 4, 1900, 1, 1, 0, 'sdasda'),
+(33, 1, 4, 1900, 1, 1, 0, 'sdasda'),
+(34, 1, 4, 1900, 1, 1, 0, 'sdasda'),
+(35, 1, 4, 1900, 1, 1, 0, '1'),
+(36, 1, 4, 1900, 1, 1, 0, '1'),
+(37, 1, 4, 1900, 1, 1, 0, '1'),
+(38, 1, 4, 1900, 1, 1, 0, 's'),
+(39, 1, 4, 1900, 1, 1, 0, 'ssa'),
+(40, 1, 4, 1900, 1, 1, 0, 'ssa'),
+(41, 2, 4, 1900, 1, 1, 0, '4'),
+(42, 2, 4, 1900, 1, 1, 0, 'sdas'),
+(43, 2, 4, 1900, 1, 1, 0, 'sdas'),
+(44, 2, 4, 1900, 1, 1, 0, 'sdas'),
+(45, 2, 4, 1900, 1, 1, 0, '555'),
+(46, 2, 4, 2010, 10, 100, 0, '666'),
+(47, 1, 4, 1900, 1, 0, 0, '1'),
+(48, 1, 4, 1900, 1, 0, 0, '151451'),
+(50, 1, 4, 1900, 1, 1, 0, 'test kniha\r\n'),
+(51, 4, 4, 1900, 1, 1, 0, 'sss'),
+(52, 4, 4, 1900, 1, 1, 0, '1'),
+(53, 4, 4, 1901, 3, 2, 0, '4'),
+(54, 4, 4, 1901, 3, 2, 0, '4'),
+(55, 8, 4, 1900, 1, 1, 0, '1'),
+(56, 7, 4, 1900, 4, 4, 7, '4'),
+(57, 8, 4, 1900, 4, 4, 0, '4'),
+(58, 8, 4, 1900, 4, 4, 0, '4'),
+(59, 8, 4, 1900, 4, 4, 0, ''),
+(60, 8, 4, 1900, 4, 4, 0, ''),
+(61, 4, 4, 1900, 7, 277, 0, 'Mobil'),
+(62, 4, 4, 1900, 7, 277, 0, 'Mobil'),
+(63, 4, 4, 1900, 7, 277, 0, 'Mobil');
 
 -- --------------------------------------------------------
 
@@ -211,6 +235,12 @@ ALTER TABLE `kategorie`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexy pro tabulku `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexy pro tabulku `pu`
 --
 ALTER TABLE `pu`
@@ -243,6 +273,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `kategorie`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT pro tabulku `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pro tabulku `pu`
