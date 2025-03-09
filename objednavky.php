@@ -29,7 +29,7 @@ $sql_buying_complete = "SELECT orders.id as order_id, orders.puID, orders.cas, o
 FROM orders
 INNER JOIN pu ON orders.puID = pu.id
 INNER JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
-INNER JOIN user ON pu.koupil = user.id
+INNER JOIN user ON pu.id_prodejce = user.id
 WHERE pu.koupil = ? AND orders.complete = 0
 ORDER BY orders.cas DESC
 ";
@@ -38,7 +38,7 @@ $sql_buying_pending = "SELECT orders.id as order_id, orders.puID, orders.cas, or
 FROM orders
 INNER JOIN pu ON orders.puID = pu.id
 INNER JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
-INNER JOIN user ON pu.koupil = user.id
+INNER JOIN user ON pu.id_prodejce = user.id
 WHERE pu.koupil = ? AND orders.complete = 1
 ORDER BY orders.cas DESC
 ";
@@ -120,6 +120,7 @@ $resultbuy_pending = $stmt_buy_pending->get_result();
                                 <td class="p-4 text-center">
                                     <form method="POST" action="objednavka.php">
                                         <input type="hidden" name="orderID" value="<?php echo htmlspecialchars($sell_complete['order_id']); ?>">
+                                        <input type="hidden" name="typ" value="koupil">
                                         <button type="submit" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
                                             Přejít
                                         </button>
@@ -159,6 +160,7 @@ $resultbuy_pending = $stmt_buy_pending->get_result();
                                 <td class="p-4 text-center">
                                     <form method="POST" action="objednavka.php">
                                         <input type="hidden" name="orderID" value="<?php echo htmlspecialchars($sell_pending['order_id']); ?>">
+                                        <input type="hidden" name="typ" value="koupil">
                                         <button type="submit" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
                                             Přejít
                                         </button>
@@ -182,7 +184,7 @@ $resultbuy_pending = $stmt_buy_pending->get_result();
                             <th class="p-4 w-[55%]">Nazev</th>
                             <th class="p-4 w-[7%]">Cena</th>
                             <th class="p-4 w-[7%]">Stav</th>
-                            <th class="p-4 w-[15%]">Kupuje</th>
+                            <th class="p-4 w-[15%]">Prodává</th>
                             <th class="p-4 w-[9%]">Podrobnosti</th>
                         </tr>
                     </thead>
@@ -201,6 +203,7 @@ $resultbuy_pending = $stmt_buy_pending->get_result();
                                 <td class="p-4 text-center">
                                     <form method="POST" action="objednavka.php">
                                         <input type="hidden" name="orderID" value="<?php echo htmlspecialchars($buy_complete['order_id']); ?>">
+                                        <input type="hidden" name="typ" value="id_prodejce">
                                         <button type="submit" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
                                             Přejít
                                         </button>
@@ -221,7 +224,7 @@ $resultbuy_pending = $stmt_buy_pending->get_result();
                             <th class="p-4 w-[55%]">Nazev</th>
                             <th class="p-4 w-[7%]">Cena</th>
                             <th class="p-4 w-[7%]">Stav</th>
-                            <th class="p-4 w-[15%]">Kupuje</th>
+                            <th class="p-4 w-[15%]">Prodává</th>
                             <th class="p-4 w-[9%]">Podrobnosti</th>
                         </tr>
                     </thead>
@@ -240,6 +243,7 @@ $resultbuy_pending = $stmt_buy_pending->get_result();
                                 <td class="p-4 text-center">
                                     <form method="POST" action="objednavka.php">
                                         <input type="hidden" name="orderID" value="<?php echo htmlspecialchars($buy_pending['order_id']); ?>">
+                                        <input type="hidden" name="typ" value="id_prodejce">
                                         <button type="submit" class="px-4 py-2 mx-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
                                             Přejít
                                         </button>
