@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
             foreach ($_FILES['fotky']['tmp_name'] as $key => $tmp_name) {
                 if (!empty($tmp_name)) { // Kontrola, zda soubor existuje
                     $fileName = pathinfo($_FILES['fotky']['name'][$key], PATHINFO_FILENAME); // Název souboru bez přípony
-                    $targetDir = "E:/Other/XAMPP/htdocs/burza/foto/pu/$puID/"; // Cesta ke složce
+                    $targetDir = "C:/_MAIN/Utility/XAMPP/htdocs/burza/foto/pu/$puID/"; // Cesta ke složce
                     $targetFilePath = $targetDir . $fileName . ".webp"; // Výstupní cesta
         
                     // 🔹 Ověření, že složka existuje, jinak ji vytvoříme

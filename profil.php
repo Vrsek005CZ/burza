@@ -5,6 +5,7 @@ include("userinfo.php");
 $pageTitle = "Profil"; 
 include("header.php");
 
+
 // Zpracování výběru třídy
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['trida_id'])) {
     $selectedTrida = intval($_POST['trida_id']);
@@ -25,7 +26,7 @@ $prodavaneUcebniceQuery =
     JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
     WHERE pu.id_prodejce = ?";
 $stmt = $conn->prepare($prodavaneUcebniceQuery);
-$stmt->bind_param("i", $user['id']);
+$stmt->bind_param("i", $userID);
 $stmt->execute();
 $prodavaneUcebnice = $stmt->get_result();
 ?>

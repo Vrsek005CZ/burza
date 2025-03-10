@@ -35,7 +35,6 @@ $profil = $profilStmt->get_result();
 
 
 ?>
-
     <style>
         td {
             word-break: break-word;
@@ -76,7 +75,7 @@ $profil = $profilStmt->get_result();
                     </div>
                 </div>
             </div>
-            <div class="w-full lg:w-2/3 mx-auto">
+            <div class="w-full mx-auto">
             <h2 class="text-xl font-semibold text-gray-700 mb-4">Prodávané učebnice</h2>
             <table class="w-full bg-gray-50 shadow-md rounded-lg">
                 <thead>

@@ -1,5 +1,5 @@
 <?php
-include("userinfo.php")
+include("userinfo.php");
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +14,7 @@ include("userinfo.php")
     <!-- Záhlaví -->
     <div class="relative items-center justify-between bg-white shadow-md p-5 rounded-md">
         <!-- Nadpis -->
-        <h1 class="text-3xl font-bold text-center text-gray-800">Online Burza Učebnic</h1>
+        <h1 class="text-3xl font-bold text-center text-gray-800"><a href="index.php">Online Burza Učebnic</a></h1>
 
         <!-- User Info-->
         <div class="absolute top-6 right-3">

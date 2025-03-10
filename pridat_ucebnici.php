@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
     $stmt->execute();
     $stmt->close();
 
+
     if ($conn->query($sql) === TRUE) {
         $id = $conn->insert_id; // Získání ID nově přidaného záznamu
 
@@ -21,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
             foreach ($_FILES['fotky']['tmp_name'] as $key => $tmp_name) {
                 if (!empty($tmp_name)) { // Kontrola, zda soubor existuje
                     $fileName = $id; // Název souboru bez přípony
-                    $targetDir = "E:/Other/XAMPP/htdocs/burza/foto/ucebnice/"; // Cesta ke složce
+                    $targetDir = "C:/_MAIN/Utility/XAMPP/htdocs/burza/foto/ucebnice/"; // Cesta ke složce
                     $targetFilePath = $targetDir . $fileName . ".webp"; // Výstupní cesta
         
                     try {

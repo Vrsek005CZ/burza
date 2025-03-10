@@ -4,6 +4,7 @@ include("connect.php");
 $pageTitle = "Objednávka"; 
 include("header.php");
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' AND isset($_POST['orderID']) AND isset($_POST['typ']) ) {
     $orderID = $_POST['orderID'];
     $typ = $_POST['typ'];
@@ -44,8 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['orderID']) && isset($_
 
 
 ?>
-
-    	
         <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
             <?php if (isset($result) && $result->num_rows > 0): ?>
                 <div class="space-y-4">

@@ -1,8 +1,9 @@
 <?php
 session_start();
 include("connect.php");
-$pageTitle = "Nova Učebnice"; 
+$pageTitle = "Nová učebnice"; 
 include("header.php");
+
 
 // Získání seznamu učebnic
 $sqlUcebnice = "SELECT id, jmeno FROM ucebnice";

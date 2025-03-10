@@ -4,7 +4,10 @@ include("connect.php");
 include("userinfo.php");
 $pageTitle = "Hlavní stránka"; 
 include("header.php");
+
+
 ?>
+
 
     <!-- Filtry pro vyhledávání a filtrování knih -->  
     <div class="p-4">
@@ -84,7 +87,6 @@ include("header.php");
 </div>
 
 <script>
-
 
 
 //funkce pro filtrování knih podle vyhledávání, kategorie a ročníku 

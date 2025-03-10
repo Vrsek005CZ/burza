@@ -6,6 +6,7 @@ include("userinfo.php");
 $pageTitle = "Objednávky"; 
 include("header.php");
 
+
 // Příprava dotazu pro prodej
 $sql_selling_complete = "SELECT orders.id as order_id, orders.puID, orders.cas, orders.complete as complete, pu.id_ucebnice, pu.id_prodejce, pu.rok_tisku, pu.stav as stav, pu.cena as cena, pu.koupil as kupuje, pu.poznamky, ucebnice.jmeno as jmeno_ucebnice, user.user as user_jmeno, user.id as user_id
 FROM orders
@@ -67,8 +68,6 @@ $stmt_buy_pending->bind_param("i", $userId); // Parametr je typu integer
 $stmt_buy_pending->execute();
 $resultbuy_pending = $stmt_buy_pending->get_result();
 ?>
-
-
 
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto"> 
         <div class="flex justify-center mb-5">

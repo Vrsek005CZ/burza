@@ -3,8 +3,9 @@
 include("connect.php");
 include("userinfo.php");
 include("upravit_knihu.php");
-$pageTitle = "Úprava učebnice"; 
+$pageTitle = "Upravit knihu"; 
 include("header.php");
+
 
 if (!isset($_GET['puID'])) {
     die("Chybějící ID učebnice.");
@@ -33,6 +34,8 @@ $dir = "foto/pu/$puID";
 // Získáme existující fotky – včetně souborů s příponou .webp
 $existingImages = glob("$dir/*.{jpg,jpeg,png,webp,gif}", GLOB_BRACE);
 ?>
+
+
     
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
       <form method="post" enctype="multipart/form-data" action="upravit_knihu.php?puID=<?= $puID ?>">

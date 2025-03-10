@@ -5,6 +5,7 @@ include("userinfo.php");
 $pageTitle = "Koupit"; 
 include("header.php");
 
+
 if (isset($_GET['puID'])) {
     $puID = $_GET['puID'];
 } else {
@@ -27,6 +28,12 @@ $result = $stmt->get_result();
 
 ?>
 
+<style>
+.bg-gray-100 {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+</style>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
     <?php $row = $result->fetch_assoc(); ?>
@@ -197,7 +204,6 @@ function velikostObrazku(img){
 
 </script>
 
-<div class="text-xl">KOUPIT</div>
 </div>
 
 </body>
