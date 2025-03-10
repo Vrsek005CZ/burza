@@ -2,6 +2,8 @@
 session_start();
 include("connect.php");
 $current_year = date("Y");
+$pageTitle = "Prodat"; 
+include("header.php");
 // Získání seznamu učebnic
 $sql = "SELECT id, jmeno FROM ucebnice";
 $sql = "SELECT ucebnice.id, ucebnice.jmeno, kategorie.nazev AS kategorie 
@@ -11,15 +13,6 @@ $sql = "SELECT ucebnice.id, ucebnice.jmeno, kategorie.nazev AS kategorie
 $result = $conn->query($sql);
 ?>
 
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Prodat</title>
-    
-    <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
 
     <!-- jQuery (pokud ještě není) -->
@@ -27,18 +20,6 @@ $result = $conn->query($sql);
 
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-</head>
-
-<body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
-
-<div class="w-full max-w-5xl">
-    <!-- Záhlaví -->
-    <div class="flex items-center justify-between bg-white shadow-md p-5 rounded-md">
-        <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">
-            <a href="index.php">Online Burza Učebnic</a>
-        </h1>
-    </div>
-    <br>
 
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
         <form method="POST" action="pridat_knihu.php" enctype="multipart/form-data">

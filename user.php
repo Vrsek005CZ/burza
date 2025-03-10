@@ -2,6 +2,8 @@
 session_start();
 include("connect.php");
 include("userinfo.php");
+$pageTitle = "Uživatel"; 
+include("header.php");
 
 
 if (isset($_GET['profileID'])) {
@@ -11,51 +13,35 @@ if (isset($_GET['profileID'])) {
 }
 
 // Načtení prodávaných učebnic, definovani aliasu
-$prodavaneUcebniceQuery = 
-"   SELECT pu.id, ucebnice.jmeno AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil FROM pu
+$prodavaneUcebniceStmt = $conn->prepare(
+    "SELECT pu.id, ucebnice.jmeno AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil 
+    FROM pu
     JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
-    WHERE pu.id_prodejce = $profileID
-";
-$prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
+    WHERE pu.id_prodejce = ?"
+);
+$prodavaneUcebniceStmt->bind_param("i", $profileID);
+$prodavaneUcebniceStmt->execute();
+$prodavaneUcebnice = $prodavaneUcebniceStmt->get_result();
 
-$profilQuery = 
-"   SELECT user.user, user.email, user.jmeno, user.prijmeni, user.trida_id
+$profilStmt = $conn->prepare(
+    "SELECT user.user, user.email, user.jmeno, user.prijmeni, user.trida_id
     FROM user
-    WHERE user.id = $profileID
-";
-
-$profil = $conn->query($profilQuery);
+    WHERE user.id = ?"
+);
+$profilStmt->bind_param("i", $profileID);
+$profilStmt->execute();
+$profil = $profilStmt->get_result();
 
 
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Uzivatel</title>
     <style>
         td {
             word-break: break-word;
             overflow-wrap: break-word;
         }
     </style>
-</head>
-
-<body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
-
-    <div class="w-full max-w-5xl">
-        <!-- Záhlaví -->
-        <div class="flex items-center justify-between bg-white shadow-md p-5 rounded-md">
-            <!-- Nadpis -->
-            <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">
-                <a href="index.php" class="">Online Burza Učebnic</a>
-            </h1>
-        </div>
-        <br>
     
         <?php $row = $profil->fetch_assoc(); ?>
         <div class="w-full bg-white shadow-md rounded-md p-8">

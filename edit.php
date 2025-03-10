@@ -3,6 +3,8 @@
 include("connect.php");
 include("userinfo.php");
 include("upravit_knihu.php");
+$pageTitle = "Úprava učebnice"; 
+include("header.php");
 
 if (!isset($_GET['puID'])) {
     die("Chybějící ID učebnice.");
@@ -31,26 +33,6 @@ $dir = "foto/pu/$puID";
 // Získáme existující fotky – včetně souborů s příponou .webp
 $existingImages = glob("$dir/*.{jpg,jpeg,png,webp,gif}", GLOB_BRACE);
 ?>
-
-
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Prodat</title>
-</head>
-<body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
-
-<div class="w-full max-w-5xl">
-    <!-- Záhlaví -->
-    <div class="flex items-center justify-between bg-white shadow-md p-5 rounded-md">
-        <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">
-            <a href="index.php">Online Burza Učebnic</a>
-        </h1>
-    </div>
-    <br>
     
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
       <form method="post" enctype="multipart/form-data" action="upravit_knihu.php?puID=<?= $puID ?>">

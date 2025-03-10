@@ -131,6 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $rowData = $result->fetch_assoc();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>

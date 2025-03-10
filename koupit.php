@@ -2,6 +2,8 @@
 session_start();
 include("connect.php");
 include("userinfo.php");
+$pageTitle = "Koupit"; 
+include("header.php");
 
 if (isset($_GET['puID'])) {
     $puID = $_GET['puID'];
@@ -16,33 +18,15 @@ $query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev 
     INNER JOIN kategorie ON ucebnice.kategorie_id = kategorie.id
     INNER JOIN typ ON ucebnice.typ_id = typ.id
     INNER JOIN user ON pu.id_prodejce = user.id
-    WHERE pu.id = $puID
+    WHERE pu.id = ?
 ";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $puID);
+$stmt->execute();
+$result = $stmt->get_result();
 
-
-$result = $conn->query($query); 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Koupit</title>
-</head>
-
-<body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
-
-<div class="w-full max-w-5xl">
-    <!-- Záhlaví -->
-    <div class="flex items-center justify-between bg-white shadow-md p-5 rounded-md">
-        <!-- Nadpis -->
-        <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">
-            <a href="index.php" class="">Online Burza Učebnic</a>
-        </h1>
-    </div>
-    <br> 
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
     <?php $row = $result->fetch_assoc(); ?>

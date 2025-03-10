@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("connect.php");
+$pageTitle = "Objednávka"; 
+include("header.php");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' AND isset($_POST['orderID']) AND isset($_POST['typ']) ) {
     $orderID = $_POST['orderID'];
@@ -42,26 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['orderID']) && isset($_
 
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Objednavka</title>
-</head>
 
-<body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
-
-    <div class="w-full max-w-5xl">
-        <!-- Záhlaví -->
-        <div class="flex items-center justify-between bg-white shadow-md p-5 rounded-md">
-            <!-- Nadpis -->
-            <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">
-                <a href="index.php" class="">Online Burza Učebnic</a>
-            </h1>
-        </div>
-        <br>
+    	
         <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
             <?php if (isset($result) && $result->num_rows > 0): ?>
                 <div class="space-y-4">

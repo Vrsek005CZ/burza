@@ -12,9 +12,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
 
     // ID přihlášeného uživatele jako prodejce (přidat kontrolu přihlášení)
     $id_prodejce = $userId; 
-
-    $sql = "INSERT INTO pu (id_ucebnice, id_prodejce, rok_tisku, stav, cena, koupil, poznamky) 
-            VALUES ($id_ucebnice, $id_prodejce, $rok_tisku, $stav, $cena, 0, '$poznamky')";
+    $stmt = $conn->prepare("INSERT INTO pu (id_ucebnice, id_prodejce, rok_tisku, stav, cena, koupil, poznamky) 
+                            VALUES (?, ?, ?, ?, ?, 0, ?)");
+    $stmt->bind_param("iiiiis", $id_ucebnice, $id_prodejce, $rok_tisku, $stav, $cena, $poznamky);
+    $stmt->execute();
+    $stmt->close();
     
     if ($conn->query($sql) === TRUE) {
         $puID = $conn->insert_id; // Získání ID nově přidaného záznamu

@@ -3,6 +3,8 @@
 session_start();
 include("connect.php");
 include("userinfo.php");
+$pageTitle = "Objednávky"; 
+include("header.php");
 
 // Příprava dotazu pro prodej
 $sql_selling_complete = "SELECT orders.id as order_id, orders.puID, orders.cas, orders.complete as complete, pu.id_ucebnice, pu.id_prodejce, pu.rok_tisku, pu.stav as stav, pu.cena as cena, pu.koupil as kupuje, pu.poznamky, ucebnice.jmeno as jmeno_ucebnice, user.user as user_jmeno, user.id as user_id
@@ -66,26 +68,8 @@ $stmt_buy_pending->execute();
 $resultbuy_pending = $stmt_buy_pending->get_result();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Objednávky</title>
-</head>
 
-<body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
 
-<div class="w-full max-w-5xl">
-    <!-- Záhlaví -->
-    <div class="flex items-center justify-between bg-white shadow-md p-5 rounded-md">
-        <!-- Nadpis -->
-        <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">
-            <a href="index.php" class="">Online Burza Učebnic</a>
-        </h1>
-    </div>
-    <br>
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto"> 
         <div class="flex justify-center mb-5">
             <button onclick="showProdavane()" id ="prodavene_button" class="w-1/2 px-4 py-2 mx-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Prodávané</button>

@@ -8,8 +8,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
     $typ_id = intval($_POST['typ_id']);
     $trida_id = intval($_POST['trida_id']);
 
-    $sql = "INSERT INTO ucebnice (jmeno, kategorie_id, typ_id, trida_id, schvaleno) 
-            VALUES ('$nazev_ucebnice', $kategorie_id, $typ_id, $trida_id, 1)";
+    $stmt = $conn->prepare("INSERT INTO ucebnice (jmeno, kategorie_id, typ_id, trida_id, schvaleno) VALUES (?, ?, ?, ?, 1)");
+    $stmt->bind_param("siii", $nazev_ucebnice, $kategorie_id, $typ_id, $trida_id);
+    $stmt->execute();
+    $stmt->close();
 
     if ($conn->query($sql) === TRUE) {
         $id = $conn->insert_id; // Získání ID nově přidaného záznamu

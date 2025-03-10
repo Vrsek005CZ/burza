@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("connect.php");
+$pageTitle = "Nova Učebnice"; 
+include("header.php");
 
 // Získání seznamu učebnic
 $sqlUcebnice = "SELECT id, jmeno FROM ucebnice";
@@ -16,23 +18,6 @@ $resultTyp = $conn->query($sqlTyp);
 
 ?>
 
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Prodat</title>
-</head>
-
-<body class="bg-gray-100 h-screen flex items-start justify-center pt-10">
-<div class="w-full max-w-5xl">
-    <div class="flex items-center justify-between bg-white shadow-md p-5 rounded-md">
-        <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">
-            <a href="index.php">Online Burza Učebnic</a>
-        </h1>
-    </div>
-    <br>
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
         <form method="POST" action="pridat_ucebnici.php" enctype="multipart/form-data">
             <table class="w-full bg-gray-50 shadow-md rounded-lg">

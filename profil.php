@@ -2,6 +2,8 @@
 session_start();
 include("connect.php");
 include("userinfo.php");
+$pageTitle = "Profil"; 
+include("header.php");
 
 // Zpracování výběru třídy
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['trida_id'])) {
@@ -21,26 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['trida_id'])) {
 $prodavaneUcebniceQuery = 
 "   SELECT pu.id, ucebnice.jmeno AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil FROM pu
     JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
-    WHERE pu.id_prodejce = {$user['id']}";
-$prodavaneUcebnice = $conn->query($prodavaneUcebniceQuery);
+    WHERE pu.id_prodejce = ?";
+$stmt = $conn->prepare($prodavaneUcebniceQuery);
+$stmt->bind_param("i", $user['id']);
+$stmt->execute();
+$prodavaneUcebnice = $stmt->get_result();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Profil</title>
-</head>
-<body class="bg-gray-100 h-screen flex flex-col items-center pt-10">
-    <div class="flex max-w-7xl items-center justify-between bg-white shadow-md p-5 rounded-md w-full">
-        <!-- Nadpis -->
-        <h1 class="text-3xl font-bold text-center flex-1 text-gray-800">
-            <a href="index.php" class="">Online Burza Učebnic</a>
-        </h1>
-    </div>
-    <br>
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8">
         <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Můj Profil</h1>
 
