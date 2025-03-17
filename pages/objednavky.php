@@ -1,10 +1,10 @@
 <?php
 #VÍM, ŽE TOTO, CO JSEM STOŘIL, JE ABSOLUTNÍ VÝSMĚCH ČEMUKOLIV, CO MÁ SPOLEČNÉHO S POČÍTAČI. JE TO DŮKAZ TOHO, ŽE BUĎ JE BŮH VE SVÉM VESMÍRU NAPROSTO BEZMOČNÝ, ABY COKOLIV UDĚLAL S TÍMTO ZVĚRSTVEM, NEBO ŽE MU JE JEDNO, CO SE V JEHO KRÁLOVSTVÍ DĚJE. KDOKOLIV, KDO BY TOTO VIDĚL, BY VĚDĚL, ŽE JE TO ZVĚRSTVO. ALE FUNGUJE TO :D TAK TŘEBA NĚKOMU DALŠÍMU, KDO SE ZA PÁR LET BUDE V TOMTO KÓDU HRABAT, TAK MU TO DÁ ASPOŇ POVEDEMÍ O TOM, JAKÝ JSEM BYL ČLOVĚK. ČLOVĚK JEDNODUCHÝ A PŘÍMOČARÝ, KTERÝ SI VOLÍ TU NEJKRATŠÍ CESTU, I KDYŽ BY SE NAŠLY MNOHEM LEPŠÍ CESTY A ČLOVĚK, CO MÁ VŠE NA HÁKU.
 session_start();
-include("connect.php");
-include("userinfo.php");
+require_once "../code/connect.php";
+require_once "../code/userinfo.php";
 $pageTitle = "Objednávky"; 
-include("header.php");
+require_once "../header.php";
 
 
 // Příprava dotazu pro prodej

@@ -3,8 +3,9 @@
 session_start();
 
 // Zahrnutí skriptů pro ověření administrátorských práv a připojení k databázi
-include("is_admin.php");
-include("connect.php");
+require_once "../code/is_admin.php";
+require_once "../code/connect.php";
+require_once "../header.php";
 
 // -------------------------------
 // Načtení seznamu všech tabulek v databázi

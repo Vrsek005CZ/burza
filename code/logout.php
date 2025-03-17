@@ -31,6 +31,6 @@ if (isset($_COOKIE['user_info'])) {
 }
 
 // Odkázat zpět na homepage
-header("Location: http://localhost/burza/index.php");
+header("Location: ../index.php");
 exit;
 ?>

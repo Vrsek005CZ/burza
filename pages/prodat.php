@@ -1,8 +1,8 @@
 <?php
 session_start();
-include("connect.php");
+require_once "../code/connect.php";
 $pageTitle = "Prodat"; 
-include("header.php");
+require_once "../header.php";
 
 $current_year = date("Y");
 // Získání seznamu učebnic
@@ -26,7 +26,7 @@ $result = $conn->query($sql);
 
 
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
-        <form method="POST" action="pridat_knihu.php" enctype="multipart/form-data">
+        <form method="POST" action="../code/pridat_knihu.php" enctype="multipart/form-data">
             <table class="w-full bg-gray-50 shadow-md rounded-lg">
                 <thead class="text-left bg-gray-200">
                     <tr>

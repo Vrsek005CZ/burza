@@ -1,9 +1,9 @@
 <?php
 session_start();
-include("connect.php");
-include("userinfo.php");
+require_once "../code/connect.php";
+require_once "../code/userinfo.php";
 $pageTitle = "Uživatel"; 
-include("header.php");
+require_once "../header.php";
 
 
 if (isset($_GET['profileID'])) {

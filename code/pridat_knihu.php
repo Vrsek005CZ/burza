@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("connect.php");
-include("userinfo.php");
+require_once "connect.php";
+require_once "userinfo.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
     $id_ucebnice = intval($_POST['id_ucebnice']);
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
         $puID = $conn->insert_id; // Získání ID nově přidaného záznamu
 
         // Vytvoření složky pro fotky
-        $targetDir = "foto/pu/$puID/";
+        $targetDir = "../foto/pu/$puID/";
         if (!file_exists($targetDir)) {
             mkdir($targetDir, 0777, true);
         }
@@ -32,9 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
             foreach ($_FILES['fotky']['tmp_name'] as $key => $tmp_name) {
                 if (!empty($tmp_name)) { // Kontrola, zda soubor existuje
                     $fileName = pathinfo($_FILES['fotky']['name'][$key], PATHINFO_FILENAME); // Název souboru bez přípony
-                    $targetDir = "C:/_MAIN/Utility/XAMPP/htdocs/burza/foto/pu/$puID/"; // Cesta ke složce
+                    $targetDir = $_SERVER['DOCUMENT_ROOT'] . "/burza/foto/pu/$puID/"; // Dynamická cesta ke složce
                     $targetFilePath = $targetDir . $fileName . ".webp"; // Výstupní cesta
         
+                    // muze se nahrat virus --> vytvorit docasnou slozku a nejak to osetrit
                     // 🔹 Ověření, že složka existuje, jinak ji vytvoříme
                     if (!file_exists($targetDir)) {
                         mkdir($targetDir, 0777, true);

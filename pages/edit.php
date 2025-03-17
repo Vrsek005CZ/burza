@@ -1,11 +1,11 @@
 <?php
 
-include("connect.php");
-include("userinfo.php");
-include("upravit_knihu.php");
-$pageTitle = "Upravit knihu"; 
-include("header.php");
+require_once "../code/connect.php";
+require_once "../code/userinfo.php";
+require_once "../code/upravit_knihu.php";
 
+$pageTitle = "Upravit knihu"; 
+require_once "../header.php";
 
 if (!isset($_GET['puID'])) {
     die("Chybějící ID učebnice.");
@@ -30,7 +30,7 @@ if ($userId != $pu['prodejce']) {
     exit;
 }
 
-$dir = "foto/pu/$puID";
+$dir = "../foto/pu/$puID";
 // Získáme existující fotky – včetně souborů s příponou .webp
 $existingImages = glob("$dir/*.{jpg,jpeg,png,webp,gif}", GLOB_BRACE);
 ?>
@@ -38,7 +38,7 @@ $existingImages = glob("$dir/*.{jpg,jpeg,png,webp,gif}", GLOB_BRACE);
 
     
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
-      <form method="post" enctype="multipart/form-data" action="upravit_knihu.php?puID=<?= $puID ?>">
+      <form method="post" enctype="multipart/form-data" action="../code/upravit_knihu.php?puID=<?= $puID ?>">
         <table class="w-full bg-gray-50 shadow-md rounded-lg">
           <thead class="text-left bg-gray-200">
             <tr>

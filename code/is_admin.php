@@ -1,6 +1,6 @@
 <?php
-include("connect.php");
-include("userinfo.php");
+require_once "connect.php";
+require_once "userinfo.php";
 
 // Pouze administrátoři mají přístup
 if (!isset($user) || !isset($user['type']) || $user['type'] == 0) {

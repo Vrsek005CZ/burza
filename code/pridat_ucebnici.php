@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("connect.php");
+require_once "connect.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
     $nazev_ucebnice = $conn->real_escape_string($_POST['nazev_ucebnice']);
@@ -13,8 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
     $stmt->execute();
     $stmt->close();
 
-
-    if ($conn->query($sql) === TRUE) {
+    if ($stmt->affected_rows > 0) {
         $id = $conn->insert_id; // Získání ID nově přidaného záznamu
 
         // Zpracování nahraných fotek
@@ -22,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
             foreach ($_FILES['fotky']['tmp_name'] as $key => $tmp_name) {
                 if (!empty($tmp_name)) { // Kontrola, zda soubor existuje
                     $fileName = $id; // Název souboru bez přípony
-                    $targetDir = "C:/_MAIN/Utility/XAMPP/htdocs/burza/foto/ucebnice/"; // Cesta ke složce
+                    $targetDir = $_SERVER['DOCUMENT_ROOT'] . "/burza/foto/ucebnice/"; // Cesta ke složce
                     $targetFilePath = $targetDir . $fileName . ".webp"; // Výstupní cesta
         
                     try {
@@ -43,11 +42,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
             }
         }
 
+        echo "Učebnice byla úspěšně přidána!";
+    } else {
+        echo "Chyba: " . $conn->error;
     }
-    echo "Učebnice byla úspěšně přidána!";
-}
-
-else {
+} else {
     echo "Chyba: " . $conn->error;
 }
 ?>

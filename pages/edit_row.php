@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("is_admin.php");
-include("connect.php");
+require_once "../code/is_admin.php";
+require_once "../code/connect.php";
 
 // Kontrola povinných parametrů
 if (!isset($_GET['table']) || !isset($_GET['id'])) {
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Správa fotek pro tabulky ucebnice a pu
     if ($table == "ucebnice") {
         // Cesta ke stávající fotce
-        $photoPath = "foto/ucebnice/$id.webp";
+        $photoPath = "../foto/ucebnice/$id.webp";
     
         // Pokud je zatrženo odstranění fotky, smažeme ji, pokud existuje
         if (isset($_POST['removePhoto'])) {
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
         
     } elseif ($table == "pu") {
-        $dir = "foto/pu/$id";
+        $dir = "../foto/pu/$id";
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <hr>
                 <div id="preview" class="flex justify-center mt-2">
                     <?php 
-                        $photoPath = "foto/ucebnice/$id.webp";
+                        $photoPath = "../foto/ucebnice/$id.webp";
                         if (file_exists($photoPath)): 
                     ?>
                         <img src="<?= $photoPath ?>" alt="Foto" id="currentPhoto" class="h-1/3 object-cover border cursor-pointer hover:opacity-70">
@@ -189,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <hr>
                 <div id="preview" class="flex flex-wrap gap-2 mt-2">
                     <?php 
-                        $dir = "foto/pu/$id"; 
+                        $dir = "../foto/pu/$id"; 
                         $existingImages = glob("$dir/*.{jpg,jpeg,png,webp,gif}", GLOB_BRACE);
                         foreach ($existingImages as $image): ?>
                         <img src="<?= $image ?>" data-file="<?= basename($image) ?>" class="preview-img h-[24vh] object-cover border cursor-pointer hover:opacity-70">

@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("connect.php");
-include("userinfo.php");
+require_once "connect.php";
+require_once "userinfo.php";
 
 if (!isset($_GET['puID'])) {
     die("Chybějící ID učebnice.");
@@ -28,7 +28,7 @@ if ($userId != $pu['prodejce']) {
     exit;
 }
 
-$dir = "foto/pu/$puID";
+$dir = "../foto/pu/$puID";
 if (!is_dir($dir)) {
     mkdir($dir, 0777, true);
 }
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-        header("Location: profil.php");
+        header("Location: ../pages/profil.php");
         exit;
     }
     
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $deleteStmt->bind_param("i", $puID);
         $deleteStmt->execute();
 
-        header("Location: profil.php");
+        header("Location: ../pages/profil.php");
         exit;
     }
 }

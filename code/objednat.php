@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("connect.php");
-include("userinfo.php");
+require_once "connect.php";
+require_once "userinfo.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['objednat']) && is_numeric($_POST['objednat'])) {
@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $stmt->close();
         } else {
+            $conn->rollback();
             echo "Chyba při přípravě prvního dotazu: " . $conn->error;
             exit;
         }
@@ -42,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $stmt->close();
         } else {
+            $conn->rollback();
             echo "Chyba při přípravě druhého dotazu: " . $conn->error;
             exit;
         }

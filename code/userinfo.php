@@ -1,5 +1,5 @@
 <?php
-include("connect.php");
+require_once "connect.php";
 
 if (isset($_COOKIE['user_info'])) {
     $userInfoData = json_decode($_COOKIE['user_info'], true);
@@ -19,7 +19,7 @@ if (isset($_COOKIE['user_info'])) {
 }
 else {
     echo("Chyba: Nejste přihlášen.");
-    header("Location: login.php");
+    header("Location: ../code/login.php");
     exit;
 }
 ?>

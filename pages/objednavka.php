@@ -1,8 +1,8 @@
 <?php
 session_start();
-include("connect.php");
+require_once "../code/connect.php";
 $pageTitle = "Objednávka"; 
-include("header.php");
+require_once "../header.php";
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' AND isset($_POST['orderID']) AND isset($_POST['typ']) ) {
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['orderID']) && isset($_
                 <div class="space-y-4">
                     <h2 class="text-xl font-bold text-gray-700 text-center">Detail objednávky</h2>
                     <div class="flex text-gray-800 text-lg w-full bg-gray-50 shadow-md rounded-md">
-                        <img src="foto/ucebnice/<?php echo htmlspecialchars($order['ucebnice_id']); ?>.webp" class="h-[30vh] p-4 border-r">
+                        <img src="../foto/ucebnice/<?php echo htmlspecialchars($order['ucebnice_id']); ?>.webp" class="h-[30vh] p-4 border-r">
                         <div class="flex-col p-4 w-full">
                             <p><span class="font-semibold">ID objednávky:</span> <?php echo htmlspecialchars($order['order_id']); ?></p>
                             <p><span class="font-semibold">Učebnice:</span> <?php echo htmlspecialchars($order['jmeno_ucebnice']); ?></p>

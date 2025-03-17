@@ -2,12 +2,12 @@
 
 
 session_start();
-include("connect.php");
+require_once "connect.php";
 
 //OAUTH 2.0 hodnoty
 $clientID = '273280823406-4v7ooveqdojua0blmfmcdhvmeds3ambo.apps.googleusercontent.com';
 $clientSecret = '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';
-$redirectUri = 'http://localhost/burza/login.php';
+$redirectUri = 'http://localhost/burza/code/login.php';
 $tokenRevocationUrl = "https://oauth2.googleapis.com/revoke";
 
 
@@ -31,7 +31,7 @@ if (!isset($_GET['code'])) {
 
 // Kontrola, zda je uživatel přihlášen
 if (!isset($_SESSION['user_id'])) {
-  header("Location: index.php");
+  header("Location: ../index.php");
 }
 
 

@@ -1,15 +1,17 @@
 <?php
 session_start();
-include("connect.php");
-include("userinfo.php");
+require_once "../code/connect.php";
+require_once "../code/userinfo.php";
+
 $pageTitle = "Koupit"; 
-include("header.php");
+require_once "../header.php";
 
 
 if (isset($_GET['puID'])) {
     $puID = $_GET['puID'];
 } else {
     echo("Chyba: Nezadali jste ID knihy.");
+    exit;
 }
 
 
@@ -39,7 +41,7 @@ $result = $stmt->get_result();
     <?php $row = $result->fetch_assoc(); ?>
     <div class="flex gap-4">
         <a href="ucebnice.php?knihaID=<?php echo htmlspecialchars($row['id'])?>" class="">
-            <img src="foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" class="rounded-lg p-1 w-56 object-cover justify-self-center bg-gray-300">
+            <img src="../foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" class="rounded-lg p-1 w-56 object-cover justify-self-center bg-gray-300">
         </a>
         <div class="flex flex-col w-full">
             <div class="text-lg font-bold"><?php echo htmlspecialchars($row['ucebnice_nazev']); ?></div>
@@ -66,7 +68,7 @@ $result = $stmt->get_result();
                     <button id="koupitButton" onclick="koupit()" class="bg-green-600 text-white font-bold py-3 w-24 rounded-lg shadow-md hover:bg-green-700 transition">
                         Koupit
                     </button>
-                    <form id="myForm" action="objednat.php" method="POST">
+                    <form id="myForm" action="../code/objednat.php" method="POST">
                         <button type="submit" name="objednat" value="<?php echo $puID; ?>" id="potvrditButton" class="bg-yellow-600 text-white font-bold py-3 w-24 rounded-lg shadow-md hover:bg-yellow-700 transition hidden">
                             Potvrdit
                         </button>
@@ -83,7 +85,7 @@ $result = $stmt->get_result();
 
     <div class='flex flex-wrap col-span-8 gap-1 bg-gray-200 shadow-md p-5 rounded-md w-full'>
         <?php
-        $cesta = "foto/pu/$puID/";
+        $cesta = "../foto/pu/$puID/";
         $files = glob($cesta . "*.webp"); //vrátí všechny hodnoty v uvedené cestě, které končí na .webp
         $files_json = json_encode($files); // poslaní do js
 
@@ -107,7 +109,7 @@ $result = $stmt->get_result();
         </button>
 
         <div class="relative bg-gray-300 p-4 rounded-lg shadow-lg flex items-center justify-center w-full h-full mx-1">
-            <img id="oknoImg" src="foto/ucebnice/1.webp" class="object-contain w-full h-auto"/>
+            <img id="oknoImg" src="../foto/ucebnice/1.webp" class="object-contain w-full h-auto"/>
         </div>
 
         <button onclick="dalsiObrazek()" class="bg-gray-300 hover:bg-gray-400 text-4xl p-2 rounded-lg shadow-lg flex items-center justify-center w-[3vh] h-full">
