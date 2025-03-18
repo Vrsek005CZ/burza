@@ -31,7 +31,7 @@ require_once "code/userinfo.php";
                     <?php if ($user['type'] > 0): ?>
                         <a href="/burza/pages/superadmin.php" class="block px-4 py-2 text-yellow-600 hover:bg-gray-100">Administrace</a>
                     <?php endif; ?>
-                    <a href="/burza/pages/logout.php" class="block px-4 py-2 text-red-800 hover:bg-gray-100">Odhlásit se</a>
+                    <a href="/burza/code/logout.php" class="block px-4 py-2 text-red-800 hover:bg-gray-100">Odhlásit se</a>
                 </div>
             <?php endif; ?>
         </div>

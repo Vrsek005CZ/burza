@@ -1,33 +1,10 @@
 <?php
-session_start();
 require_once "../code/connect.php";
 require_once "../code/userinfo.php";
+require_once "../code/buy.php";
 
 $pageTitle = "Koupit"; 
 require_once "../header.php";
-
-
-if (isset($_GET['puID'])) {
-    $puID = $_GET['puID'];
-} else {
-    echo("Chyba: Nezadali jste ID knihy.");
-    exit;
-}
-
-
-$query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, user.user AS prodejce, pu.poznamky, user.id AS prodejce_id, pu.koupil as koupil
-    FROM pu
-    INNER JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
-    INNER JOIN kategorie ON ucebnice.kategorie_id = kategorie.id
-    INNER JOIN typ ON ucebnice.typ_id = typ.id
-    INNER JOIN user ON pu.id_prodejce = user.id
-    WHERE pu.id = ?
-";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $puID);
-$stmt->execute();
-$result = $stmt->get_result();
-
 ?>
 
 <style>
@@ -38,7 +15,7 @@ $result = $stmt->get_result();
 </style>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
-    <?php $row = $result->fetch_assoc(); ?>
+    <?php if ($row): ?>
     <div class="flex gap-4">
         <a href="ucebnice.php?knihaID=<?php echo htmlspecialchars($row['id'])?>" class="">
             <img src="../foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" class="rounded-lg p-1 w-56 object-cover justify-self-center bg-gray-300">
@@ -79,16 +56,14 @@ $result = $stmt->get_result();
             <div class="bg-gray-100 shadow-md rounded-md p-2 mt-2"><?php echo htmlspecialchars($row['poznamky'])?></div>
         </div>
     </div>
-
+<?php else: ?>
+        <p>Učebnice nenalezena.</p>
+    <?php endif; ?>
 
 <br>
 
     <div class='flex flex-wrap col-span-8 gap-1 bg-gray-200 shadow-md p-5 rounded-md w-full'>
         <?php
-        $cesta = "../foto/pu/$puID/";
-        $files = glob($cesta . "*.webp"); //vrátí všechny hodnoty v uvedené cestě, které končí na .webp
-        $files_json = json_encode($files); // poslaní do js
-
         if ($files) {
             foreach ($files as $index => $file) { //oznaci indexi obrazku a projde pro kazdy obrazek
                 echo "<img src='$file' class='h-48 aspect-auto cursor-pointer' onclick='otevritOkno($index)' />";
@@ -121,90 +96,15 @@ $result = $stmt->get_result();
 
 <script>
 
-function koupit(){
-    document.getElementById('koupitButton').classList.add('hidden')
-    document.getElementById('potvrditButton').classList.remove('hidden')
-}
+const UserId = <?php echo $userId; ?>;
+const prodejceId = <?php echo htmlspecialchars($row['prodejce_id']); ?>;
+const koupil = <?php echo htmlspecialchars($row['koupil']); ?>
 
-var UserId = <?php echo $userId; ?>;
-var prodejceId = <?php echo htmlspecialchars($row['prodejce_id']); ?>;
-var koupil = <?php echo htmlspecialchars($row['koupil']); ?>
-// Funkce pro skrytí tlačítka rezervace, pokud je uživatel prodávající
-if (prodejceId === UserId || koupil !== 0) {
-    var button = document.getElementById('koupitButton')
-    button.classList.remove('bg-green-600', 'hover:bg-green-700', 'transition', 'cursor-pointer');
-    button.classList.add('bg-gray-400', 'cursor-not-allowed');
-    button.removeAttribute("href");
-    button.removeAttribute("onclick");
-}
-
-
-document.addEventListener("keydown", function(event) {
-    if (event.key === "Escape") {
-      zavritOkno();
-    }
-  });
-
-let aktualniIndex = 0;
 let obrazky = <?php echo $files_json; ?>;
 
-function otevritOkno(index) {
-    aktualniIndex = index;
-    document.getElementById("oknoImg").src = obrazky[aktualniIndex];
-    document.getElementById("okno").classList.remove("hidden");
-    nactiObrazek();
-}
-
-function zavritOkno() {
-    document.getElementById("okno").classList.add("hidden");
-}
-
-function dalsiObrazek() {
-    if (aktualniIndex < obrazky.length - 1) {
-        aktualniIndex++;
-    } else {
-        aktualniIndex = 0;
-    }
-    velikostObrazku(aktualniIndex)
-    document.getElementById("oknoImg").src = obrazky[aktualniIndex];
-    nactiObrazek();
-}
-
-function predchoziObrazek() {
-    if (aktualniIndex > 0) {
-        aktualniIndex--;
-    } else {
-        aktualniIndex = obrazky.length - 1;
-    }
-    velikostObrazku(aktualniIndex)
-    document.getElementById("oknoImg").src = obrazky[aktualniIndex];
-    nactiObrazek();
-}
-
-function nactiObrazek() {
-    let oknoImg = document.getElementById("oknoImg");
-    oknoImg.src = obrazky[aktualniIndex];
-
-    let img = new Image();
-    img.src = obrazky[aktualniIndex];
-    img.onload = function () {
-        velikostObrazku(img);
-    };
-}
-
-function velikostObrazku(img){
-    let oknoImg = document.getElementById("oknoImg");
-
-    if (img.height > img.width) {
-        oknoImg.classList.remove("w-full");
-        oknoImg.classList.add("h-full");
-    } else {
-        oknoImg.classList.remove("h-full");
-        oknoImg.classList.add("w-full");
-    }
-}
-
 </script>
+<script src="../code/buy.js"></script>
+
 
 </div>
 

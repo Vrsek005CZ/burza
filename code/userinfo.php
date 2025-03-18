@@ -19,7 +19,7 @@ if (isset($_COOKIE['user_info'])) {
 }
 else {
     echo("Chyba: Nejste přihlášen.");
-    header("Location: ../code/login.php");
+    header("Location: /burza/code/login.php");
     exit;
 }
 ?>

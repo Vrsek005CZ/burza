@@ -4,6 +4,7 @@ require_once "code/userinfo.php";
 $pageTitle = "Hlavní stránka"; 
 require_once "header.php";
 
+require_once "code/index_logic.php";
 //get_header("HlAVNÍ STRÁNKA");
 ?>
 
@@ -14,8 +15,6 @@ require_once "header.php";
     <select id="categoryFilter" class="p-2 border rounded w-full">
         <option value="">Všechny kategorie</option>
         <?php
-        $categoryQuery = "SELECT id, nazev FROM kategorie";
-        $categoryResult = $conn->query($categoryQuery);
         while ($cat = $categoryResult->fetch_assoc()) {
             echo "<option value='" . htmlspecialchars($cat['nazev']) . "'>" . htmlspecialchars($cat['nazev']) . "</option>";
         }
@@ -25,8 +24,6 @@ require_once "header.php";
     <select id="gradeFilter" class="p-2 border rounded w-full">
         <option value="">Všechny ročníky</option>
         <?php
-        $gradeQuery = "SELECT DISTINCT trida_id FROM ucebnice ORDER BY trida_id";
-        $gradeResult = $conn->query($gradeQuery);
         while ($grade = $gradeResult->fetch_assoc()) {
             echo "<option value='" . htmlspecialchars($grade['trida_id']) . "'>" . htmlspecialchars($grade['trida_id']) . ". ročník</option>";
         }
@@ -38,18 +35,6 @@ require_once "header.php";
 
     <!-- Kniha z SQL -->
     <?php
-    $query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, 
-    COUNT(CASE WHEN pu.koupil = 0 THEN 1 END) AS pocet_ks, 
-    ROUND(AVG(CASE WHEN pu.koupil = 0 THEN pu.cena END)) AS avg_cena 
-    FROM ucebnice 
-    INNER JOIN kategorie ON ucebnice.kategorie_id=kategorie.id 
-    INNER JOIN typ ON ucebnice.typ_id=typ.id 
-    INNER JOIN pu ON ucebnice.id=pu.id_ucebnice 
-    GROUP BY ucebnice.id
-    ORDER BY pocet_ks DESC";
-    
-    $result = $conn->query($query);
-
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo 
@@ -83,37 +68,8 @@ require_once "header.php";
 
 </div>
 
-<script>
-//funkce pro filtrování knih podle vyhledávání, kategorie a ročníku 
+<script src="code/index.js"></script>
 
-document.getElementById('searchInput').addEventListener('input', filterBooks);
-document.getElementById('categoryFilter').addEventListener('change', filterBooks);
-document.getElementById('gradeFilter').addEventListener('change', filterBooks);
-
-function filterBooks() {
-    //Získání vstupních hodnot
-    const searchText = document.getElementById('searchInput').value.toLowerCase();
-    const selectedCategory = document.getElementById('categoryFilter').value;
-    const selectedGrade = document.getElementById('gradeFilter').value;
-    const books = document.querySelectorAll('.book'); //vrátí NodeList obsahující všechny prvky s třídou .book
-
-    books.forEach(book => {
-        const bookTitle = book.querySelector('.text-l').textContent.toLowerCase(); //Získá název knihy z prvku s třídou .text-l
-        const bookCategory = book.getAttribute('data-category'); //Získá hodnotu atributu data-category z prvku knihy
-        const bookGrade = book.getAttribute('data-grade'); //Získá hodnotu atributu data-grade
-
-        if (
-            bookTitle.includes(searchText) && //Ověří, zda název knihy obsahuje hledaný text
-            (selectedCategory === "" || bookCategory === selectedCategory) && //Když kategorie prázdná, nefiltrujeme
-            (selectedGrade === "" || bookGrade === selectedGrade) //když ročník prázdný, nefiltrujeme
-        ) {
-            book.style.display = "block";
-        } else {
-            book.style.display = "none";
-        }
-    });
-}
-</script>
 
 </body>
 </html>

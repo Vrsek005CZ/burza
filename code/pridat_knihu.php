@@ -16,55 +16,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
                             VALUES (?, ?, ?, ?, ?, 0, ?)");
     $stmt->bind_param("iiiiis", $id_ucebnice, $id_prodejce, $rok_tisku, $stav, $cena, $poznamky);
     $stmt->execute();
+    $puID = $stmt->insert_id; // Získání ID nově přidaného záznamu
     $stmt->close();
-    
-    if ($conn->query($sql) === TRUE) {
-        $puID = $conn->insert_id; // Získání ID nově přidaného záznamu
 
-        // Vytvoření složky pro fotky
-        $targetDir = "../foto/pu/$puID/";
-        if (!file_exists($targetDir)) {
-            mkdir($targetDir, 0777, true);
-        }
-
-        // Zpracování nahraných fotek
-        if (!empty($_FILES['fotky']) && isset($_FILES['fotky']['tmp_name']) && is_array($_FILES['fotky']['tmp_name'])) {
-            foreach ($_FILES['fotky']['tmp_name'] as $key => $tmp_name) {
-                if (!empty($tmp_name)) { // Kontrola, zda soubor existuje
-                    $fileName = pathinfo($_FILES['fotky']['name'][$key], PATHINFO_FILENAME); // Název souboru bez přípony
-                    $targetDir = $_SERVER['DOCUMENT_ROOT'] . "/burza/foto/pu/$puID/"; // Dynamická cesta ke složce
-                    $targetFilePath = $targetDir . $fileName . ".webp"; // Výstupní cesta
-        
-                    // muze se nahrat virus --> vytvorit docasnou slozku a nejak to osetrit
-                    // 🔹 Ověření, že složka existuje, jinak ji vytvoříme
-                    if (!file_exists($targetDir)) {
-                        mkdir($targetDir, 0777, true);
-                    }
-        
-                    try {
-                        $image = new Imagick($tmp_name);
-                        $image->setImageFormat('webp');  // Nastavení formátu WebP
-                        $image->setImageCompressionQuality(80); // Nastavení kvality
-                        $image->writeImage($targetFilePath); // Uložení obrázku
-                        $image->clear();
-                        $image->destroy();
-                        
-                        echo "Obrázek převeden: " . $targetFilePath . "<br>"; // Debug výpis
-                    } catch (Exception $e) {
-                        echo "❌ Chyba při konverzi obrázku: " . $e->getMessage();
-                    }
-                } else {
-                    echo "❌ Fotka neexistuje nebo jste žádnou nevložili.<br>";
-                }
-            }
-        } else {
-            echo "❌ Žádné soubory k nahrání.<br>";
-        }
-        
-
-        echo "Učebnice byla úspěšně přidána!";
-    } else {
-        echo "Chyba: " . $conn->error;
+    // Vytvoření složky pro fotky
+    $targetDir = $_SERVER['DOCUMENT_ROOT'] . "/burza/foto/pu/$puID/";
+    if (!file_exists($targetDir)) {
+        mkdir($targetDir, 0777, true);
     }
+
+    // Zpracování nahraných fotek
+    if (!empty($_FILES['fotky']) && isset($_FILES['fotky']['tmp_name']) && is_array($_FILES['fotky']['tmp_name'])) {
+        foreach ($_FILES['fotky']['tmp_name'] as $key => $tmp_name) {
+            if (!empty($tmp_name)) { // Kontrola, zda soubor existuje
+                $fileName = pathinfo($_FILES['fotky']['name'][$key], PATHINFO_FILENAME); // Název souboru bez přípony
+                $targetFilePath = $targetDir . $fileName . ".webp"; // Výstupní cesta
+
+                try {
+                    $image = new Imagick($tmp_name);
+                    $image->setImageFormat('webp');  // Nastavení formátu WebP
+                    $image->setImageCompressionQuality(80); // Nastavení kvality
+                    $image->writeImage($targetFilePath); // Uložení obrázku
+                    $image->clear();
+                    $image->destroy();
+                    
+                    echo "Obrázek převeden: " . $targetFilePath . "<br>"; // Debug výpis
+                } catch (Exception $e) {
+                    echo "❌ Chyba při konverzi obrázku: " . $e->getMessage();
+                }
+            } else {
+                echo "❌ Fotka neexistuje nebo jste žádnou nevložili.<br>";
+            }
+        }
+    } else {
+        echo "❌ Žádné soubory k nahrání.<br>";
+    }
+
+    echo "Učebnice byla úspěšně přidána!";
 }
 ?>

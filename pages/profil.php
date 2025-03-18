@@ -5,32 +5,17 @@ require_once "../code/userinfo.php";
 $pageTitle = "Profil"; 
 require_once "../header.php";
 
+require_once "../code/profile.php";
 
-// Zpracování výběru třídy
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['trida_id'])) {
-    $selectedTrida = intval($_POST['trida_id']);
-    
-    $updateQuery = "UPDATE user SET trida_id=$selectedTrida WHERE id=$userId";
-    if ($conn->query($updateQuery) === TRUE) {
-        $user['trida_id'] = $selectedTrida; // Aktualizujeme hodnotu i lokálně
-        header("Location: profil.php"); // Přesměrování po uložení
-        exit;
-    } else {
-        echo "Chyba při ukládání třídy: " . $conn->error;
-    }
-}
-
-// Načtení prodávaných učebnic, definování aliasu
-$prodavaneUcebniceQuery = 
-"   SELECT pu.id, ucebnice.jmeno AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil FROM pu
-    JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
-    WHERE pu.id_prodejce = ?";
-$stmt = $conn->prepare($prodavaneUcebniceQuery);
-$stmt->bind_param("i", $userID);
-$stmt->execute();
-$prodavaneUcebnice = $stmt->get_result();
 ?>
 
+
+<style>
+.break-words {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+</style>
     <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8">
         <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Můj Profil</h1>
 
@@ -61,7 +46,7 @@ $prodavaneUcebnice = $stmt->get_result();
                     <?php echo htmlspecialchars($user['trida_id']).". ročník"; ?>
                 <?php endif; ?>
             </div>
-            <div><strong>ID:</strong> <?php echo htmlspecialchars($user['id']); ?></div>
+            <div><strong>ID:</strong> <?php echo htmlspecialchars($userId); ?></div>
         </div>
 
         <!-- Tabulka učebnic -->
@@ -79,23 +64,29 @@ $prodavaneUcebnice = $stmt->get_result();
                 </tr>
             </thead>
             <tbody>
-                <?php while ($ucebnice = $prodavaneUcebnice->fetch_assoc()): ?>
-                    <tr class="even:bg-gray-100">
-                        <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['ucebnice']); ?></td>
-                        <td class="p-4"><?php echo htmlspecialchars($ucebnice['rok_tisku']); ?></td>
-                        <td class="p-4"><?php echo htmlspecialchars($ucebnice['stav']); ?></td>
-                        <td class="p-4"><?php echo htmlspecialchars($ucebnice['cena']); ?> Kč</td>
-                        <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
-                        <td class="p-4">
-                            <a href="koupit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="font-semibold italic <?php echo ($ucebnice['koupil'] != 0) ? 'text-red-600' : 'text-green-600'; ?>">
-                                <?php echo ($ucebnice['koupil'] != 0) ? 'Prodáno' : 'Neprodáno'; ?>
-                            </a>
-                        </td>
-                        <td class="p-4">
-                            <a href="edit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="button bg-blue-500 text-white px-4 py-3 rounded">Edit</a>
-                        </td>
+                <?php if ($prodavaneUcebnice->num_rows > 0): ?>
+                    <?php while ($ucebnice = $prodavaneUcebnice->fetch_assoc()): ?>
+                        <tr class="even:bg-gray-100">
+                            <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['ucebnice']); ?></td>
+                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['rok_tisku']); ?></td>
+                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['stav']); ?></td>
+                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['cena']); ?> Kč</td>
+                            <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
+                            <td class="p-4">
+                                <a href="koupit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="font-semibold italic <?php echo ($ucebnice['koupil'] != 0) ? 'text-red-600' : 'text-green-600'; ?>">
+                                    <?php echo ($ucebnice['koupil'] != 0) ? 'Prodáno' : 'Neprodáno'; ?>
+                                </a>
+                            </td>
+                            <td class="p-4">
+                                <a href="edit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="button bg-blue-500 text-white px-4 py-3 rounded">Edit</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7" class="p-4 text-center">Žádné učebnice nenalezeny.</td>
                     </tr>
-                <?php endwhile; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
