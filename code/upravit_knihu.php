@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $updateStmt = $conn->prepare($updateSql);
         $updateStmt->bind_param("isi", $cena, $poznamky, $puID);
         $updateStmt->execute();
+        $updateStmt->close();
 
         // Odstranění existujících fotek
         if (!empty($_POST['removedImages'])) {
@@ -99,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $deleteStmt = $conn->prepare($deleteSql);
         $deleteStmt->bind_param("i", $puID);
         $deleteStmt->execute();
+        $deleteStmt->close();
 
         header("Location: ../pages/profil.php");
         exit;

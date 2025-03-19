@@ -1,4 +1,6 @@
 <?php
+require_once "connect.php";
+
 // -------------------------------
 // Načtení seznamu všech tabulek v databázi
 // -------------------------------
@@ -7,10 +9,10 @@
 $tables = [];
 
 // Provedeme SQL dotaz, který získá seznam tabulek v aktuální databázi
-$result = mysqli_query($conn, "SHOW TABLES");
+$result = $conn->query("SHOW TABLES");
 
 // Iterujeme přes výsledky dotazu a ukládáme název každé tabulky do pole $tables
-while ($row = mysqli_fetch_array($result)) {
+while ($row = $result->fetch_array()) {
     $tables[] = $row[0]; // Název tabulky je v prvním sloupci výsledku
 }
 
@@ -31,10 +33,12 @@ if ($selected_table && in_array($selected_table, $tables)) {
     // Načtení názvů sloupců vybrané tabulky
     // -------------------------------
     // Provedeme SQL dotaz, který získá informace o sloupcích z vybrané tabulky
-    $col_result = mysqli_query($conn, "SHOW COLUMNS FROM `$selected_table`");
+    $col_result = $conn->prepare("SHOW COLUMNS FROM `$selected_table`");
+    $col_result->execute();
+    $col_result = $col_result->get_result();
     
     // Iterujeme přes výsledky dotazu a ukládáme název každého sloupce (pole 'Field') do pole $table_columns
-    while ($col = mysqli_fetch_assoc($col_result)) {
+    while ($col = $col_result->fetch_assoc()) {
         $table_columns[] = $col['Field'];
     }
     
@@ -42,10 +46,12 @@ if ($selected_table && in_array($selected_table, $tables)) {
     // Načtení všech řádků z vybrané tabulky
     // -------------------------------
     // Provedeme SQL dotaz, který získá všechny záznamy z vybrané tabulky
-    $row_result = mysqli_query($conn, "SELECT * FROM `$selected_table`");
+    $row_result = $conn->prepare("SELECT * FROM `$selected_table`");
+    $row_result->execute();
+    $row_result = $row_result->get_result();
     
     // Iterujeme přes každý řádek výsledku a přidáváme ho do pole $table_rows
-    while ($row = mysqli_fetch_assoc($row_result)) {
+    while ($row = $row_result->fetch_assoc()) {
         $table_rows[] = $row;
     }
 }

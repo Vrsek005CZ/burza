@@ -14,10 +14,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pridat'])) {
     $id_prodejce = $userId; 
     $stmt = $conn->prepare("INSERT INTO pu (id_ucebnice, id_prodejce, rok_tisku, stav, cena, koupil, poznamky) 
                             VALUES (?, ?, ?, ?, ?, 0, ?)");
-    $stmt->bind_param("iiiiis", $id_ucebnice, $id_prodejce, $rok_tisku, $stav, $cena, $poznamky);
-    $stmt->execute();
-    $puID = $stmt->insert_id; // Získání ID nově přidaného záznamu
-    $stmt->close();
+    if ($stmt) {
+        $stmt->bind_param("iiiiis", $id_ucebnice, $id_prodejce, $rok_tisku, $stav, $cena, $poznamky);
+        $stmt->execute();
+        $puID = $stmt->insert_id; // Získání ID nově přidaného záznamu
+        $stmt->close();
+    } else {
+        die("Chyba při přípravě dotazu: " . $conn->error);
+    }
 
     // Vytvoření složky pro fotky
     $targetDir = $_SERVER['DOCUMENT_ROOT'] . "/burza/foto/pu/$puID/";

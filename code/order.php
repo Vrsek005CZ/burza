@@ -1,10 +1,12 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' AND isset($_POST['orderID']) AND isset($_POST['typ']) ) {
-    $orderID = $_POST['orderID'];
+require_once "connect.php";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['orderID']) && isset($_POST['typ'])) {
+    $orderID = intval($_POST['orderID']);
     $typ = $_POST['typ'];
 
     $sql = "SELECT 
-    orders.id as order_id, orders.puID as puID, orders.complete as complete, pu.id_ucebnice, pu.id as puID,  pu.id_prodejce, pu.stav as stav, pu.cena as cena, pu.koupil as kupuje, ucebnice.jmeno as jmeno_ucebnice, ucebnice.id as ucebnice_id, user.user as user_jmeno, user.id as user_id, user.email as mail
+    orders.id as order_id, orders.puID as puID, orders.complete as complete, pu.id_ucebnice, pu.id as puID, pu.id_prodejce, pu.stav as stav, pu.cena as cena, pu.koupil as kupuje, ucebnice.jmeno as jmeno_ucebnice, ucebnice.id as ucebnice_id, user.user as user_jmeno, user.id as user_id, user.email as mail
     FROM orders
     INNER JOIN pu ON orders.puID = pu.id
     INNER JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
@@ -13,11 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' AND isset($_POST['orderID']) AND isset(
 
     // Příprava a provedení dotazu pro prodej
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $orderID); // Parametr je typu integer
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $order = $result -> fetch_assoc();
+    if ($stmt) {
+        $stmt->bind_param("i", $orderID); // Parametr je typu integer
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $order = $result->fetch_assoc();
+        $stmt->close();
+    } else {
+        die("Chyba při přípravě dotazu: " . $conn->error);
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['orderID']) && isset($_POST['confirm'])) {
@@ -25,15 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['orderID']) && isset($_
 
     $sql = "UPDATE orders SET complete = 1 WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $orderID);
-
-    if ($stmt->execute()) {
-        echo "Objednávka byla úspěšně potvrzena!";
+    if ($stmt) {
+        $stmt->bind_param("i", $orderID);
+        if ($stmt->execute()) {
+            echo "Objednávka byla úspěšně potvrzena!";
+        } else {
+            echo "Chyba při potvrzení objednávky.";
+        }
+        $stmt->close();
     } else {
-        echo "Chyba při potvrzení objednávky.";
+        die("Chyba při přípravě dotazu: " . $conn->error);
     }
 
-    $stmt->close();
     $conn->close();
-} 
+}
 ?>

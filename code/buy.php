@@ -4,7 +4,7 @@ require_once "connect.php";
 require_once "userinfo.php";
 
 if (isset($_GET['puID'])) {
-    $puID = $_GET['puID'];
+    $puID = intval($_GET['puID']); // Proti SQL injection
 } else {
     echo("Chyba: Nezadali jste ID knihy.");
     exit;
@@ -18,10 +18,16 @@ $query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev 
     INNER JOIN user ON pu.id_prodejce = user.id
     WHERE pu.id = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $puID);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
+if ($stmt) {
+    $stmt->bind_param("i", $puID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
+} else {
+    echo "Chyba při přípravě dotazu: " . $conn->error;
+    exit;
+}
 
 if (!$row) {
     echo "Učebnice nenalezena.";
@@ -31,9 +37,4 @@ if (!$row) {
 $cesta = "../foto/pu/$puID/";
 $files = glob($cesta . "*.webp"); // vrátí všechny hodnoty v uvedené cestě, které končí na .webp
 $files_json = json_encode($files); // poslaní do js
-
-$cesta = "../foto/pu/$puID/";
-        $files = glob($cesta . "*.webp"); //vrátí všechny hodnoty v uvedené cestě, které končí na .webp
-        $files_json = json_encode($files); // poslaní do js
-        
 ?>

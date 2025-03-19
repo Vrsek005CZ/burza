@@ -30,10 +30,16 @@ if (isset($_GET['order']) && isset($_GET['sort'])) {
 }
 
 $stmt = $conn->prepare($prodavaneUcebniceQuery);
-if ($selfbook == 1) {
-    $stmt->bind_param("i", $userId);
+if ($stmt) {
+    if ($selfbook == 1) {
+        $stmt->bind_param("ii", $knihaID, $userId);
+    } else {
+        $stmt->bind_param("i", $knihaID);
+    }
+    $stmt->execute();
+    $prodavaneUcebnice = $stmt->get_result();
+    $stmt->close();
+} else {
+    die("Chyba při přípravě dotazu: " . $conn->error);
 }
-$stmt->execute();
-$prodavaneUcebnice = $stmt->get_result();
-
 ?>

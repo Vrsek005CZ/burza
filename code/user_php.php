@@ -1,29 +1,41 @@
 <?php
-//dochází mi nápady, jak pojmenovávat soubory
+require_once "connect.php";
+
+// Kontrola, zda byl zadán profileID
 if (isset($_GET['profileID'])) {
-    $profileID = isset($_GET['profileID']) ? intval($_GET['profileID']) : 0;  // proti sql injekci
+    $profileID = intval($_GET['profileID']); // Proti SQL injection
 } else {
-    echo("Chyba: Nezadali jste ID knihy.");
+    die("Chyba: Nezadali jste ID profilu.");
 }
 
-// Načtení prodávaných učebnic, definovani aliasu
+// Načtení prodávaných učebnic, definování aliasu
 $prodavaneUcebniceStmt = $conn->prepare(
     "SELECT pu.id, ucebnice.jmeno AS ucebnice, pu.rok_tisku, pu.stav, pu.cena, pu.poznamky, pu.koupil 
     FROM pu
     JOIN ucebnice ON pu.id_ucebnice = ucebnice.id
     WHERE pu.id_prodejce = ?"
 );
-$prodavaneUcebniceStmt->bind_param("i", $profileID);
-$prodavaneUcebniceStmt->execute();
-$prodavaneUcebnice = $prodavaneUcebniceStmt->get_result();
+if ($prodavaneUcebniceStmt) {
+    $prodavaneUcebniceStmt->bind_param("i", $profileID);
+    $prodavaneUcebniceStmt->execute();
+    $prodavaneUcebnice = $prodavaneUcebniceStmt->get_result();
+    $prodavaneUcebniceStmt->close();
+} else {
+    die("Chyba při přípravě dotazu: " . $conn->error);
+}
 
+// Načtení informací o profilu
 $profilStmt = $conn->prepare(
     "SELECT user.user, user.email, user.jmeno, user.prijmeni, user.trida_id
     FROM user
     WHERE user.id = ?"
 );
-$profilStmt->bind_param("i", $profileID);
-$profilStmt->execute();
-$profil = $profilStmt->get_result();
-
+if ($profilStmt) {
+    $profilStmt->bind_param("i", $profileID);
+    $profilStmt->execute();
+    $profil = $profilStmt->get_result();
+    $profilStmt->close();
+} else {
+    die("Chyba při přípravě dotazu: " . $conn->error);
+}
 ?>

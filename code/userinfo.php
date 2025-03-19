@@ -4,20 +4,41 @@ require_once "connect.php";
 if (isset($_COOKIE['user_info'])) {
     $userInfoData = json_decode($_COOKIE['user_info'], true);
     $userInfoDataArray = json_decode($userInfoData, true);
-    $email = $conn->real_escape_string($userInfoDataArray['email']);
-    $query_user = "SELECT * FROM user WHERE email='$email'";
-    $result_user = $conn->query($query_user);
 
-    if ($result_user->num_rows > 0) {
-        $user = $result_user->fetch_assoc();
-        $userId = $user['id'];
-    }
-    else {
-        echo("Chyba: User nenalezen.");
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        echo("Chyba: Neplatný formát JSON v cookie.");
+        header("Location: /burza/code/login.php");
         exit;
     }
-}
-else {
+
+    if (isset($userInfoDataArray['email'])) {
+        $email = $conn->real_escape_string($userInfoDataArray['email']);
+
+        $query_user = "SELECT * FROM user WHERE email = ?";
+        $stmt = $conn->prepare($query_user);
+        if ($stmt) {
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result_user = $stmt->get_result();
+
+            if ($result_user->num_rows > 0) {
+                $user = $result_user->fetch_assoc();
+                $userId = $user['id'];
+            } else {
+                echo("Chyba: User nenalezen.");
+                exit;
+            }
+            $stmt->close();
+        } else {
+            echo("Chyba při přípravě dotazu: " . $conn->error);
+            exit;
+        }
+    } else {
+        echo("Chyba: Email není v cookie.");
+        header("Location: /burza/code/login.php");
+        exit;
+    }
+} else {
     echo("Chyba: Nejste přihlášen.");
     header("Location: /burza/code/login.php");
     exit;

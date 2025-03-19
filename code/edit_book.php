@@ -1,4 +1,7 @@
 <?php
+require_once "connect.php";
+require_once "userinfo.php";
+
 if (!isset($_GET['puID'])) {
     die("Chybějící ID učebnice.");
 }
@@ -9,10 +12,15 @@ $sql = "SELECT pu.cena as cena, pu.poznamky as poznamky, ucebnice.jmeno as nazev
         INNER JOIN ucebnice ON pu.id_ucebnice = ucebnice.id 
         WHERE pu.id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $puID);
-$stmt->execute();
-$result = $stmt->get_result();
-$pu = $result->fetch_assoc();
+if ($stmt) {
+    $stmt->bind_param("i", $puID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $pu = $result->fetch_assoc();
+    $stmt->close();
+} else {
+    die("Chyba při přípravě dotazu: " . $conn->error);
+}
 
 if (!$pu) {
     die("Učebnice nenalezena.");

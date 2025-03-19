@@ -1,13 +1,36 @@
 <?php
+require_once "connect.php";
+
 // Získání seznamu učebnic
 $sqlUcebnice = "SELECT id, jmeno FROM ucebnice";
-$resultUcebnice = $conn->query($sqlUcebnice);
+$stmtUcebnice = $conn->prepare($sqlUcebnice);
+if ($stmtUcebnice) {
+    $stmtUcebnice->execute();
+    $resultUcebnice = $stmtUcebnice->get_result();
+    $stmtUcebnice->close();
+} else {
+    die("Chyba při přípravě dotazu: " . $conn->error);
+}
 
 // Získání seznamu kategorií
 $sqlKategorie = "SELECT id, nazev FROM kategorie";
-$resultKategorie = $conn->query($sqlKategorie);
+$stmtKategorie = $conn->prepare($sqlKategorie);
+if ($stmtKategorie) {
+    $stmtKategorie->execute();
+    $resultKategorie = $stmtKategorie->get_result();
+    $stmtKategorie->close();
+} else {
+    die("Chyba při přípravě dotazu: " . $conn->error);
+}
 
 // Získání seznamu typů
 $sqlTyp = "SELECT id, nazev FROM typ";
-$resultTyp = $conn->query($sqlTyp);
+$stmtTyp = $conn->prepare($sqlTyp);
+if ($stmtTyp) {
+    $stmtTyp->execute();
+    $resultTyp = $stmtTyp->get_result();
+    $stmtTyp->close();
+} else {
+    die("Chyba při přípravě dotazu: " . $conn->error);
+}
 ?>
