@@ -14,39 +14,39 @@ require_once "../header.php";
 }
 </style>
 
-<div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
+<div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
     <?php if ($row): ?>
-    <div class="flex gap-4">
+    <div class="flex flex-col sm:flex-row gap-4">
         <a href="ucebnice.php?knihaID=<?php echo htmlspecialchars($row['id'])?>" class="">
-            <img src="../foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" class="rounded-lg p-1 w-56 object-cover justify-self-center bg-gray-300">
+            <img src="../foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" class="rounded-lg p-1 w-full sm:w-56 object-cover justify-self-center bg-gray-300">
         </a>
         <div class="flex flex-col w-full">
-            <div class="text-lg font-bold"><?php echo htmlspecialchars($row['ucebnice_nazev']); ?></div>
-            <div class="text-sm flex">
+            <div class="text-lg font-bold text-center sm:text-left"><?php echo htmlspecialchars($row['ucebnice_nazev']); ?></div>
+            <div class="text-sm flex flex-col sm:flex-row">
                 <div class="flex flex-col flex-grow gap-2">
-                    <div class="flex gap-4">
-                        <div class="w-32 flex-auto text-slate-700"><?php echo htmlspecialchars($row['typ_nazev'])?></div>
-                        <div class="w-32 flex-auto"><?php echo htmlspecialchars($row['rok_tisku'])?></div>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="w-full sm:w-32 flex-auto text-slate-700"><?php echo htmlspecialchars($row['typ_nazev'])?></div>
+                        <div class="w-full sm:w-32 flex-auto"><?php echo htmlspecialchars($row['rok_tisku'])?></div>
                     </div>
-                    <div class="flex gap-4">
-                        <div class="flex-auto w-32 text-slate-700"><?php echo htmlspecialchars($row['kategorie_nazev'])?></div>
-                        <div class="flex-auto w-32"><?php echo htmlspecialchars($row['stav'])?>/10</div>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="w-full sm:w-32 flex-auto text-slate-700"><?php echo htmlspecialchars($row['kategorie_nazev'])?></div>
+                        <div class="w-full sm:w-32 flex-auto"><?php echo htmlspecialchars($row['stav'])?>/10</div>
                     </div>
-                    <div class="flex gap-4">
-                        <div class="flex-auto w-32 text-slate-700">vhodné pro <?php echo htmlspecialchars($row['trida_id'])?>. ročník</div>
-                        <div class="flex-auto w-32">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="w-full sm:w-32 flex-auto text-slate-700">vhodné pro <?php echo htmlspecialchars($row['trida_id'])?>. ročník</div>
+                        <div class="w-full sm:w-32 flex-auto">
                             <a href="user.php?profileID=<?php echo htmlspecialchars($row['prodejce_id']); ?>" class="text-gray-600 italic">
                                 <?php echo htmlspecialchars($row['prodejce']); ?>
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center">
-                    <button id="koupitButton" onclick="koupit()" class="bg-green-600 text-white font-bold py-3 w-24 rounded-lg shadow-md hover:bg-green-700 transition">
+                <div class="flex items-center mt-4 sm:mt-0">
+                    <button id="koupitButton" onclick="koupit()" class="bg-green-600 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md hover:bg-green-700 transition">
                         Koupit
                     </button>
-                    <form id="myForm" action="../code/objednat.php" method="POST">
-                        <button type="submit" name="objednat" value="<?php echo $puID; ?>" id="potvrditButton" class="bg-yellow-600 text-white font-bold py-3 w-24 rounded-lg shadow-md hover:bg-yellow-700 transition hidden">
+                    <form id="myForm" action="../code/objednat.php" method="POST" class="w-full sm:w-auto">
+                        <button type="submit" name="objednat" value="<?php echo $puID; ?>" id="potvrditButton" class="bg-yellow-600 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md hover:bg-yellow-700 transition hidden">
                             Potvrdit
                         </button>
                     </form>
@@ -104,7 +104,6 @@ let obrazky = <?php echo $files_json; ?>;
 
 </script>
 <script src="../code/buy.js"></script>
-
 
 </div>
 

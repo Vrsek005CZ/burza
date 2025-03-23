@@ -1,4 +1,7 @@
 <?php
+require_once "../code/is_admin.php";
+require_once "../code/connect.php";
+
 require_once "../code/row_edit.php";
 ?>
 <!DOCTYPE html>
@@ -9,7 +12,7 @@ require_once "../code/row_edit.php";
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Editace záznamu</title>
 </head>
-<body class="bg-gray-100 p-10">
+<body class="bg-gray-100 p-4 sm:p-10">
     <div class="max-w-4xl mx-auto bg-white shadow-md rounded-md p-6">
         <h1 class="text-2xl font-bold mb-4">Editace záznamu v tabulce: <?php echo htmlspecialchars($table); ?></h1>
         <?php if (isset($message)): ?>
@@ -25,6 +28,8 @@ require_once "../code/row_edit.php";
                         <td class="p-2">
                         <?php if ($column == "id"): ?>
                             <input type="text" name="<?php echo htmlspecialchars($column); ?>" value="<?php echo htmlspecialchars($value); ?>" readonly class="border p-1 w-full">
+                        <?php elseif ($column == "poznamky"): ?>
+                            <textarea name="<?php echo htmlspecialchars($column); ?>" rows="10" class="border p-1 w-full"><?php echo htmlspecialchars($value); ?></textarea>
                         <?php else: ?>
                             <input type="text" name="<?php echo htmlspecialchars($column); ?>" value="<?php echo htmlspecialchars($value); ?>" class="border p-1 w-full">
                         <?php endif; ?>
@@ -34,7 +39,7 @@ require_once "../code/row_edit.php";
             </table>
         <?php if ($table == "ucebnice"): ?>
             <!-- Sekce pro fotku u tabulky ucebnice -->
-            <div class="bg-gray-100 shadow-md rounded-md p-8 mx-auto mb-4">
+            <div class="bg-gray-100 shadow-md rounded-md p-4 sm:p-8 mx-auto mb-4">
                 <div class="text-center font-bold">Fotografie</div>
                 <hr>
                 <div id="preview" class="flex justify-center mt-2">
@@ -54,7 +59,7 @@ require_once "../code/row_edit.php";
             </div>
         <?php elseif ($table == "pu"): ?>
             <!-- Sekce pro existující fotky -->
-            <div class="bg-gray-100 shadow-md rounded-md p-8 mx-auto">
+            <div class="bg-gray-100 shadow-md rounded-md p-4 sm:p-8 mx-auto">
                 <div class="text-center font-bold">Fotky</div>
                 <hr>
                 <div id="preview" class="flex flex-wrap gap-2 mt-2">
@@ -68,7 +73,7 @@ require_once "../code/row_edit.php";
             </div>
             
             <!-- Sekce pro nahrání nových fotek -->
-            <div class="bg-gray-100 shadow-md rounded-md p-8 mx-auto mt-4">
+            <div class="bg-gray-100 shadow-md rounded-md p-4 sm:p-8 mx-auto mt-4">
                 <div class="text-center font-bold">Přidat nové fotky</div>
                 <hr>
                 <input type="file" name="newFiles[]" id="fileInput" accept="image/*" multiple class="p-2 w-full">
@@ -81,9 +86,10 @@ require_once "../code/row_edit.php";
         </div>
         </form>
     </div>
-    <script>
-        const table = "<?php echo $table; ?>";
-    </script>
-    <script src="../code/row_row.js"></script>
+<?php if ($table == "pu"): ?>
+    <script src="../code/row_edit_pu.js"></script>
+<?php elseif ($table == "ucebnice"): ?>
+    <script src="../code/row_edit_ucebnice.js"></script>
+<?php endif; ?>
 </body>
 </html>

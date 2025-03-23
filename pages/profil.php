@@ -8,19 +8,11 @@ require_once "../header.php";
 require_once "../code/profile.php";
 
 ?>
-
-
-<style>
-.break-words {
-    word-break: break-word;
-    overflow-wrap: break-word;
-}
-</style>
-    <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8">
+    <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
         <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Můj Profil</h1>
 
         <!-- Osobní informace -->
-        <div class="grid grid-cols-2 gap-4 border-b pb-6 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b pb-6 mb-6">
             <div><strong>Jméno:</strong> <?php echo htmlspecialchars($user['jmeno']); ?></div>
             <div><strong>Příjmení:</strong> <?php echo htmlspecialchars($user['prijmeni']); ?></div>
             <div><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></div>
@@ -51,44 +43,46 @@ require_once "../code/profile.php";
 
         <!-- Tabulka učebnic -->
         <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">Prodávané učebnice</h2>
-        <table class="w-full bg-gray-50 shadow-md rounded-lg">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="p-4 text-left w-[23%]">Název učebnice</th>
-                    <th class="p-4 text-left w-[5%]">Rok tisku</th>
-                    <th class="p-4 text-left w-[5%]">Stav</th>
-                    <th class="p-4 text-left w-[7%]">Cena</th>
-                    <th class="p-4 text-left w-[46%]">Poznámky</th>
-                    <th class="p-4 text-left w-[7%]">Stav prodání</th>
-                    <th class="p-4 text-left w-[7%]">Upravit</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($prodavaneUcebnice->num_rows > 0): ?>
-                    <?php while ($ucebnice = $prodavaneUcebnice->fetch_assoc()): ?>
-                        <tr class="even:bg-gray-100">
-                            <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['ucebnice']); ?></td>
-                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['rok_tisku']); ?></td>
-                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['stav']); ?></td>
-                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['cena']); ?> Kč</td>
-                            <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
-                            <td class="p-4">
-                                <a href="koupit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="font-semibold italic <?php echo ($ucebnice['koupil'] != 0) ? 'text-red-600' : 'text-green-600'; ?>">
-                                    <?php echo ($ucebnice['koupil'] != 0) ? 'Prodáno' : 'Neprodáno'; ?>
-                                </a>
-                            </td>
-                            <td class="p-4">
-                                <a href="edit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="button bg-blue-500 text-white px-4 py-3 rounded">Edit</a>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="7" class="p-4 text-center">Žádné učebnice nenalezeny.</td>
+        <div class="overflow-x-auto">
+            <table class="min-w-[1000px] sm:min-w-full bg-gray-50 shadow-md rounded-lg text-sm">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="p-4 text-left w-[23%]">Název učebnice</th>
+                        <th class="p-4 text-left w-[5%]">Rok tisku</th>
+                        <th class="p-4 text-left w-[5%]">Stav</th>
+                        <th class="p-4 text-left w-[7%]">Cena</th>
+                        <th class="p-4 text-left w-[46%]">Poznámky</th>
+                        <th class="p-4 text-left w-[7%]">Stav prodání</th>
+                        <th class="p-4 text-left w-[7%]">Upravit</th>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php if ($prodavaneUcebnice->num_rows > 0): ?>
+                        <?php while ($ucebnice = $prodavaneUcebnice->fetch_assoc()): ?>
+                            <tr class="even:bg-gray-100">
+                                <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['ucebnice']); ?></td>
+                                <td class="p-4"><?php echo htmlspecialchars($ucebnice['rok_tisku']); ?></td>
+                                <td class="p-4"><?php echo htmlspecialchars($ucebnice['stav']); ?></td>
+                                <td class="p-4"><?php echo htmlspecialchars($ucebnice['cena']); ?> Kč</td>
+                                <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
+                                <td class="p-4">
+                                    <a href="koupit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="font-semibold italic <?php echo ($ucebnice['koupil'] != 0) ? 'text-red-600' : 'text-green-600'; ?>">
+                                        <?php echo ($ucebnice['koupil'] != 0) ? 'Prodáno' : 'Neprodáno'; ?>
+                                    </a>
+                                </td>
+                                <td class="p-4">
+                                    <a href="edit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="button bg-blue-500 text-white px-4 py-3 rounded">Edit</a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="7" class="p-4 text-center">Žádné učebnice nenalezeny.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 <?php $conn->close(); ?>

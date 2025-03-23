@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once "../code/connect.php";
-require_once "../code/userinfo.php";
+require_once "code/connect.php";
+require_once "code/userinfo.php";
 
-require_once "../header.php";
+require_once "header.php";
 getHeader("Uživatel"); 
 
 require_once "../code/user_php.php";

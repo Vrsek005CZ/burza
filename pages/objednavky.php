@@ -7,21 +7,20 @@ $pageTitle = "Objednávky";
 require_once "../header.php";
 
 require_once "../code/orders.php";
-
-
 ?>
 
-    <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto"> 
-        <div class="flex justify-center mb-5">
-            <button onclick="showProdavane()" id ="prodavene_button" class="w-1/2 px-4 py-2 mx-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Prodávané</button>
-            <button onclick="showKupovane()" id="kupovane_button" class="w-1/2 px-4 py-2 mx-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Kupované</button>
-        </div><hr><br>
-        <!-- Prodávané -->
-        <div id = "prodavene_div" class="">
-            <?php if ($resultsell_complete->num_rows > 0): ?>
+<div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto"> 
+    <div class="flex justify-center mb-5">
+        <button onclick="showProdavane()" id ="prodavene_button" class="w-1/2 px-4 py-2 mx-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Prodávané</button>
+        <button onclick="showKupovane()" id="kupovane_button" class="w-1/2 px-4 py-2 mx-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Kupované</button>
+    </div><hr><br>
+    <!-- Prodávané -->
+    <div id="prodavene_div" class="">
+        <?php if ($resultsell_complete->num_rows > 0): ?>
+            <div class="overflow-x-auto">
                 <table class="w-full bg-gray-50 shadow-md rounded-lg">
                     <thead>
-                    <tr class="bg-gray-200 text-left">
+                        <tr class="bg-gray-200 text-left">
                             <th class="p-4 w-[7%]">ID</th>
                             <th class="p-4 w-[55%]">Nazev</th>
                             <th class="p-4 w-[7%]">Cena</th>
@@ -55,13 +54,15 @@ require_once "../code/orders.php";
                         <?php endwhile; ?>
                     </tbody>
                 </table>
-            <?php else: ?>
-                <div class="text-center text-xl font-bold">Nemáte žádné aktivní objednávky.</div>
-            <?php endif; ?><br><hr><br>
-            <?php if ($resultsell_pending->num_rows > 0): ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center text-xl font-bold">Nemáte žádné aktivní objednávky.</div>
+        <?php endif; ?><br><hr><br>
+        <?php if ($resultsell_pending->num_rows > 0): ?>
+            <div class="overflow-x-auto">
                 <table class="w-full bg-gray-50 shadow-md rounded-lg">
                     <thead>
-                    <tr class="bg-gray-200 text-left">
+                        <tr class="bg-gray-200 text-left">
                             <th class="p-4 w-[7%]">ID</th>
                             <th class="p-4 w-[55%]">Nazev</th>
                             <th class="p-4 w-[7%]">Cena</th>
@@ -95,16 +96,18 @@ require_once "../code/orders.php";
                         <?php endwhile; ?>
                     </tbody>
                 </table>
-            <?php else: ?>
-                <div class="text-center text-xl font-bold">Nemáte žádnou historii objednávek.</div>
-            <?php endif; ?>
-        </div>
-        <!-- Kupované -->
-        <div id = "kupovane_div" class="hidden">
-            <?php if ($resultbuy_complete->num_rows > 0): ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center text-xl font-bold">Nemáte žádnou historii objednávek.</div>
+        <?php endif; ?>
+    </div>
+    <!-- Kupované -->
+    <div id="kupovane_div" class="hidden">
+        <?php if ($resultbuy_complete->num_rows > 0): ?>
+            <div class="overflow-x-auto">
                 <table class="w-full bg-gray-50 shadow-md rounded-lg">
                     <thead>
-                    <tr class="bg-gray-200 text-left">
+                        <tr class="bg-gray-200 text-left">
                             <th class="p-4 w-[7%]">ID</th>
                             <th class="p-4 w-[55%]">Nazev</th>
                             <th class="p-4 w-[7%]">Cena</th>
@@ -138,13 +141,15 @@ require_once "../code/orders.php";
                         <?php endwhile; ?>
                     </tbody>
                 </table>
-            <?php else: ?>
-                <div class="text-center text-xl font-bold">Nemáte žádné aktivní objednávky.</div>
-            <?php endif; ?><br><hr><br>
-            <?php if ($resultbuy_pending->num_rows > 0): ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center text-xl font-bold">Nemáte žádné aktivní objednávky.</div>
+        <?php endif; ?><br><hr><br>
+        <?php if ($resultbuy_pending->num_rows > 0): ?>
+            <div class="overflow-x-auto">
                 <table class="w-full bg-gray-50 shadow-md rounded-lg">
                     <thead>
-                    <tr class="bg-gray-200 text-left">
+                        <tr class="bg-gray-200 text-left">
                             <th class="p-4 w-[7%]">ID</th>
                             <th class="p-4 w-[55%]">Nazev</th>
                             <th class="p-4 w-[7%]">Cena</th>
@@ -178,10 +183,10 @@ require_once "../code/orders.php";
                         <?php endwhile; ?>
                     </tbody>
                 </table>
-            <?php else: ?>
-                <div class="text-center text-xl font-bold">Nemáte žádnou historii objednávek.</div>
-            <?php endif; ?>
-        </div>
+            </div>
+        <?php else: ?>
+            <div class="text-center text-xl font-bold">Nemáte žádnou historii objednávek.</div>
+        <?php endif; ?>
     </div>
 </div>
 

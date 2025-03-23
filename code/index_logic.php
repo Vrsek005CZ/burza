@@ -41,4 +41,13 @@ if ($mainStmt) {
 } else {
     die("Chyba při přípravě dotazu: " . $conn->error);
 }
+
+// Zpracování přepnutí výšky
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggleHeight'])) {
+    $_SESSION['fullHeight'] = isset($_SESSION['fullHeight']) ? !$_SESSION['fullHeight'] : true;
+    header("Location: index.php");
+    exit;
+}
+$fullHeightClass = isset($_SESSION['fullHeight']) && $_SESSION['fullHeight'] ? 'h-full' : 'h-12';
+
 ?>

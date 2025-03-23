@@ -6,8 +6,6 @@ session_start();
 require_once "../code/is_admin.php";
 require_once "../code/connect.php";
 require_once "../code/super_admin.php";
-
-
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -19,7 +17,7 @@ require_once "../code/super_admin.php";
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Superadmin - Seznam záznamů</title>
 </head>
-<body class="bg-gray-100 min-h-screen p-10">
+<body class="bg-gray-100 min-h-screen p-4 sm:p-10">
   <div class="max-w-7xl mx-auto">
     <!-- ========================================= -->
     <!-- Hlavička stránky -->
@@ -48,7 +46,7 @@ require_once "../code/super_admin.php";
           <?php endforeach; ?>
         </select>
         <!-- Tlačítko pro odeslání formuláře, čímž se načtou data z vybrané tabulky -->
-        <button type="submit" class="mt-3 bg-blue-500 text-white px-4 py-2 rounded">
+        <button type="submit" class="mt-3 bg-blue-500 text-white px-4 py-2 rounded w-full sm:w-auto">
           Načíst data
         </button>
       </form>
@@ -64,9 +62,9 @@ require_once "../code/super_admin.php";
           Data z tabulky: <?php echo htmlspecialchars($selected_table); ?>
         </h2>
         <!-- Kontejner pro tabulku, který zaručuje, že nebude přesahovat rodičovský element -->
-        <div class="w-full" style="max-width: 100%;">
+        <div class="overflow-x-auto">
           <!-- Samotná HTML tabulka bez pevně stanovené šířky, takže se šířku přizpůsobí obsahu -->
-          <table class="table-auto border-collapse w-full" style="max-width: 100%;">
+          <table class="table-auto border-collapse w-full">
             <thead>
               <tr>
                 <!-- Generování záhlaví tabulky podle názvů sloupců -->

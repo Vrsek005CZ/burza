@@ -1,18 +1,18 @@
 <?php
 session_start();
 require_once "code/userinfo.php";
-$pageTitle = "Hlavní stránka"; 
+
 require_once "header.php";
+getHeader("Hlavní stránka"); 
 
 require_once "code/index_logic.php";
-//get_header("HlAVNÍ STRÁNKA");
 ?>
 
 <!-- Filtry pro vyhledávání a filtrování knih -->  
 <div class="p-4">
     <input type="text" id="searchInput" placeholder="Hledat učebnici..." class="p-2 border rounded w-full mb-2">
 
-    <select id="categoryFilter" class="p-2 border rounded w-full">
+    <select id="categoryFilter" class="p-2 border rounded w-full mb-2">
         <option value="">Všechny kategorie</option>
         <?php
         while ($cat = $categoryResult->fetch_assoc()) {
@@ -21,7 +21,7 @@ require_once "code/index_logic.php";
         ?>
     </select>
 
-    <select id="gradeFilter" class="p-2 border rounded w-full">
+    <select id="gradeFilter" class="p-2 border rounded w-full mb-2">
         <option value="">Všechny ročníky</option>
         <?php
         while ($grade = $gradeResult->fetch_assoc()) {
@@ -29,19 +29,24 @@ require_once "code/index_logic.php";
         }
         ?>
     </select>
+    <form method="post" class="inline-flex items-center space-x-1 p-2 border rounded bg-gray-100">
+        <label for="toggleHeight" class="mr-2 font-semibold">Zobrazit celé texty:</label>
+        <button type="submit" name="toggleHeight" id="toggleHeight" class="p-2 rounded hover:text-blue-500 <?php echo isset($_SESSION['fullHeight']) && $_SESSION['fullHeight'] ? 'text-blue-600' : 'text-black'; ?>">
+            <?php echo isset($_SESSION['fullHeight']) && $_SESSION['fullHeight'] ? '◆' : '◇'; ?>
+        </button>
+    </form>
 </div>
 
-<div id="booksContainer" class="grid gap-4 p-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+<div id="booksContainer" class="grid gap-4 p-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
 
     <!-- Kniha z SQL -->
     <?php
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo 
-
-            "<a href='pages/ucebnice.php?knihaID=" . $row['id'] . "' class='book bg-gray-200 p-4 rounded-md items-center rounded-md' data-category='" . htmlspecialchars($row['kategorie_nazev']) . "' data-grade='" . htmlspecialchars($row['trida_id']) . "'>
+            "<a href='pages/ucebnice.php?knihaID=" . $row['id'] . "' class='book bg-gray-200 p-4 rounded-md items-center' data-category='" . htmlspecialchars($row['kategorie_nazev']) . "' data-grade='" . htmlspecialchars($row['trida_id']) . "'>
                 <div class='bg-gray-100 rounded-md'>
-                    <div class='text-l text-center font-semibold m-1 p-1 h-12 hover:h-full'>"
+                    <div class='text-l text-center font-semibold m-1 p-1 $fullHeightClass hover:h-full break-words'>"
                         . htmlspecialchars($row['ucebnice_nazev']) . 
                     "</div>
                     <div class='h-50'>
@@ -66,10 +71,8 @@ require_once "code/index_logic.php";
 
 <h1>Nejde spustit jinde nez na serveru > v googlu odkaz na localhost, ale v jinde 10.0.0.13 . Doladit web, jako třeba šipku zpět. Všude pro sql pridat bind params</h1>
 
-</div>
 
 <script src="code/index.js"></script>
-
 
 </body>
 </html>
