@@ -2,8 +2,10 @@
 session_start();
 require_once "../code/connect.php";
 require_once "../code/userinfo.php";
-$pageTitle = "Profil"; 
+
 require_once "../header.php";
+getHeader("Profil"); 
+
 
 require_once "../code/profile.php";
 

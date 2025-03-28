@@ -15,7 +15,8 @@ require_once "code/index_logic.php";
     <select id="categoryFilter" class="p-2 border rounded w-full mb-2">
         <option value="">Všechny kategorie</option>
         <?php
-        while ($cat = $categoryResult->fetch_assoc()) {
+        $kategorie = getKategorie($conn);
+        foreach ($kategorie as $cat) {
             echo "<option value='" . htmlspecialchars($cat['nazev']) . "'>" . htmlspecialchars($cat['nazev']) . "</option>";
         }
         ?>
@@ -24,7 +25,8 @@ require_once "code/index_logic.php";
     <select id="gradeFilter" class="p-2 border rounded w-full mb-2">
         <option value="">Všechny ročníky</option>
         <?php
-        while ($grade = $gradeResult->fetch_assoc()) {
+        $tridy = getTridy($conn);
+        foreach ($tridy as $grade) {
             echo "<option value='" . htmlspecialchars($grade['trida_id']) . "'>" . htmlspecialchars($grade['trida_id']) . ". ročník</option>";
         }
         ?>
@@ -41,19 +43,20 @@ require_once "code/index_logic.php";
 
     <!-- Kniha z SQL -->
     <?php
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
+    $ucebnice = getUcebnice($conn); // Získání dat jako pole
+    if (!empty($ucebnice)) { // Kontrola, zda pole není prázdné
+        foreach ($ucebnice as $row) { // Iterace přes pole
             echo 
-            "<a href='pages/ucebnice.php?knihaID=" . $row['id'] . "' class='book bg-gray-200 p-4 rounded-md items-center' data-category='" . htmlspecialchars($row['kategorie_nazev']) . "' data-grade='" . htmlspecialchars($row['trida_id']) . "'>
+            "<a href='pages/ucebnice.php?knihaID=" . htmlspecialchars($row['id']) . "' class='book bg-gray-200 p-4 rounded-md items-center' data-category='" . htmlspecialchars($row['kategorie_nazev']) . "' data-grade='" . htmlspecialchars($row['trida_id']) . "'>
                 <div class='bg-gray-100 rounded-md'>
                     <div class='text-l text-center font-semibold m-1 p-1 $fullHeightClass hover:h-full break-words'>"
                         . htmlspecialchars($row['ucebnice_nazev']) . 
                     "</div>
                     <div class='h-50'>
-                        <img src='foto/ucebnice/" . $row['id'] . ".webp' class='rounded-lg p-1 w-full h-48 object-cover'>
+                        <img src='foto/ucebnice/" . htmlspecialchars($row['id']) . ".webp' class='rounded-lg p-1 w-full h-48 object-cover'>
                     </div>
                     <div class='text-s m-1 p-1'>
-                        Počet ks: <span class='font-medium'>" . $row['pocet_ks'] . "</span><br>
+                        Počet ks: <span class='font-medium'>" . htmlspecialchars($row['pocet_ks']) . "</span><br>
                         Avg cena: <span class='font-medium'>" . number_format($row['avg_cena'], 0, ',', '.') . "</span>
                     </div>
                 </div> 

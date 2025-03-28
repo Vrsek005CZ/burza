@@ -1,53 +1,84 @@
 <?php
 require_once "connect.php";
 
-// Dotaz na kategorie
-$categoryQuery = "SELECT id, nazev FROM kategorie";
-$categoryStmt = $conn->prepare($categoryQuery);
-if ($categoryStmt) {
-    $categoryStmt->execute();
-    $categoryResult = $categoryStmt->get_result();
-    $categoryStmt->close();
-} else {
-    die("Chyba při přípravě dotazu: " . $conn->error);
+/**
+ * Získá všechny kategorie z databáze.
+ *
+ * @param mysqli $conn Připojení k databázi.
+ * @return array Pole kategorií.
+ */
+function getKategorie($conn) {
+    $query = "SELECT id, nazev FROM kategorie";
+    $stmt = $conn->prepare($query);
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $data;
+    } else {
+        die("Chyba při přípravě dotazu: " . $conn->error);
+    }
 }
 
-// Dotaz na třídy
-$gradeQuery = "SELECT DISTINCT trida_id FROM ucebnice ORDER BY trida_id";
-$gradeStmt = $conn->prepare($gradeQuery);
-if ($gradeStmt) {
-    $gradeStmt->execute();
-    $gradeResult = $gradeStmt->get_result();
-    $gradeStmt->close();
-} else {
-    die("Chyba při přípravě dotazu: " . $conn->error);
+/**
+ * Získá všechny unikátní třídy z databáze.
+ *
+ * @param mysqli $conn Připojení k databázi.
+ * @return array Pole tříd.
+ */
+function getTridy($conn) {
+    $query = "SELECT DISTINCT trida_id FROM ucebnice ORDER BY trida_id";
+    $stmt = $conn->prepare($query);
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $data;
+    } else {
+        die("Chyba při přípravě dotazu: " . $conn->error);
+    }
 }
 
-// Hlavní dotaz na učebnice
-$query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, 
-COUNT(CASE WHEN pu.koupil = 0 THEN 1 END) AS pocet_ks, 
-ROUND(AVG(CASE WHEN pu.koupil = 0 THEN pu.cena END)) AS avg_cena 
-FROM ucebnice 
-INNER JOIN kategorie ON ucebnice.kategorie_id=kategorie.id 
-INNER JOIN typ ON ucebnice.typ_id=typ.id 
-INNER JOIN pu ON ucebnice.id=pu.id_ucebnice 
-GROUP BY ucebnice.id
-ORDER BY pocet_ks DESC";
-$mainStmt = $conn->prepare($query);
-if ($mainStmt) {
-    $mainStmt->execute();
-    $result = $mainStmt->get_result();
-    $mainStmt->close();
-} else {
-    die("Chyba při přípravě dotazu: " . $conn->error);
+/**
+ * Získá všechny učebnice z databáze.
+ *
+ * @param mysqli $conn Připojení k databázi.
+ * @return array Pole učebnic.
+ */
+function getUcebnice($conn) {
+    $query = "SELECT ucebnice.id, ucebnice.jmeno AS ucebnice_nazev, kategorie.nazev AS kategorie_nazev, ucebnice.trida_id, typ.nazev AS typ_nazev, 
+    COUNT(CASE WHEN pu.koupil = 0 THEN 1 END) AS pocet_ks, 
+    ROUND(AVG(CASE WHEN pu.koupil = 0 THEN pu.cena END)) AS avg_cena 
+    FROM ucebnice 
+    INNER JOIN kategorie ON ucebnice.kategorie_id=kategorie.id 
+    INNER JOIN typ ON ucebnice.typ_id=typ.id 
+    INNER JOIN pu ON ucebnice.id=pu.id_ucebnice 
+    GROUP BY ucebnice.id
+    ORDER BY pocet_ks DESC";
+
+    $stmt = $conn->prepare($query);
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $data;
+    } else {
+        die("Chyba při přípravě dotazu: " . $conn->error);
+    }
 }
 
 // Zpracování přepnutí výšky
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggleHeight'])) {
-    $_SESSION['fullHeight'] = isset($_SESSION['fullHeight']) ? !$_SESSION['fullHeight'] : true;
-    header("Location: index.php");
-    exit;
-}
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggleHeight'])) {
+        $_SESSION['fullHeight'] = isset($_SESSION['fullHeight']) ? !$_SESSION['fullHeight'] : true;
+        header("Location: index.php");
+        exit;
+    }
+
+
+// Nastavení třídy pro výšku textu
 $fullHeightClass = isset($_SESSION['fullHeight']) && $_SESSION['fullHeight'] ? 'h-full' : 'h-12';
 
 ?>

@@ -3,8 +3,9 @@ require_once "../code/connect.php";
 require_once "../code/userinfo.php";
 require_once "../code/buy.php";
 
-$pageTitle = "Koupit"; 
 require_once "../header.php";
+getHeader("Koupit"); 
+
 ?>
 
 <style>

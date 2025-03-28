@@ -4,8 +4,9 @@ require_once "../code/connect.php";
 require_once "../code/userinfo.php";
 require_once "../code/upravit_knihu.php";
 
-$pageTitle = "Upravit knihu"; 
 require_once "../header.php";
+getHeader("Upravit"); 
+
 
 require_once "../code/edit_book.php";
 

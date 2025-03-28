@@ -2,8 +2,9 @@
 session_start();
 require_once "../code/connect.php";
 
-$pageTitle = "Objednávka"; 
 require_once "../header.php";
+getHeader("Objednávka"); 
+
 
 require_once "../code/order.php";
 

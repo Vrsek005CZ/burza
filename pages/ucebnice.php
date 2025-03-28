@@ -2,8 +2,10 @@
 session_start();
 require_once "../code/connect.php";
 require_once "../code/userinfo.php";
-$pageTitle = "Učebnice"; 
+
 require_once "../header.php";
+getHeader("Učebnice");
+
 require_once "../code/book.php";
 ?>
 

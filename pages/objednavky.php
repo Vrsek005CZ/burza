@@ -3,8 +3,9 @@ session_start();
 require_once "../code/connect.php";
 require_once "../code/userinfo.php";
 
-$pageTitle = "Objednávky"; 
 require_once "../header.php";
+getHeader("Objednávky"); 
+
 
 require_once "../code/orders.php";
 ?>

@@ -1,9 +1,7 @@
 <?php
 require_once "code/userinfo.php";
-echo "getheader nacten";
 
 function getHeader($pageTitle) {
-    echo "hlavicka nactena<br>";
     global $email, $user;
     ?>
     <!DOCTYPE html>

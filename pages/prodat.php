@@ -1,8 +1,10 @@
 <?php
 session_start();
 require_once "../code/connect.php";
-$pageTitle = "Prodat"; 
+
 require_once "../header.php";
+getHeader("Prodat"); 
+
 
 require_once "../code/sell.php";
 

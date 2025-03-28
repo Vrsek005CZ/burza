@@ -1,7 +1,10 @@
 <?php
 session_start();
 require_once "../code/connect.php";
+
 $pageTitle = "Nová učebnice"; 
+getHeader("Nová učebnice"); 
+
 require_once "../header.php";
 require_once "../code/new.php";
 ?>
