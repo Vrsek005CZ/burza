@@ -4,16 +4,27 @@ require_once "../code/userinfo.php";
 require_once "../code/buy.php";
 
 require_once "../header.php";
-getHeader("Koupit"); 
+getHeader("Koupit");
 
-?>
-
-<style>
-.bg-gray-100 {
-    word-break: break-word;
-    overflow-wrap: break-word;
+// Získání ID učebnice z GET parametru
+if (isset($_GET['puID'])) {
+    $puID = intval($_GET['puID']); // Proti SQL injection
+} else {
+    echo("Chyba: Nezadali jste ID knihy.");
+    exit;
 }
-</style>
+
+// Načtení detailu učebnice
+$row = getBookDetail($conn, $puID);
+if (!$row) {
+    echo "Učebnice nenalezena.";
+    exit;
+}
+
+// Načtení obrázků
+$files = getBookImages($puID);
+$files_json = json_encode($files); // Poslání do JS
+?>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
     <?php if ($row): ?>
@@ -54,10 +65,10 @@ getHeader("Koupit");
                 </div>
             </div>
             <br>
-            <div class="bg-gray-100 shadow-md rounded-md p-2 mt-2"><?php echo htmlspecialchars($row['poznamky'])?></div>
+            <div class="bg-gray-100 shadow-md rounded-md p-2 mt-2 break-words"><?php echo htmlspecialchars($row['poznamky'])?></div>
         </div>
     </div>
-<?php else: ?>
+    <?php else: ?>
         <p>Učebnice nenalezena.</p>
     <?php endif; ?>
 
@@ -66,7 +77,7 @@ getHeader("Koupit");
     <div class='flex flex-wrap col-span-8 gap-1 bg-gray-200 shadow-md p-5 rounded-md w-full'>
         <?php
         if ($files) {
-            foreach ($files as $index => $file) { //oznaci indexi obrazku a projde pro kazdy obrazek
+            foreach ($files as $index => $file) { // Projde každý obrázek
                 echo "<img src='$file' class='h-48 aspect-auto cursor-pointer' onclick='otevritOkno($index)' />";
             }
         } else {
@@ -96,13 +107,10 @@ getHeader("Koupit");
 </div>
 
 <script>
-
 const UserId = <?php echo $userId; ?>;
 const prodejceId = <?php echo htmlspecialchars($row['prodejce_id']); ?>;
-const koupil = <?php echo htmlspecialchars($row['koupil']); ?>
-
+const koupil = <?php echo htmlspecialchars($row['koupil']); ?>;
 let obrazky = <?php echo $files_json; ?>;
-
 </script>
 <script src="../code/buy.js"></script>
 

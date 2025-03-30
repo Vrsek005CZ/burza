@@ -4,12 +4,34 @@ require_once "../code/connect.php";
 require_once "../code/userinfo.php";
 
 require_once "../header.php";
-getHeader("Učebnice");
+getHeader("Učebnice"); 
 
 require_once "../code/book.php";
+
+// Kontrola, zda byl zadán knihaID
+if (isset($_GET['knihaID'])) {
+    $knihaID = intval($_GET['knihaID']); // Proti SQL injection
+} else {
+    die("Chyba: Nezadali jste ID knihy.");
+}
+
+// Parametry pro řazení
+$order = isset($_GET['order']) ? $_GET['order'] : null;
+$sort = isset($_GET['sort']) ? strtolower($_GET['sort']) : 'asc';
+$selfbook = isset($_GET['selfbook']) ? intval($_GET['selfbook']) : 1;
+
+// Načtení dat pomocí funkcí
+$row = getKnihaInfo($conn, $knihaID);
+if (!$row) {
+    die("Chyba: Kniha nebyla nalezena.");
+}
+
+$prodavaneUcebnice = getProdavaneUcebnice($conn, $knihaID, $order, $sort, $selfbook, $userId);
+
+// Přepnutí směru řazení
+$nextSort = ($sort === 'asc') ? 'desc' : 'asc';
 ?>
 
-<?php $row = $result->fetch_assoc(); ?>
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 mx-auto grid gap-4 sm:grid-cols-4 grid-cols-1">
     <img src="../foto/ucebnice/<?php echo htmlspecialchars($row['id'])?>.webp" 
         class="rounded-lg p-1 w-full sm:w-48 object-cover justify-self-center bg-gray-300">
@@ -70,12 +92,12 @@ require_once "../code/book.php";
                     </th>
                     
                     <th class="p-2 w-[19%]">
-                        &nbsp;&nbsp;<button onclick="BookChange()" id ="bookButton" class="hover:cursor-pointer <?php echo ($selfbook !== 1) ? 'text-blue-600' : ''; ?> hover:text-blue-500">◇</button>&nbsp;
+                        &nbsp;&nbsp;<button onclick="BookChange()" id="bookButton" class="hover:cursor-pointer <?php echo ($selfbook !== 1) ? 'text-blue-600' : ''; ?> hover:text-blue-500">◇</button>&nbsp;
                     </th>
                 </tr>   
             </thead>
             <tbody>
-                <?php while ($ucebnice = $prodavaneUcebnice->fetch_assoc()): ?>
+                <?php foreach ($prodavaneUcebnice as $ucebnice): ?>
                     <tr class="border-t">
                         <td class="p-2 text-center"><?php echo htmlspecialchars($ucebnice['stav']); ?>/10</td>
                         <td class="p-2 text-center"><?php echo htmlspecialchars($ucebnice['rok_tisku']); ?></td>
@@ -112,7 +134,7 @@ require_once "../code/book.php";
                             </script>
                         </td>
                     </tr>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>

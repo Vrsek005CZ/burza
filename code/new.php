@@ -1,36 +1,60 @@
 <?php
 require_once "connect.php";
 
-// Získání seznamu učebnic
-$sqlUcebnice = "SELECT id, jmeno FROM ucebnice";
-$stmtUcebnice = $conn->prepare($sqlUcebnice);
-if ($stmtUcebnice) {
-    $stmtUcebnice->execute();
-    $resultUcebnice = $stmtUcebnice->get_result();
-    $stmtUcebnice->close();
-} else {
-    die("Chyba při přípravě dotazu: " . $conn->error);
+/**
+ * Získá seznam učebnic.
+ *
+ * @param mysqli $conn Připojení k databázi.
+ * @return mysqli_result Výsledek dotazu.
+ */
+function getUcebnice($conn) {
+    $sql = "SELECT id, jmeno FROM ucebnice";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return $result;
+    } else {
+        die("Chyba při přípravě dotazu: " . $conn->error);
+    }
 }
 
-// Získání seznamu kategorií
-$sqlKategorie = "SELECT id, nazev FROM kategorie";
-$stmtKategorie = $conn->prepare($sqlKategorie);
-if ($stmtKategorie) {
-    $stmtKategorie->execute();
-    $resultKategorie = $stmtKategorie->get_result();
-    $stmtKategorie->close();
-} else {
-    die("Chyba při přípravě dotazu: " . $conn->error);
+/**
+ * Získá seznam kategorií.
+ *
+ * @param mysqli $conn Připojení k databázi.
+ * @return mysqli_result Výsledek dotazu.
+ */
+function getKategorie($conn) {
+    $sql = "SELECT id, nazev FROM kategorie";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return $result;
+    } else {
+        die("Chyba při přípravě dotazu: " . $conn->error);
+    }
 }
 
-// Získání seznamu typů
-$sqlTyp = "SELECT id, nazev FROM typ";
-$stmtTyp = $conn->prepare($sqlTyp);
-if ($stmtTyp) {
-    $stmtTyp->execute();
-    $resultTyp = $stmtTyp->get_result();
-    $stmtTyp->close();
-} else {
-    die("Chyba při přípravě dotazu: " . $conn->error);
+/**
+ * Získá seznam typů.
+ *
+ * @param mysqli $conn Připojení k databázi.
+ * @return mysqli_result Výsledek dotazu.
+ */
+function getTypy($conn) {
+    $sql = "SELECT id, nazev FROM typ";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return $result;
+    } else {
+        die("Chyba při přípravě dotazu: " . $conn->error);
+    }
 }
 ?>

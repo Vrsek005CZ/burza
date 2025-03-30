@@ -6,6 +6,22 @@ session_start();
 require_once "../code/is_admin.php";
 require_once "../code/connect.php";
 require_once "../code/super_admin.php";
+
+// Načtení seznamu tabulek
+$tables = getTables($conn);
+
+// Získání vybrané tabulky z GET parametru
+$selected_table = isset($_GET['table']) ? $_GET['table'] : "";
+
+// Inicializace proměnných pro sloupce a řádky
+$table_columns = [];
+$table_rows = [];
+
+// Pokud je vybraná tabulka platná, načteme její sloupce a řádky
+if ($selected_table && in_array($selected_table, $tables)) {
+    $table_columns = getTableColumns($conn, $selected_table);
+    $table_rows = getTableRows($conn, $selected_table);
+}
 ?>
 <!DOCTYPE html>
 <html lang="cs">

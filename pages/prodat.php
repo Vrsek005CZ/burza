@@ -1,13 +1,14 @@
 <?php
 session_start();
 require_once "../code/connect.php";
-
-require_once "../header.php";
-getHeader("Prodat"); 
-
-
 require_once "../code/sell.php";
+require_once "../header.php";
 
+getHeader("Prodat");
+
+// Načtení seznamu učebnic a aktuálního roku
+$ucebniceSeznam = getUcebniceSeznam($conn);
+$currentYear = getCurrentYear();
 ?>
 
 <!-- Select2 CSS -->
@@ -27,7 +28,7 @@ require_once "../code/sell.php";
                 <select id="ucebniceSelect" name="id_ucebnice" class="border p-2 w-full select2" required>
                     <?php 
                     $currentCategory = null;
-                    while ($row = $result->fetch_assoc()) { 
+                    foreach ($ucebniceSeznam as $row) { 
                         if ($currentCategory !== $row['kategorie']) {
                             if ($currentCategory !== null) {
                                 echo "</optgroup>";
@@ -50,7 +51,7 @@ require_once "../code/sell.php";
             </div>
             <div class="w-full sm:w-1/4">
                 <label class="block font-bold">Rok tisku</label>
-                <input type="number" name="rok_tisku" min="1900" max="<?php echo $current_year; ?>" class="border p-2 w-full" required>
+                <input type="number" name="rok_tisku" min="1900" max="<?php echo $currentYear; ?>" class="border p-2 w-full" required>
             </div>
         </div>
         

@@ -1,19 +1,72 @@
 <?php
-
 require_once "../code/connect.php";
 require_once "../code/userinfo.php";
-require_once "../code/upravit_knihu.php";
-
-require_once "../header.php";
-getHeader("Upravit"); 
-
-
 require_once "../code/edit_book.php";
 
+require_once "../header.php";
+getHeader("Upravit");
+
+// Získání ID učebnice z GET parametru
+if (!isset($_GET['puID'])) {
+    die("Chybějící ID učebnice.");
+}
+
+$puID = intval($_GET['puID']);
+
+// Načtení detailu učebnice
+$pu = getBookDetail($conn, $puID);
+if (!$pu) {
+    die("Učebnice nenalezena.");
+}
+
+// Ověření, zda je uživatel vlastníkem učebnice
+if ($userId != $pu['prodejce']) {
+    header("Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+    exit;
+}
+
+// Načtení existujících obrázků
+$existingImages = getExistingImages($puID);
+
+// Zpracování POST požadavků
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['update'])) {
+        $cena = intval($_POST['cena']);
+        $poznamky = trim($_POST['poznamky']);
+        updateBook($conn, $puID, $cena, $poznamky);
+
+        // Odstranění existujících fotek
+        if (!empty($_POST['removedImages'])) {
+            $removedImages = json_decode($_POST['removedImages'], true);
+            if (is_array($removedImages)) {
+                foreach ($removedImages as $file) {
+                    $filePath = "../foto/pu/$puID/" . basename($file);
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
+                }
+            }
+        }
+
+        // Nahrání nových fotek
+        if (!empty($_FILES['newFiles']['name'][0])) {
+            uploadNewImages($puID, $_FILES['newFiles']);
+        }
+
+        ##header("Location: ../pages/profil.php");
+        exit;
+    }
+
+    if (isset($_POST['delete'])) {
+        deleteBook($conn, $puID);
+        ##header("Location: ../pages/profil.php");
+        exit;
+    }
+}
 ?>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
-  <form method="post" enctype="multipart/form-data" action="../code/upravit_knihu.php?puID=<?= $puID ?>">
+  <form method="post" enctype="multipart/form-data">
     <div class="hidden sm:block">
       <table class="w-full bg-gray-50 shadow-md rounded-lg">
         <thead class="text-left bg-gray-200">

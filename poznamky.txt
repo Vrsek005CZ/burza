@@ -1,0 +1,3 @@
+nefungujou heic fotky
+zmenit i soubory napr pridat_knihu.php
+cele otestovat

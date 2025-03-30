@@ -1,12 +1,14 @@
 <?php
 session_start();
 require_once "../code/connect.php";
-
-$pageTitle = "Nová učebnice"; 
-getHeader("Nová učebnice"); 
-
-require_once "../header.php";
 require_once "../code/new.php";
+require_once "../header.php";
+
+getHeader("Nová učebnice");
+
+// Načtení dat pomocí funkcí
+$resultKategorie = getKategorie($conn);
+$resultTyp = getTypy($conn);
 ?>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
@@ -48,10 +50,6 @@ require_once "../code/new.php";
                         </option>
                     <?php } ?>
                 </select>
-            </div>
-            <div class="w-full sm:w-3/4">
-                <label class="block font-bold">Poznámky</label>
-                <textarea name="poznamky" class="border p-2 w-full h-40 resize-none" maxlength="256"></textarea>
             </div>
         </div>
         
