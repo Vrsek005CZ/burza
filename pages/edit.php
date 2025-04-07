@@ -67,9 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
   <form method="post" enctype="multipart/form-data">
-    <div class="hidden sm:block">
+    <div class="overflow-x-auto">
       <table class="w-full bg-gray-50 shadow-md rounded-lg">
-        <thead class="text-left bg-gray-200">
+        <thead class="hidden sm:table-header-group bg-gray-200">
           <tr>
             <th class="p-4 w-[25%]">Učebnice</th>
             <th class="p-4 w-[8%]">Cena</th>
@@ -79,44 +79,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="p-4"><?= htmlspecialchars($pu['nazev']); ?></td>
-            <td class="p-1">
+          <tr class="sm:table-row flex flex-col sm:flex-row sm:items-center sm:justify-between border-b sm:border-none">
+            <td class="p-4 sm:table-cell flex flex-col sm:flex-none">
+              <span class="block sm:hidden font-bold">Učebnice:</span>
+              <?= htmlspecialchars($pu['nazev']); ?>
+            </td>
+            <td class="p-1 sm:table-cell flex flex-col sm:flex-none">
+              <span class="block sm:hidden font-bold">Cena:</span>
               <input type="number" name="cena" class="border p-2 w-full" value="<?= htmlspecialchars($pu['cena']); ?>" required>
             </td>
-            <td class="p-1">
+            <td class="p-1 sm:table-cell flex flex-col sm:flex-none">
+              <span class="block sm:hidden font-bold">Poznámky:</span>
               <textarea name="poznamky" class="border p-2 w-full h-40 resize-none" maxlength="256"><?= htmlspecialchars($pu['poznamky']); ?></textarea>
             </td>
-            <td class="p-1 text-center">
+            <td class="p-1 sm:table-cell flex flex-col sm:flex-none text-center">
               <button type="submit" name="update" class="bg-blue-500 text-white px-4 py-2 rounded">Upravit</button>
             </td>
-            <td class="p-1 text-center">
+            <td class="p-1 sm:table-cell flex flex-col sm:flex-none text-center">
               <button type="submit" name="delete" class="bg-red-500 text-white px-4 py-2 rounded"
                       onclick="return confirm('Opravdu chcete smazat tuto učebnici?');">Smazat</button>
             </td>
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <!-- Mobilní verze -->
-    <div class="block sm:hidden space-y-4">
-      <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-        <div><strong>Učebnice:</strong><br><?= htmlspecialchars($pu['nazev']); ?></div>
-        <div>
-          <label class="block font-semibold mt-2">Cena:</label>
-          <input type="number" name="cena" class="border p-2 w-full" value="<?= htmlspecialchars($pu['cena']); ?>" required>
-        </div>
-        <div>
-          <label class="block font-semibold mt-2">Poznámky:</label>
-          <textarea name="poznamky" class="border p-2 w-full h-40 resize-none" maxlength="256"><?= htmlspecialchars($pu['poznamky']); ?></textarea>
-        </div>
-        <div class="flex justify-between mt-4">
-          <button type="submit" name="update" class="bg-blue-500 text-white px-4 py-2 rounded w-[48%]">Upravit</button>
-          <button type="submit" name="delete" class="bg-red-500 text-white px-4 py-2 rounded w-[48%]"
-                  onclick="return confirm('Opravdu chcete smazat tuto učebnici?');">Smazat</button>
-        </div>
-      </div>
     </div>
 
     <br>

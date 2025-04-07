@@ -1,8 +1,53 @@
 <?php
 require_once "../code/is_admin.php";
 require_once "../code/connect.php";
-
 require_once "../code/row_edit.php";
+
+$table = isset($_GET['table']) ? $_GET['table'] : '';
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+if (!$table || !$id) {
+    die("Neplatný požadavek.");
+}
+
+$tables = getTables($conn);
+if (!in_array($table, $tables)) {
+    die("Neplatná tabulka.");
+}
+
+$rowData = getRowById($conn, $table, $id);
+if (!$rowData) {
+    die("Záznam nenalezen.");
+}
+
+$message = '';
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
+    // Získání seznamu sloupců tabulky
+    $columns = getTableColumns($conn, $table);
+
+    // Filtrování dat z formuláře
+    $data = [];
+    foreach ($_POST as $key => $value) {
+        if (in_array($key, $columns) && $key !== 'id') {
+            $data[$key] = $value;
+        }
+    }
+
+    // Aktualizace záznamu
+    $message = updateRow($conn, $table, $data, $id);
+
+    // Správa fotek pro tabulky ucebnice a pu
+    if ($table == "ucebnice") {
+        $message .= " " . manageUcebnicePhoto($id, $_FILES, isset($_POST['removePhoto']));
+    } elseif ($table == "pu") {
+        $removedImages = !empty($_POST['removedImages']) ? json_decode($_POST['removedImages'], true) : [];
+        $message .= " " . managePuPhotos($id, $_FILES, $removedImages);
+    }
+
+    // Znovunačtení záznamu po aktualizaci
+    $rowData = getRowById($conn, $table, $id);
+}
 ?>
 <!DOCTYPE html>
 <html lang="cs">

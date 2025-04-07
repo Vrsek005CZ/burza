@@ -14,6 +14,13 @@ if (isset($_GET['puID'])) {
     exit;
 }
 
+// Zpracování objednávky
+$message = '';
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['objednat'])) {
+    $puID = intval($_POST['objednat']);
+    $message = processOrder($conn, $puID, $userId);
+}
+
 // Načtení detailu učebnice
 $row = getBookDetail($conn, $puID);
 if (!$row) {
@@ -27,6 +34,12 @@ $files_json = json_encode($files); // Poslání do JS
 ?>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
+    <?php if (!empty($message)): ?>
+        <div class="bg-green-200 p-3 rounded mb-4">
+            <?php echo htmlspecialchars($message); ?>
+        </div>
+    <?php endif; ?>
+
     <?php if ($row): ?>
     <div class="flex flex-col sm:flex-row gap-4">
         <a href="ucebnice.php?knihaID=<?php echo htmlspecialchars($row['id'])?>" class="">
@@ -54,14 +67,24 @@ $files_json = json_encode($files); // Poslání do JS
                     </div>
                 </div>
                 <div class="flex items-center mt-4 sm:mt-0">
-                    <button id="koupitButton" onclick="koupit()" class="bg-green-600 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md hover:bg-green-700 transition">
-                        Koupit
-                    </button>
-                    <form id="myForm" action="../code/objednat.php" method="POST" class="w-full sm:w-auto">
-                        <button type="submit" name="objednat" value="<?php echo $puID; ?>" id="potvrditButton" class="bg-yellow-600 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md hover:bg-yellow-700 transition hidden">
-                            Potvrdit
+                    <?php if ($row['koupil']): ?>
+                        <button disabled class="bg-gray-400 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md">
+                            Prodáno
                         </button>
-                    </form>
+                    <?php elseif ($row['prodejce_id'] == $userId): ?>
+                        <button disabled class="bg-gray-400 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md">
+                            Vaše
+                        </button>
+                    <?php else: ?>
+                        <button id="koupitButton" onclick="koupit()" class="bg-green-600 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md hover:bg-green-700 transition">
+                        Koupit
+                        </button>
+                        <form id="myForm" action="" method="POST" class="w-full sm:w-auto">
+                            <button type="submit" name="objednat" value="<?php echo $puID; ?>" id="potvrditButton" class="bg-yellow-600 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md hover:bg-yellow-700 transition hidden">
+                                Objednat
+                            </button>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </div>
             <br>

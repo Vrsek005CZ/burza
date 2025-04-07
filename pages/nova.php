@@ -9,10 +9,22 @@ getHeader("Nová učebnice");
 // Načtení dat pomocí funkcí
 $resultKategorie = getKategorie($conn);
 $resultTyp = getTypy($conn);
+
+// Zpracování formuláře
+$message = '';
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['pridat'])) {
+    $message = pridatUcebnici($conn, $_POST, $_FILES);
+}
 ?>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
-    <form method="POST" action="../code/pridat_ucebnici.php" enctype="multipart/form-data">
+    <?php if (!empty($message)): ?>
+        <div class="bg-green-200 p-3 rounded mb-4">
+            <?php echo htmlspecialchars($message); ?>
+        </div>
+    <?php endif; ?>
+
+    <form method="POST" action="" enctype="multipart/form-data">
         <div class="sm:flex sm:space-x-4 space-y-4 sm:space-y-0">
             <div class="w-full sm:w-1/2">
                 <label class="block font-bold">Název učebnice</label>

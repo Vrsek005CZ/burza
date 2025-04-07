@@ -45,6 +45,57 @@ function getBookImages($puID) {
     return $files;
 }
 
+/**
+ * Zpracuje objednávku učebnice.
+ *
+ * @param mysqli $conn Připojení k databázi.
+ * @param int $puID ID učebnice.
+ * @param int $userId ID uživatele, který objednává.
+ * @return string Zpráva o výsledku objednávky.
+ */
+function processOrder($conn, $puID, $userId) {
+    if (!isset($userId) || $userId <= 0) {
+        return "Chyba: Neplatný uživatel.";
+    }
+
+    $cas = time();
+
+    // Spustíme transakci
+    $conn->begin_transaction();
+
+    // První dotaz - aktualizace tabulky `pu`
+    $sql = "UPDATE pu SET koupil = ? WHERE id = ?";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("ii", $userId, $puID);
+        if (!$stmt->execute()) {
+            $conn->rollback();
+            return "Chyba při aktualizaci objednávky: " . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        $conn->rollback();
+        return "Chyba při přípravě prvního dotazu: " . $conn->error;
+    }
+
+    // Druhý dotaz - vložení do tabulky `orders`
+    $sql_orders = "INSERT INTO orders (puID, cas) VALUES (?, ?)";
+    if ($stmt = $conn->prepare($sql_orders)) {
+        $stmt->bind_param("ii", $puID, $cas);
+        if (!$stmt->execute()) {
+            $conn->rollback();
+            return "Chyba při vkládání do orders: " . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        $conn->rollback();
+        return "Chyba při přípravě druhého dotazu: " . $conn->error;
+    }
+
+    // Pokud vše proběhlo v pořádku, potvrdíme změny
+    $conn->commit();
+    return "Objednávka byla úspěšně zpracována!";
+}
+
 if (isset($_GET['puID'])) {
     $puID = intval($_GET['puID']); // Proti SQL injection
 } else {

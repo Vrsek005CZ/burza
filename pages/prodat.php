@@ -9,6 +9,12 @@ getHeader("Prodat");
 // Načtení seznamu učebnic a aktuálního roku
 $ucebniceSeznam = getUcebniceSeznam($conn);
 $currentYear = getCurrentYear();
+
+// Zpracování formuláře
+$message = '';
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['pridat'])) {
+    $message = pridatKnihu($conn, $_POST, $_FILES, $userId);
+}
 ?>
 
 <!-- Select2 CSS -->
@@ -21,7 +27,13 @@ $currentYear = getCurrentYear();
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
-    <form method="POST" action="../code/pridat_knihu.php" enctype="multipart/form-data">
+    <?php if (!empty($message)): ?>
+        <div class="bg-green-200 p-3 rounded mb-4">
+            <?php echo htmlspecialchars($message); ?>
+        </div>
+    <?php endif; ?>
+
+    <form method="POST" action="" enctype="multipart/form-data">
         <div class="sm:flex sm:space-x-4 space-y-4 sm:space-y-0">
             <div class="w-full sm:w-1/2">
                 <label class="block font-bold">Učebnice</label>

@@ -1,3 +1,6 @@
 nefungujou heic fotky
 zmenit i soubory napr pridat_knihu.php
-cele otestovat
+cele otestovat - prvne fotky
+
+prodat.php - fotky pridava nejak divne, prida to dannou fotku nekdy a nekdy nejakou dalsi nahodnou
+edit.php - nepridava fotky, jen maze a nemeni data
