@@ -1,5 +1,6 @@
 <?php
 require_once "connect.php";
+require_once "is_banned.php";
 
 if (isset($_COOKIE['user_info'])) {
     $userInfoData = json_decode($_COOKIE['user_info'], true);
@@ -24,6 +25,13 @@ if (isset($_COOKIE['user_info'])) {
             if ($result_user->num_rows > 0) {
                 $user = $result_user->fetch_assoc();
                 $userId = $user['id'];
+
+                if (!isset($user['trida_id']) || empty($user['trida_id'])) {
+                    if (basename($_SERVER['PHP_SELF']) !== 'profil.php') {
+                        header("Location: /burza/pages/profil.php");
+                        exit;
+                    }
+                }
             } else {
                 echo("Chyba: User nenalezen.");
                 exit;
@@ -43,4 +51,6 @@ if (isset($_COOKIE['user_info'])) {
     header("Location: /burza/code/login.php");
     exit;
 }
+
+isUserBanned($conn, $user);
 ?>

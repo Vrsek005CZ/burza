@@ -23,7 +23,7 @@ function getHeader($pageTitle) {
         <!-- Záhlaví -->
         <div class="relative items-center justify-between bg-white shadow-md p-5 rounded-md">
             <!-- Nadpis -->
-            <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-800"><a href="/burza/index.php">Online Burza Učebnic</a></h1>
+            <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 hover:underline"><a href="/burza/index.php">Online Burza Učebnic</a></h1>
             <!-- User Info-->
             <div>
                 <!-- Email -->

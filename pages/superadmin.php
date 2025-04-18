@@ -40,7 +40,7 @@ if ($selected_table && in_array($selected_table, $tables)) {
     <!-- ========================================= -->
     <div class="bg-white shadow-md rounded-md p-5 mb-5">
       <h1 class="text-3xl font-bold text-yellow-600 text-center">
-        Online Burza Učebnic - Superadmin
+        <a href="/burza/index.php" class="hover:underline">Online Burza Učebnic - Superadmin</a>
       </h1>
     </div>
     

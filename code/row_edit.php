@@ -76,6 +76,30 @@ function updateRow($conn, $table, $data, $id) {
 }
 
 /**
+ * Smaže záznam z tabulky podle ID.
+ *
+ * @param mysqli $conn Připojení k databázi.
+ * @param string $table Název tabulky.
+ * @param int $id ID záznamu.
+ * @return string Zpráva o výsledku operace.
+ */
+function deleteRow($conn, $table, $id) {
+    $query = "DELETE FROM `$table` WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        return "Chyba při přípravě dotazu: " . $conn->error;
+    }
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    if ($stmt->affected_rows > 0) {
+        return "Záznam byl úspěšně smazán.";
+    } else {
+        return "Záznam nebyl nalezen nebo již byl smazán.";
+    }
+}
+
+/**
  * Získá seznam sloupců tabulky.
  *
  * @param mysqli $conn Připojení k databázi.

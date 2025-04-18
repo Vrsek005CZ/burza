@@ -7,6 +7,11 @@ require_once "../header.php";
 
 getHeader("Profil");
 
+// Check if trida_id is set
+if (!isset($user['trida_id']) || empty($user['trida_id'])) {
+    echo "<script>alert('Chyba: Nemáte nastavenou třídu.');</script>";
+}
+
 // Zpracování požadavku na aktualizaci třídy
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['trida_id'])){
     handleTridaUpdate($conn, $userId);
@@ -28,7 +33,7 @@ $prodavaneUcebnice = getProdavaneUcebnice($conn, $userId);
             <strong>Ročník:</strong>
             <?php if ($user['trida_id'] == 0): ?>
                 <form method="POST">
-                    <select name="trida_id" class="border rounded p-2">
+                    <select name="trida_id" class="border rounded p-2 bg-yellow-300">
                         <option value="" disabled selected>Vyberte třídu</option>
                         <option value="1">1. Ročník (1.A)</option>
                         <option value="2">2. Ročník (2.A)</option>

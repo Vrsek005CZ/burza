@@ -30,6 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
     $data = [];
     foreach ($_POST as $key => $value) {
         if (in_array($key, $columns) && $key !== 'id') {
+            if ($admintype < 2 && $key == "type") {
+                continue; // Pokud není admin, přeskoč typ
+            }
             $data[$key] = $value;
         }
     }
@@ -48,6 +51,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
     // Znovunačtení záznamu po aktualizaci
     $rowData = getRowById($conn, $table, $id);
 }
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete'])) {
+    $message = deleteRow($conn, $table, $id);
+    echo "<script>alert('$message'); window.location.href='superadmin.php?table=" . urlencode($table) . "';</script>";
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -59,10 +68,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
 </head>
 <body class="bg-gray-100 p-4 sm:p-10">
     <div class="max-w-4xl mx-auto bg-white shadow-md rounded-md p-6">
+        <!-- Šipka zpět -->
+        <a href="superadmin.php?table=<?php echo urlencode($table); ?>" class="inline-flex items-center text-blue-600 hover:underline mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Zpět na seznam
+        </a>
         <h1 class="text-2xl font-bold mb-4">Editace záznamu v tabulce: <?php echo htmlspecialchars($table); ?></h1>
         <?php if (isset($message)): ?>
             <div class="bg-green-200 p-3 rounded mb-4">
                 <?php echo htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($table == "user"): ?>
+            <div class="p-3 rounded mb-4">
+                <strong>Typ uživatele:</strong><br>
+                0 - Běžný uživatel<br>
+                1 - Admin<br>
+                2 - Superadmin (může přidávat a mazat adminy)<br>
+                -1 - Zabanovaný uživatel<br>
             </div>
         <?php endif; ?>
         <form method="POST" enctype="multipart/form-data">
@@ -75,6 +100,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
                             <input type="text" name="<?php echo htmlspecialchars($column); ?>" value="<?php echo htmlspecialchars($value); ?>" readonly class="border p-1 w-full">
                         <?php elseif ($column == "poznamky"): ?>
                             <textarea name="<?php echo htmlspecialchars($column); ?>" rows="10" class="border p-1 w-full"><?php echo htmlspecialchars($value); ?></textarea>
+                        <?php elseif ($column == "type"): ?>
+                            <?php if ($admintype > 1): ?>
+                                <input type="text" name="<?php echo htmlspecialchars($column); ?>" value="<?php echo htmlspecialchars($value); ?>" class="border p-1 w-full">
+                            <?php else: ?>
+                                <input type="text" name="<?php echo htmlspecialchars($column); ?>" value="<?php echo htmlspecialchars($value); ?>" readonly class="border p-1 w-full">
+                            <?php endif; ?>
                         <?php else: ?>
                             <input type="text" name="<?php echo htmlspecialchars($column); ?>" value="<?php echo htmlspecialchars($value); ?>" class="border p-1 w-full">
                         <?php endif; ?>
@@ -127,6 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
         <?php endif; ?>
         <div class="flex gap-4">
             <button type="submit" name="update" class="bg-blue-500 text-white px-4 py-2 rounded">Upravit</button>
+            <button type="submit" name="delete" class="bg-red-500 text-white px-4 py-2 rounded" onclick="return confirm('Opravdu chcete smazat tento záznam?');">Smazat</button>
             <a href="superadmin.php?table=<?php echo urlencode($table); ?>" class="bg-gray-500 text-white px-4 py-2 rounded">Zpět</a>
         </div>
         </form>

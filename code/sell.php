@@ -40,7 +40,7 @@ function getCurrentYear() {
  * @param array $data Data z formuláře.
  * @param array $files Nahrané soubory.
  * @param int $userId ID přihlášeného uživatele.
- * @return string Zpráva o výsledku operace.
+ * @return array Pole se zprávou a ID nové učebnice.
  */
 function pridatKnihu($conn, $data, $files, $userId) {
     $id_ucebnice = intval($data['id_ucebnice']);
@@ -58,7 +58,10 @@ function pridatKnihu($conn, $data, $files, $userId) {
         $puID = $stmt->insert_id; // Získání ID nově přidaného záznamu
         $stmt->close();
     } else {
-        die("Chyba při přípravě dotazu: " . $conn->error);
+        return [
+            "msg" => "❌ Chyba při přípravě dotazu: " . $conn->error,
+            "error" => true
+        ];
     }
 
     // Vytvoření složky pro fotky
@@ -82,12 +85,20 @@ function pridatKnihu($conn, $data, $files, $userId) {
                     $image->clear();
                     $image->destroy();
                 } catch (Exception $e) {
-                    return "❌ Chyba při konverzi obrázku: " . $e->getMessage();
+                    return [
+                        "msg" => "❌ Chyba při konverzi obrázku: " . $e->getMessage(),
+                        "error" => true
+                    ];
                 }
             }
         }
     }
 
-    return "Učebnice byla úspěšně přidána!";
+    // Vracíme pole se zprávou a ID nové učebnice
+    return [
+        "msg" => "Učebnice byla úspěšně přidána!",
+        "puID" => $puID,
+        "error" => false
+    ];
 }
 ?>

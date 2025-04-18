@@ -29,43 +29,64 @@ if ($userId != $pu['prodejce']) {
 $existingImages = getExistingImages($puID);
 
 // Zpracování POST požadavků
+$message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update'])) {
         $cena = intval($_POST['cena']);
         $poznamky = trim($_POST['poznamky']);
-        updateBook($conn, $puID, $cena, $poznamky);
 
-        // Odstranění existujících fotek
-        if (!empty($_POST['removedImages'])) {
-            $removedImages = json_decode($_POST['removedImages'], true);
-            if (is_array($removedImages)) {
-                foreach ($removedImages as $file) {
-                    $filePath = "../foto/pu/$puID/" . basename($file);
-                    if (file_exists($filePath)) {
-                        unlink($filePath);
+        // Kontrola, zda cena není negativní
+        if ($cena < 0) {
+            $message = "❌ Cena nemůže být záporná.";
+        } else {
+            updateBook($conn, $puID, $cena, $poznamky);
+
+            // Odstranění existujících fotek
+            if (!empty($_POST['removedImages'])) {
+                $removedImages = json_decode($_POST['removedImages'], true);
+                if (is_array($removedImages)) {
+                    foreach ($removedImages as $file) {
+                        $filePath = "../foto/pu/$puID/" . basename($file);
+                        if (file_exists($filePath)) {
+                            unlink($filePath);
+                        }
                     }
                 }
             }
-        }
 
-        // Nahrání nových fotek
-        if (!empty($_FILES['newFiles']['name'][0])) {
-            uploadNewImages($puID, $_FILES['newFiles']);
-        }
+            // Nahrání nových fotek
+            if (!empty($_FILES['newFiles']['name'][0])) {
+                uploadNewImages($puID, $_FILES['newFiles']);
+            }
 
-        ##header("Location: ../pages/profil.php");
-        exit;
+            $message = "✅ Změny byly úspěšně uloženy.";
+        }
     }
 
     if (isset($_POST['delete'])) {
         deleteBook($conn, $puID);
-        ##header("Location: ../pages/profil.php");
+        $message = "✅ Učebnice byla úspěšně smazána.";
+        echo "<script>alert('$message'); window.location.href='profil.php';</script>";
         exit;
     }
 }
 ?>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-8 mx-auto">
+  <!-- Zobrazení zprávy -->
+  <?php if (!empty($message)): ?>
+    <div class="bg-green-200 text-green-800 p-4 rounded mb-4">
+      <?php echo htmlspecialchars($message); ?>
+    </div>
+  <?php endif; ?>
+
+  <!-- Šipka zpět -->
+  <a href="profil.php" class="inline-flex items-center text-blue-600 hover:underline mb-4">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+    Zpět na profil
+  </a>
   <form method="post" enctype="multipart/form-data">
     <div class="overflow-x-auto">
       <table class="w-full bg-gray-50 shadow-md rounded-lg">

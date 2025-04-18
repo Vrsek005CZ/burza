@@ -1,6 +1,8 @@
 nefungujou heic fotky
-zmenit i soubory napr pridat_knihu.php
 cele otestovat - prvne fotky
 
+pridat zápatí
+profil.php - Zobrazit prodane a neprodane knihy zvlast
+edit.php - odstranit moznost mazat a upravovat prodane knihy
+
 prodat.php - fotky pridava nejak divne, prida to dannou fotku nekdy a nekdy nejakou dalsi nahodnou
-edit.php - nepridava fotky, jen maze a nemeni data

@@ -12,8 +12,13 @@ $currentYear = getCurrentYear();
 
 // Zpracování formuláře
 $message = '';
+$puID = null;
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['pridat'])) {
-    $message = pridatKnihu($conn, $_POST, $_FILES, $userId);
+    $result = pridatKnihu($conn, $_POST, $_FILES, $userId);
+    $message = $result['msg'];
+    if (isset($result['error']) && $result['error'] === false) {
+        $puID = $result['puID'];
+    }
 }
 ?>
 
@@ -28,8 +33,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['pridat'])) {
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
     <?php if (!empty($message)): ?>
-        <div class="bg-green-200 p-3 rounded mb-4">
-            <?php echo htmlspecialchars($message); ?>
+        <div class="flex items-center gap-4 <?php echo isset($result['error']) && $result['error'] ? 'bg-red-200' : 'bg-green-200'; ?> p-3 rounded mb-4">
+            <span><?php echo htmlspecialchars($message); ?></span>
+            <?php if (!empty($puID)): ?>
+                <a href="/burza/pages/koupit.php?puID=<?php echo urlencode($puID); ?>" 
+                   class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                    Přejít na učebnici
+                </a>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 

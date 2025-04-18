@@ -12,31 +12,32 @@ require_once "code/index_logic.php";
 <div class="p-4">
     <input type="text" id="searchInput" placeholder="Hledat učebnici..." class="p-2 border rounded w-full mb-2">
 
-    <select id="categoryFilter" class="p-2 border rounded w-full mb-2">
-        <option value="">Všechny kategorie</option>
-        <?php
-        $kategorie = getKategorie($conn);
-        foreach ($kategorie as $cat) {
-            echo "<option value='" . htmlspecialchars($cat['nazev']) . "'>" . htmlspecialchars($cat['nazev']) . "</option>";
-        }
-        ?>
-    </select>
+        <select id="categoryFilter" class="p-2 border rounded w-full mb-2">
+            <option value="">Všechny kategorie</option>
+            <?php
+            $kategorie = getKategorie($conn);
+            foreach ($kategorie as $cat) {
+                echo "<option value='" . htmlspecialchars($cat['nazev']) . "'>" . htmlspecialchars($cat['nazev']) . "</option>";
+            }
+            ?>
+        </select>
 
-    <select id="gradeFilter" class="p-2 border rounded w-full mb-2">
-        <option value="">Všechny ročníky</option>
-        <?php
-        $tridy = getTridy($conn);
-        foreach ($tridy as $grade) {
-            echo "<option value='" . htmlspecialchars($grade['trida_id']) . "'>" . htmlspecialchars($grade['trida_id']) . ". ročník</option>";
-        }
-        ?>
-    </select>
-    <form method="post" class="inline-flex items-center space-x-1 p-2 border rounded bg-gray-100">
+        <select id="gradeFilter" class="p-2 border rounded w-full mb-2">
+            <option value="">Všechny ročníky</option>
+            <?php
+            $tridy = getTridy($conn);
+            foreach ($tridy as $grade) {
+                echo "<option value='" . htmlspecialchars($grade['trida_id']) . "'>" . htmlspecialchars($grade['trida_id']) . ". ročník</option>";
+            }
+            ?>
+        </select>
+    </input>
+    <div class="inline-flex items-center space-x-1 p-2 border rounded">
         <label for="toggleHeight" class="mr-2 font-semibold">Zobrazit celé texty:</label>
-        <button type="submit" name="toggleHeight" id="toggleHeight" class="p-2 rounded hover:text-blue-500 <?php echo isset($_SESSION['fullHeight']) && $_SESSION['fullHeight'] ? 'text-blue-600' : 'text-black'; ?>">
-            <?php echo isset($_SESSION['fullHeight']) && $_SESSION['fullHeight'] ? '◆' : '◇'; ?>
+        <button type="button" name="toggleHeight" id="toggleHeight" class="p-2 rounded hover:text-blue-500">
+            ◇
         </button>
-    </form>
+    </div>
 </div>
 
 <div id="booksContainer" class="grid gap-4 p-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
@@ -49,7 +50,7 @@ require_once "code/index_logic.php";
             echo 
             "<a href='pages/ucebnice.php?knihaID=" . htmlspecialchars($row['id']) . "' class='book bg-gray-200 p-4 rounded-md items-center' data-category='" . htmlspecialchars($row['kategorie_nazev']) . "' data-grade='" . htmlspecialchars($row['trida_id']) . "'>
                 <div class='bg-gray-100 rounded-md'>
-                    <div class='text-l text-center font-semibold m-1 p-1 $fullHeightClass hover:h-full break-words'>"
+                    <div class='text-l text-center font-semibold m-1 p-1 h-12 hover:h-full break-words'>"
                         . htmlspecialchars($row['ucebnice_nazev']) . 
                     "</div>
                     <div class='h-50'>
@@ -72,10 +73,57 @@ require_once "code/index_logic.php";
     ?>
 </div>
 
-<h1>Nejde spustit jinde nez na serveru > v googlu odkaz na localhost, ale v jinde 10.0.0.13 . Doladit web, jako třeba šipku zpět. Všude pro sql pridat bind params</h1>
+<script>
+//vše je tady, protože z nějakého důvodu to nefunguje, když se to načítá odjinud
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("toggleHeight");
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", toggleFullHeight);
+    }
+});
 
+function toggleFullHeight() {
+    const bookTitles = document.querySelectorAll('.text-l');
+    const toggleHeightButton = document.getElementById('toggleHeight');
 
-<script src="code/index.js"></script>
+    toggleHeightButton.classList.toggle('text-blue-600');
+    toggleHeightButton.innerHTML = toggleHeightButton.classList.contains('text-blue-600') ? '◆' : '◇';
+
+    bookTitles.forEach(title => {
+        title.classList.toggle('h-12');
+        title.classList.toggle('h-full');
+    });
+}
+
+document.getElementById('searchInput').addEventListener('input', filterBooks);
+document.getElementById('categoryFilter').addEventListener('change', filterBooks);
+document.getElementById('gradeFilter').addEventListener('change', filterBooks);
+
+function filterBooks() {
+    // Získání vstupních hodnot
+    const searchText = document.getElementById('searchInput').value.toLowerCase();
+    const selectedCategory = document.getElementById('categoryFilter').value;
+    const selectedGrade = document.getElementById('gradeFilter').value;
+    const books = document.querySelectorAll('.book'); // Vrátí NodeList obsahující všechny prvky s třídou .book
+
+    books.forEach(book => {
+        const bookTitle = book.querySelector('.text-l').textContent.toLowerCase(); // Získá název knihy z prvku s třídou .text-l
+        const bookCategory = book.getAttribute('data-category'); // Získá hodnotu atributu data-category z prvku knihy
+        const bookGrade = book.getAttribute('data-grade'); // Získá hodnotu atributu data-grade
+
+        if (
+            bookTitle.includes(searchText) && // Ověří, zda název knihy obsahuje hledaný text
+            (selectedCategory === "" || bookCategory === selectedCategory) && // Když kategorie prázdná, nefiltrujeme
+            (selectedGrade === "" || bookGrade === selectedGrade) // Když ročník prázdný, nefiltrujeme
+        ) {
+            book.style.display = "block";
+        } else {
+            book.style.display = "none";
+        }
+    });
+}
+</script>
+
 
 </body>
 </html>
