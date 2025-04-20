@@ -1,8 +1,7 @@
-nefungujou heic fotky
 cele otestovat - prvne fotky
 
 pridat zápatí
-profil.php - Zobrazit prodane a neprodane knihy zvlast
-edit.php - odstranit moznost mazat a upravovat prodane knihy
+koupit.php - prejit na objednavku
+objednavky.php = tlacitko zpet a po objednani automaticky presmerovat na stejnou dokoncenou bodjednavku
 
 prodat.php - fotky pridava nejak divne, prida to dannou fotku nekdy a nekdy nejakou dalsi nahodnou

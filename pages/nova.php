@@ -18,6 +18,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['pridat'])) {
 ?>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
+    <!-- Tlačítko zpět -->
+    <a href="prodat.php" class="inline-flex items-center text-blue-600 hover:underline mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Zpět na přidání učebnice
+    </a>
     <?php if (!empty($message)): ?>
         <div class="bg-green-200 p-3 rounded mb-4">
             <?php echo htmlspecialchars($message); ?>

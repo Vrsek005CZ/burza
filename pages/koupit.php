@@ -34,9 +34,25 @@ $files_json = json_encode($files); // Poslání do JS
 ?>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
+    <!-- Šipka zpět -->
+    <a href="ucebnice.php?knihaID=<?php echo htmlspecialchars($row['id']); ?>" class="inline-flex items-center text-blue-600 hover:underline mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Zpět na učebnici
+    </a>
     <?php if (!empty($message)): ?>
         <div class="bg-green-200 p-3 rounded mb-4">
             <?php echo htmlspecialchars($message); ?>
+            <?php if ($message === "Objednávka byla úspěšně zpracována!"): ?>
+                <form method="POST" action="objednavka.php" class="mt-4">
+                    <input type="hidden" name="orderID" value="<?php echo htmlspecialchars($puID); ?>">
+                    <input type="hidden" name="typ" value="koupil">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                        Přejít na objednávku
+                    </button>
+                </form>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 
@@ -60,10 +76,14 @@ $files_json = json_encode($files); // Poslání do JS
                     <div class="flex flex-col sm:flex-row gap-4">
                         <div class="w-full sm:w-32 flex-auto text-slate-700">vhodné pro <?php echo htmlspecialchars($row['trida_id'])?>. ročník</div>
                         <div class="w-full sm:w-32 flex-auto">
-                            <a href="user.php?profileID=<?php echo htmlspecialchars($row['prodejce_id']); ?>" class="text-gray-600 italic">
+                            <a href="user.php?profileID=<?php echo htmlspecialchars($row['prodejce_id']); ?>" class="text-blue-600 hover:underline">
                                 <?php echo htmlspecialchars($row['prodejce']); ?>
                             </a>
                         </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="w-full sm:w-32 flex-auto text-slate-700 font-bold">Cena:</div>
+                        <div class="w-full sm:w-32 flex-auto font-bold text-green-600"><?php echo htmlspecialchars($row['cena']); ?> Kč</div>
                     </div>
                 </div>
                 <div class="flex items-center mt-4 sm:mt-0">

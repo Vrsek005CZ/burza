@@ -10,7 +10,7 @@ require_once "userinfo.php";
  * @return array|null Detail učebnice nebo null, pokud není nalezena.
  */
 function getBookDetail($conn, $puID) {
-    $sql = "SELECT pu.cena AS cena, pu.poznamky AS poznamky, ucebnice.jmeno AS nazev, pu.id_prodejce AS prodejce
+    $sql = "SELECT pu.cena AS cena, pu.poznamky AS poznamky, ucebnice.jmeno AS nazev, pu.id_prodejce AS prodejce, pu.koupil AS koupil
             FROM pu 
             INNER JOIN ucebnice ON pu.id_ucebnice = ucebnice.id 
             WHERE pu.id = ?";
@@ -21,6 +21,12 @@ function getBookDetail($conn, $puID) {
         $result = $stmt->get_result();
         $book = $result->fetch_assoc();
         $stmt->close();
+
+        // Kontrola, zda je kniha prodaná
+        if ($book && $book['koupil'] != 0) {
+            die("Tuto učebnici již nelze upravovat, protože byla prodána.");
+        }
+
         return $book;
     } else {
         die("Chyba při přípravě dotazu: " . $conn->error);

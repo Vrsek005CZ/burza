@@ -19,6 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['trida_id'])){
 
 // Načtení prodávaných učebnic uživatele
 $prodavaneUcebnice = getProdavaneUcebnice($conn, $userId);
+
+// Načtení prodaných a neprodaných učebnic uživatele
+$neprodaneUcebnice = array_filter($prodavaneUcebnice, fn($ucebnice) => $ucebnice['koupil'] == 0);
+$prodaneUcebnice = array_filter($prodavaneUcebnice, fn($ucebnice) => $ucebnice['koupil'] != 0);
 ?>
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
     <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Můj Profil</h1>
@@ -53,8 +57,49 @@ $prodavaneUcebnice = getProdavaneUcebnice($conn, $userId);
         <div><strong>ID:</strong> <?php echo htmlspecialchars($userId); ?></div>
     </div>
 
-    <!-- Tabulka učebnic -->
-    <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">Prodávané učebnice</h2>
+    <!-- Neprodané učebnice -->
+    <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">Neprodané učebnice</h2>
+    <div class="overflow-x-auto mb-8">
+        <table class="min-w-[1000px] sm:min-w-full bg-gray-50 shadow-md rounded-lg text-sm">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-4 text-left w-[23%]">Název učebnice</th>
+                    <th class="p-4 text-left w-[5%]">Rok tisku</th>
+                    <th class="p-4 text-left w-[5%]">Stav</th>
+                    <th class="p-4 text-left w-[7%]">Cena</th>
+                    <th class="p-4 text-left w-[46%]">Poznámky</th>
+                    <th class="p-4 text-left w-[7%]">Upravit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (count($neprodaneUcebnice) > 0): ?>
+                    <?php foreach ($neprodaneUcebnice as $ucebnice): ?>
+                        <tr class="even:bg-gray-100">
+                            <td class="p-4 break-words">
+                                <a href="koupit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="text-blue-600 hover:underline">
+                                    <?php echo htmlspecialchars($ucebnice['ucebnice']); ?>
+                                </a>
+                            </td>
+                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['rok_tisku']); ?></td>
+                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['stav']); ?></td>
+                            <td class="p-4"><?php echo htmlspecialchars($ucebnice['cena']); ?> Kč</td>
+                            <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
+                            <td class="p-4">
+                                <a href="edit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="button bg-blue-500 text-white px-4 py-3 rounded">Edit</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="p-4 text-center">Žádné neprodané učebnice nenalezeny.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Prodané učebnice -->
+    <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">Prodané učebnice</h2>
     <div class="overflow-x-auto">
         <table class="min-w-[1000px] sm:min-w-full bg-gray-50 shadow-md rounded-lg text-sm">
             <thead>
@@ -64,32 +109,26 @@ $prodavaneUcebnice = getProdavaneUcebnice($conn, $userId);
                     <th class="p-4 text-left w-[5%]">Stav</th>
                     <th class="p-4 text-left w-[7%]">Cena</th>
                     <th class="p-4 text-left w-[46%]">Poznámky</th>
-                    <th class="p-4 text-left w-[7%]">Stav prodání</th>
-                    <th class="p-4 text-left w-[7%]">Upravit</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if (count($prodavaneUcebnice) > 0): ?>
-                    <?php foreach ($prodavaneUcebnice as $ucebnice): ?>
+                <?php if (count($prodaneUcebnice) > 0): ?>
+                    <?php foreach ($prodaneUcebnice as $ucebnice): ?>
                         <tr class="even:bg-gray-100">
-                            <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['ucebnice']); ?></td>
+                            <td class="p-4 break-words">
+                                <a href="koupit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="text-blue-600 hover:underline">
+                                    <?php echo htmlspecialchars($ucebnice['ucebnice']); ?>
+                                </a>
+                            </td>
                             <td class="p-4"><?php echo htmlspecialchars($ucebnice['rok_tisku']); ?></td>
                             <td class="p-4"><?php echo htmlspecialchars($ucebnice['stav']); ?></td>
                             <td class="p-4"><?php echo htmlspecialchars($ucebnice['cena']); ?> Kč</td>
                             <td class="p-4 break-words"><?php echo htmlspecialchars($ucebnice['poznamky']); ?></td>
-                            <td class="p-4">
-                                <a href="koupit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="font-semibold italic <?php echo ($ucebnice['koupil'] != 0) ? 'text-red-600' : 'text-green-600'; ?>">
-                                    <?php echo ($ucebnice['koupil'] != 0) ? 'Prodáno' : 'Neprodáno'; ?>
-                                </a>
-                            </td>
-                            <td class="p-4">
-                                <a href="edit.php?puID=<?php echo htmlspecialchars($ucebnice['id']); ?>" class="button bg-blue-500 text-white px-4 py-3 rounded">Edit</a>
-                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="7" class="p-4 text-center">Žádné učebnice nenalezeny.</td>
+                        <td colspan="5" class="p-4 text-center">Žádné prodané učebnice nenalezeny.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
