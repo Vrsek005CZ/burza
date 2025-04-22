@@ -112,4 +112,4 @@ function pridatUcebnici($conn, $data, $files) {
         return "Chyba: " . $conn->error;
     }
 }
-?>
+?> 

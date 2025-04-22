@@ -6,6 +6,9 @@ require_once "../header.php";
 
 getHeader("Objednávka");
 
+// Definice proměnných na vyšší úrovni
+$typ = null;
+
 // Zpracování POST požadavku
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['orderID']) && isset($_POST['typ'])) {
@@ -16,16 +19,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['orderID']) && isset($_POST['confirm'])) {
         $orderID = intval($_POST['orderID']);
+        if (isset($_POST['typ'])) {
+            $typ = $_POST['typ'];
+        }
         if (confirmOrder($conn, $orderID)) {
-            echo "<script>alert('Objednávka byla úspěšně potvrzena!');</script>";
+            // Přesměrování na dokončenou objednávku pomocí POST
+            echo '<form id="redirectForm" method="POST" action="objednavka.php">
+                    <input type="hidden" name="orderID" value="' . htmlspecialchars($orderID) . '">
+                    <input type="hidden" name="typ" value="' . htmlspecialchars($typ) . '">
+                  </form>
+                  <script>
+                      document.getElementById("redirectForm").submit();
+                  </script>';
+            exit;
         } else {
             echo "<script>alert('Chyba při potvrzení objednávky.');</script>";
+        }
+    }
+
+    if (isset($_POST['orderID']) && isset($_POST['cancel'])) {
+        $orderID = intval($_POST['orderID']);
+        $result = cancelOrder($conn, $orderID);
+        if ($result['success']) {
+            echo "<script>alert('" . htmlspecialchars($result['msg']) . "');</script>";
+            header("Location: objednavky.php");
+            exit;
+        } else {
+            echo "<script>alert('Chyba: " . htmlspecialchars($result['msg']) . "');</script>";
         }
     }
 }
 ?>
 
 <div class="w-full max-w-7xl bg-white shadow-md rounded-md p-4 sm:p-8 mx-auto">
+    <!-- Tlačítko zpět -->
+    <a href="objednavky.php" class="inline-flex items-center text-blue-600 hover:underline mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Zpět na moje objednávky
+    </a>
     <?php if (isset($order)): ?>
         <div class="space-y-4">
             <h2 class="text-xl font-bold text-gray-700 text-center">Detail objednávky</h2>
@@ -65,11 +98,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php if ($order['complete'] == 0): ?>
                             <form method="POST" class="w-full sm:w-auto">
                                 <input type="hidden" name="orderID" value="<?php echo htmlspecialchars($order['order_id']); ?>">
+                                <input type="hidden" name="typ" value="<?php echo htmlspecialchars($typ); ?>">
                                 <input type="hidden" name="confirm" value="1">
                                 <button type="submit" class="w-full sm:w-auto px-4 py-2 ml-0 sm:ml-2 mb-2 sm:mb-0 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition text-center">Potvrdit objednávku</button>
                             </form>
                         <?php endif; ?>
                     </div>
+                    <br>
+                    <!-- Tlačítko storno objednávky -->
+                    <?php if ($order['complete'] == 0): ?>
+                        <button id='stornoButton' onclick='confirm()' class="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition text-center">
+                            Storno objednávky
+                        </button>
+                        <form method="POST" class="w-full">
+                            <input type="hidden" name="orderID" value="<?php echo htmlspecialchars($order['order_id']); ?>">
+                            <input type="hidden" name="cancel" value="1">
+                            <button type="submit" id='confirmButton' class="w-full hidden px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition text-center">
+                                Potvrdit
+                            </button>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -78,4 +126,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 </div>
 </body>
+<script>
+    function confirm() {
+        alert("Opravdu chcete stornovat objednávku? Tímmto dojde k jejímu znovuvystavení.");
+        const confirmButton = document.getElementById('confirmButton');
+        const stornoButton = document.getElementById('stornoButton');
+        confirmButton.classList.remove('hidden');
+        stornoButton.classList.add('hidden');
+    }
+</script>
 </html>

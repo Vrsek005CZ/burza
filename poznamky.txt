@@ -1,7 +1,6 @@
 cele otestovat - prvne fotky
 
 pridat zápatí
-koupit.php - prejit na objednavku
-objednavky.php = tlacitko zpet a po objednani automaticky presmerovat na stejnou dokoncenou bodjednavku
+stav - dat jasne najevo, ze je to x/10
 
 prodat.php - fotky pridava nejak divne, prida to dannou fotku nekdy a nekdy nejakou dalsi nahodnou

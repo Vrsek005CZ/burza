@@ -52,4 +52,58 @@ function confirmOrder($conn, $orderID) {
         die("Chyba při přípravě dotazu: " . $conn->error);
     }
 }
+
+function cancelOrder($conn, $orderID) {
+    // Zahájení transakce
+    $conn->begin_transaction();
+
+    try {
+        // Získání puID z tabulky orders
+        $query = "SELECT puID FROM orders WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new Exception("Chyba při přípravě dotazu pro získání objednávky: " . $conn->error);
+        }
+        $stmt->bind_param("i", $orderID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $order = $result->fetch_assoc();
+        $stmt->close();
+
+        if (!$order) {
+            throw new Exception("Objednávka nenalezena.");
+        }
+
+        $puID = $order['puID'];
+
+        // Odstranění záznamu z tabulky orders
+        $deleteQuery = "DELETE FROM orders WHERE id = ?";
+        $deleteStmt = $conn->prepare($deleteQuery);
+        if (!$deleteStmt) {
+            throw new Exception("Chyba při přípravě dotazu pro odstranění objednávky: " . $conn->error);
+        }
+        $deleteStmt->bind_param("i", $orderID);
+        $deleteStmt->execute();
+        $deleteStmt->close();
+
+        // Aktualizace hodnoty pu.koupil na 0
+        $updateQuery = "UPDATE pu SET koupil = 0 WHERE id = ?";
+        $updateStmt = $conn->prepare($updateQuery);
+        if (!$updateStmt) {
+            throw new Exception("Chyba při přípravě dotazu pro aktualizaci učebnice: " . $conn->error);
+        }
+        $updateStmt->bind_param("i", $puID);
+        $updateStmt->execute();
+        $updateStmt->close();
+
+        // Potvrzení transakce
+        $conn->commit();
+        return ["success" => true, "msg" => "Objednávka byla úspěšně zrušena."];
+    } catch (Exception $e) {
+        // Zrušení transakce při chybě
+        $conn->rollback();
+        return ["success" => false, "msg" => $e->getMessage()];
+    }
+}
+
 ?>

@@ -2,6 +2,7 @@
 require_once "../code/connect.php";
 require_once "../code/userinfo.php";
 require_once "../code/buy.php";
+require_once "../code/orders.php";
 
 require_once "../header.php";
 getHeader("Koupit");
@@ -42,12 +43,16 @@ $files_json = json_encode($files); // Poslání do JS
         Zpět na učebnici
     </a>
     <?php if (!empty($message)): ?>
-        <div class="bg-green-200 p-3 rounded mb-4">
-            <?php echo htmlspecialchars($message); ?>
+        <div class="bg-green-200 p-3 rounded sm:mb-4 sm:flex sm:items-center sm:justify-between text-center sm:text-left">
+            <span class="block sm:inline mb-4 sm:mb-0"><?php echo htmlspecialchars($message); ?></span>
             <?php if ($message === "Objednávka byla úspěšně zpracována!"): ?>
-                <form method="POST" action="objednavka.php" class="mt-4">
-                    <input type="hidden" name="orderID" value="<?php echo htmlspecialchars($puID); ?>">
-                    <input type="hidden" name="typ" value="koupil">
+                <?php 
+                $orders = getKupovaneObjednavky($conn, $userId, 0);
+                $order = getOrderByPuID($orders, $puID);
+                ?>
+                <form method="POST" action="objednavka.php" class="sm:ml-4">
+                    <input type="hidden" name="orderID" value="<?php echo htmlspecialchars($order['order_id']); ?>">
+                    <input type="hidden" name="typ" value="id_prodejce">
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
                         Přejít na objednávku
                     </button>

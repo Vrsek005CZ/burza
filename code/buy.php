@@ -39,6 +39,17 @@ function getBookDetail($conn, $puID) {
  * @param int $puID ID učebnice.
  * @return array Seznam cest k obrázkům.
  */
+
+function getOrderByPuID($orders, $puID) {
+    foreach ($orders as $order) {
+        if ($order['puID'] == $puID) {
+            return $order;
+        }
+    }
+    return null;
+}
+
+
 function getBookImages($puID) {
     $cesta = "../foto/pu/$puID/";
     $files = glob($cesta . "*.webp"); // Vrátí všechny soubory s příponou .webp
@@ -56,6 +67,12 @@ function getBookImages($puID) {
 function processOrder($conn, $puID, $userId) {
     if (!isset($userId) || $userId <= 0) {
         return "Chyba: Neplatný uživatel.";
+    }
+
+    // Získání detailu učebnice
+    $book = getBookDetail($conn, $puID);
+    if ($book['prodejce_id'] == $userId) {
+        return "Chyba: Nemůžete koupit vlastní knihu.";
     }
 
     $cas = time();
