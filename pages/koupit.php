@@ -91,7 +91,7 @@ $files_json = json_encode($files); // Poslání do JS
                         <div class="w-full sm:w-32 flex-auto font-bold text-green-600"><?php echo htmlspecialchars($row['cena']); ?> Kč</div>
                     </div>
                 </div>
-                <div class="flex items-center mt-4 sm:mt-0">
+                <div class="items-center mt-4 sm:mt-0">
                     <?php if ($row['koupil']): ?>
                         <button disabled class="bg-gray-400 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md">
                             Prodáno
@@ -104,8 +104,8 @@ $files_json = json_encode($files); // Poslání do JS
                         <button id="koupitButton" onclick="koupit()" class="bg-green-600 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md hover:bg-green-700 transition">
                         Koupit
                         </button>
-                        <form id="myForm" action="" method="POST" class="w-full sm:w-auto">
-                            <button type="submit" name="objednat" value="<?php echo $puID; ?>" id="potvrditButton" class="bg-yellow-600 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md hover:bg-yellow-700 transition hidden">
+                        <form id="myForm" action="" method="POST" class="w-full sm:w-24">
+                            <button type="submit" name="objednat" value="<?php echo $puID; ?>" id="potvrditButton" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 w-full sm:w-24 rounded-lg shadow-md hover:bg-yellow-700 transition hidden">
                                 Objednat
                             </button>
                         </form>
@@ -140,7 +140,7 @@ $files_json = json_encode($files); // Poslání do JS
     <div class="relative p-4 flex items-center justify-center max-w-4xl w-full h-[85vh]">
 
         <button onclick="predchoziObrazek()" class="bg-gray-300 hover:bg-gray-400 text-4xl p-2 rounded-lg shadow-lg flex items-center justify-center w-[3vh] h-full">
-            ⯇
+            ←
         </button>
 
         <div class="relative bg-gray-300 p-4 rounded-lg shadow-lg flex items-center justify-center w-full h-full mx-1">
@@ -148,7 +148,7 @@ $files_json = json_encode($files); // Poslání do JS
         </div>
 
         <button onclick="dalsiObrazek()" class="bg-gray-300 hover:bg-gray-400 text-4xl p-2 rounded-lg shadow-lg flex items-center justify-center w-[3vh] h-full">
-            ⯈
+            →
         </button>
         
     </div>
@@ -159,10 +159,94 @@ const UserId = <?php echo $userId; ?>;
 const prodejceId = <?php echo htmlspecialchars($row['prodejce_id']); ?>;
 const koupil = <?php echo htmlspecialchars($row['koupil']); ?>;
 let obrazky = <?php echo $files_json; ?>;
-</script>
-<script src="../code/buy.js"></script>
 
-</div>
+function koupit(){
+    document.getElementById('koupitButton').classList.add('hidden')
+    document.getElementById('potvrditButton').classList.remove('hidden')
+}
+
+
+// Funkce pro skrytí tlačítka rezervace, pokud je uživatel prodávající
+if (prodejceId === UserId || koupil !== 0) {
+    const button = document.getElementById('koupitButton')
+    button.classList.remove('bg-green-600', 'hover:bg-green-700', 'transition', 'cursor-pointer');
+    button.classList.add('bg-gray-400', 'cursor-not-allowed');
+    button.removeAttribute("href");
+    button.removeAttribute("onclick");
+}
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+      zavritOkno();
+    }
+  });
+
+let aktualniIndex = 0;
+
+function otevritOkno(index) {
+    aktualniIndex = index;
+    document.getElementById("oknoImg").src = obrazky[aktualniIndex];
+    document.getElementById("okno").classList.remove("hidden");
+    nactiObrazek();
+}
+
+function zavritOkno() {
+    document.getElementById("okno").classList.add("hidden");
+}
+
+function dalsiObrazek() {
+    if (aktualniIndex < obrazky.length - 1) {
+        aktualniIndex++;
+    } else {
+        aktualniIndex = 0;
+    }
+    velikostObrazku(aktualniIndex)
+    document.getElementById("oknoImg").src = obrazky[aktualniIndex];
+    nactiObrazek();
+}
+
+function predchoziObrazek() {
+    if (aktualniIndex > 0) {
+        aktualniIndex--;
+    } else {
+        aktualniIndex = obrazky.length - 1;
+    }
+    velikostObrazku(aktualniIndex)
+    document.getElementById("oknoImg").src = obrazky[aktualniIndex];
+    nactiObrazek();
+}
+
+function nactiObrazek() {
+    let oknoImg = document.getElementById("oknoImg");
+    oknoImg.src = obrazky[aktualniIndex];
+
+    let img = new Image();
+    img.src = obrazky[aktualniIndex];
+    img.onload = function () {
+        velikostObrazku(img);
+    };
+}
+
+function velikostObrazku(img){
+    let oknoImg = document.getElementById("oknoImg");
+
+    if (img.height > img.width) {
+        oknoImg.classList.remove("w-full");
+        oknoImg.classList.add("h-full");
+    } else {
+        oknoImg.classList.remove("h-full");
+        oknoImg.classList.add("w-full");
+    }
+}
+
+</script>
+
+
+<?php
+// Zápatí stránku
+require_once "../footer.php"; 
+getFooter();
+?>
 
 </body>
 </html>

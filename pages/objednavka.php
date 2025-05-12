@@ -135,4 +135,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         stornoButton.classList.add('hidden');
     }
 </script>
+
+<?php
+// Zápatí stránku
+require_once "../footer.php"; 
+getFooter();
+?>
+
 </html>

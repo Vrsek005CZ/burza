@@ -58,7 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!empty($_FILES['newFiles']['name'][0])) {
                 uploadNewImages($puID, $_FILES['newFiles']);
             }
-
+            
+            // Aktualizace seznamu obrázků
+            $existingImages = getExistingImages($puID);
             $message = "✅ Změny byly úspěšně uloženy.";
         }
     }
@@ -139,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <br>
     <!-- Sekce pro nahrání nových fotek -->
     <div class="bg-gray-100 shadow-md rounded-md p-8 mx-auto">
-      <div class="text-center font-bold">Přidat nové fotky</div>
+      <div class="text-center font-bold">Sem můžete přidat nové fotky. Pokud se vyskytnou problémy, přidávejte fotky jednotlivě.</div>
       <hr>
       <input type="file" name="newFiles[]" id="fileInput" accept="image/*" multiple class="p-2 w-full">
       <div id="newPreview" class="flex flex-wrap gap-2 mt-2 justify-center"></div>
@@ -147,5 +149,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </form>
 </div>
 <script src="../code/upravit_knihu.js"></script>
+
+<?php
+// Zápatí stránku
+require_once "../footer.php"; 
+getFooter();
+?>
+
 </body>
 </html>

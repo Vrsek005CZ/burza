@@ -137,8 +137,12 @@ function manageUcebnicePhoto($id, $files, $removePhoto) {
         $tmpName = $files['newPhoto']['tmp_name'];
         try {
             $image = new Imagick($tmpName);
+            // Automatická orientace podle EXIF
+            if ($image->getImageOrientation() != Imagick::ORIENTATION_UNDEFINED) {
+                $image->autoOrient();
+            }
             $image->setImageFormat('webp');
-            $image->setImageCompressionQuality(90);
+            $image->setImageCompressionQuality(1);
             $image->writeImage($photoPath);
             $image->clear();
             $image->destroy();
@@ -184,8 +188,12 @@ function managePuPhotos($id, $files, $removedImages) {
                 $targetPath = "$dir/$newName";
                 try {
                     $image = new Imagick($tmpName);
+                    // Automatická orientace podle EXIF
+                    if ($image->getImageOrientation() != Imagick::ORIENTATION_UNDEFINED) {
+                        $image->autoOrient();
+                    }
                     $image->setImageFormat('webp');
-                    $image->setImageCompressionQuality(80);
+                    $image->setImageCompressionQuality(1);
                     $image->writeImage($targetPath);
                     $image->clear();
                     $image->destroy();

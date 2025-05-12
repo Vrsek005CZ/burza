@@ -79,13 +79,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['pridat'])) {
         <br>
         <!-- Sekce pro nahrání nových fotek -->
         <div class="bg-gray-100 shadow-md rounded-md p-4 sm:p-8 mx-auto">
-            <div class="text-center font-bold">Sem můžete nahrát fotky. Při použití fotek heif/heif formátu nefunguje náhled</div>
+            <div class="text-center font-bold">Sem nahrajte fotku desek učebnice. Ideálně staženou někde z internetu.</div>
             <input type="file" id="fotky" name="fotky[]" accept="image/*" required class="p-2 w-full"><hr>
             <div id="preview" class="flex flex-wrap gap-2 mt-2"></div>
         </div>
     </form>
 </div>
 
-<script src="../code/new.js"></script>
+<script src="../code/new.js"></script
+
+<?php
+// Zápatí stránku
+require_once "../footer.php"; 
+getFooter();
+?>
+
 </body>
 </html>

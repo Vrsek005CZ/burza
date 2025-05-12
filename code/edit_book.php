@@ -112,8 +112,12 @@ function uploadNewImages($puID, $files) {
             try {
                 $image = new Imagick($tmpName);
                 echo "Obrázek načten: " . $files['name'][$key] . "<br>";
+                // Automatická orientace podle EXIF
+                if ($image->getImageOrientation() != Imagick::ORIENTATION_UNDEFINED) {
+                    $image->autoOrient();
+                }
                 $image->setImageFormat('webp');
-                $image->setImageCompressionQuality(80);
+                $image->setImageCompressionQuality(2);
                 $image->writeImage($targetFilePath);
                 echo "✅ Obrázek uložen: $targetFilePath<br>";
                 $image->clear();

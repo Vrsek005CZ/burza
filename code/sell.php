@@ -64,11 +64,16 @@ function pridatKnihu($conn, $data, $files, $userId) {
         ];
     }
 
+
     // Vytvoření složky pro fotky
-    $targetDir = $_SERVER['DOCUMENT_ROOT'] . "/burza/foto/pu/$puID/";
-    if (!file_exists($targetDir)) {
-        mkdir($targetDir, 0777, true);
+    $targetDir = realpath("../foto/pu/$puID");
+    if (!$targetDir) {
+        if (!mkdir("../foto/pu/$puID", 0777, true)) {
+            die("❌ Nelze vytvořit složku: ../foto/pu/$puID");
+        }
+        $targetDir = realpath("../foto/pu/$puID");
     }
+    $targetDir .= '/'; // Ujistíme se, že cesta končí lomítkem
 
     // Zpracování nahraných fotek
     if (!empty($files['fotky']) && isset($files['fotky']['tmp_name']) && is_array($files['fotky']['tmp_name'])) {
@@ -79,8 +84,12 @@ function pridatKnihu($conn, $data, $files, $userId) {
 
                 try {
                     $image = new Imagick($tmp_name);
+                    // Automatická orientace podle EXIF
+                    if ($image->getImageOrientation() != Imagick::ORIENTATION_UNDEFINED) {
+                        $image->autoOrient();
+                    }
                     $image->setImageFormat('webp');  // Nastavení formátu WebP
-                    $image->setImageCompressionQuality(80); // Nastavení kvality
+                    $image->setImageCompressionQuality(2); // Nastavení kvality
                     $image->writeImage($targetFilePath); // Uložení obrázku
                     $image->clear();
                     $image->destroy();

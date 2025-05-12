@@ -64,8 +64,9 @@ $kupovaneCekajici = getKupovaneObjednavky($conn, $userId, 0);
                 </table>
             </div>
         <?php else: ?>
+            <h2 class="text-lg font-bold mb-4">Čekající objednávky</h2>
             <div class="text-center text-xl font-bold">Nemáte žádné čekající objednávky.</div>
-        <?php endif; ?>
+        <?php endif; ?><br><hr><br>
 
         <?php if (count($prodavaneDokoncene) > 0): ?>
             <h2 class="text-lg font-bold mb-4">Dokončené objednávky</h2>
@@ -108,7 +109,8 @@ $kupovaneCekajici = getKupovaneObjednavky($conn, $userId, 0);
                 </table>
             </div>
         <?php else: ?>
-            <div class="text-center text-xl font-bold">Nemáte žádné aktivní objednávky.</div>
+            <h2 class="text-lg font-bold mb-4">Dokončené objednávky</h2>
+            <div class="text-center text-xl font-bold">Nemáte žádné dokončené objednávky.</div>
         <?php endif; ?>
     </div>
 
@@ -155,8 +157,9 @@ $kupovaneCekajici = getKupovaneObjednavky($conn, $userId, 0);
                 </table>
             </div>
         <?php else: ?>
+            <h2 class="text-lg font-bold mb-4">Čekající objednávky</h2>
             <div class="text-center text-xl font-bold">Nemáte žádné čekající objednávky.</div>
-        <?php endif; ?>
+        <?php endif; ?><br><hr><br>
 
         <?php if (count($kupovaneDokoncene) > 0): ?>
             <h2 class="text-lg font-bold mb-4">Dokončené objednávky</h2>
@@ -199,11 +202,19 @@ $kupovaneCekajici = getKupovaneObjednavky($conn, $userId, 0);
                 </table>
             </div>
         <?php else: ?>
-            <div class="text-center text-xl font-bold">Nemáte žádné aktivní objednávky.</div>
+            <h2 class="text-lg font-bold mb-4">Dokončené objednávky</h2>
+            <div class="text-center text-xl font-bold">Nemáte žádné dokončené objednávky.</div>
         <?php endif; ?>
     </div>
 </div>
 
 <script src="../code/orders.js"></script>
+
+<?php
+// Zápatí stránku
+require_once "../footer.php"; 
+getFooter();
+?>
+
 </body>
 </html>

@@ -61,30 +61,30 @@ $nextSort = ($sort === 'asc') ? 'desc' : 'asc';
                 <tr class="bg-gray-300 text-left h-[5px] text-gray-600">
                     <th class="p-2 w-[7%] text-center">
                         &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=asc&selfbook=<?php echo $selfbook; ?>" 
-                            class="<?php echo ($order == 'stav' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
+                            class="<?php echo ($order == 'stav' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">⇓</a>&nbsp;
                         <a href="?knihaID=<?php echo $knihaID; ?>&order=stav&sort=desc&selfbook=<?php echo $selfbook; ?>" 
-                            class="<?php echo ($order == 'stav' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
+                            class="<?php echo ($order == 'stav' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">⇑</a>
                     </th>
 
                     <th class="p-2 w-[7%] text-center">
                         &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=asc&selfbook=<?php echo $selfbook; ?>" 
-                            class="<?php echo ($order == 'rok_tisku' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
+                            class="<?php echo ($order == 'rok_tisku' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">⇓</a>&nbsp;
                         <a href="?knihaID=<?php echo $knihaID; ?>&order=rok_tisku&sort=desc&selfbook=<?php echo $selfbook; ?>" 
-                            class="<?php echo ($order == 'rok_tisku' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
+                            class="<?php echo ($order == 'rok_tisku' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">⇑</a>
                     </th>
 
                     <th class="p-2 w-[10%] text-center">
                         &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=asc&selfbook=<?php echo $selfbook; ?>" 
-                            class="<?php echo ($order == 'cena' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
+                            class="<?php echo ($order == 'cena' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">⇓</a>&nbsp;
                         <a href="?knihaID=<?php echo $knihaID; ?>&order=cena&sort=desc&selfbook=<?php echo $selfbook; ?>" 
-                            class="<?php echo ($order == 'cena' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
+                            class="<?php echo ($order == 'cena' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">⇑</a>
                     </th>
 
                     <th class="hidden p-2 w-[8%] sm:table-cell text-center">
                         &nbsp;&nbsp;<a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=asc&selfbook=<?php echo $selfbook; ?>" 
-                            class="<?php echo ($order == 'prodejce' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠷</a>&nbsp;
+                            class="<?php echo ($order == 'prodejce' && $sort == 'asc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">⇓</a>&nbsp;
                         <a href="?knihaID=<?php echo $knihaID; ?>&order=prodejce&sort=desc&selfbook=<?php echo $selfbook; ?>" 
-                            class="<?php echo ($order == 'prodejce' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">🠵</a>
+                            class="<?php echo ($order == 'prodejce' && $sort == 'desc') ? 'text-blue-600' : ''; ?> hover:text-blue-500">⇑</a>
                     </th>
 
                     <th class="p-2 w-[49%]">
@@ -142,6 +142,12 @@ $nextSort = ($sort === 'asc') ? 'desc' : 'asc';
 
 <script src="../code/book.js">
 </script>
+
+<?php
+// Zápatí stránku
+require_once "../footer.php"; 
+getFooter();
+?>
 
 </body>
 </html>

@@ -5,11 +5,10 @@ session_start();
 require_once "connect.php";
 
 //OAUTH 2.0 hodnoty
-$clientID = '273280823406-4v7ooveqdojua0blmfmcdhvmeds3ambo.apps.googleusercontent.com';
-$clientSecret = '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';
-$redirectUri = 'http://localhost/burza/code/login.php';
+$clientID = '';
+$clientSecret = '';
+$redirectUri = 'https://gymso.online/-/vrseka/burza/code/login.php';
 $tokenRevocationUrl = "https://oauth2.googleapis.com/revoke";
-
 
 // Kontrola, zda byl vrácen kód pro autorizaci
 if (!isset($_GET['code'])) {

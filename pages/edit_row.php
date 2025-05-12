@@ -159,7 +159,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete'])) {
         <div class="flex gap-4">
             <button type="submit" name="update" class="bg-blue-500 text-white px-4 py-2 rounded">Upravit</button>
             <button type="submit" name="delete" class="bg-red-500 text-white px-4 py-2 rounded" onclick="return confirm('Opravdu chcete smazat tento záznam?');">Smazat</button>
-            <a href="superadmin.php?table=<?php echo urlencode($table); ?>" class="bg-gray-500 text-white px-4 py-2 rounded">Zpět</a>
         </div>
         </form>
     </div>
@@ -169,4 +168,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete'])) {
     <script src="../code/row_edit_ucebnice.js"></script>
 <?php endif; ?>
 </body>
+
 </html>

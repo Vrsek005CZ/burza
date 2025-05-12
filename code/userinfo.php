@@ -8,7 +8,7 @@ if (isset($_COOKIE['user_info'])) {
 
     if (json_last_error() !== JSON_ERROR_NONE) {
         echo("Chyba: Neplatný formát JSON v cookie.");
-        header("Location: /burza/code/login.php");
+        header("Location: " . $BASE_URL . "code/login.php");
         exit;
     }
 
@@ -28,7 +28,7 @@ if (isset($_COOKIE['user_info'])) {
 
                 if (!isset($user['trida_id']) || empty($user['trida_id'])) {
                     if (basename($_SERVER['PHP_SELF']) !== 'profil.php') {
-                        header("Location: /burza/pages/profil.php");
+                        header("Location: " . $BASE_URL . "pages/profil.php");
                         exit;
                     }
                 }
@@ -43,12 +43,12 @@ if (isset($_COOKIE['user_info'])) {
         }
     } else {
         echo("Chyba: Email není v cookie.");
-        header("Location: /burza/code/login.php");
+        header("Location: " . $BASE_URL . "code/login.php");
         exit;
     }
 } else {
     echo("Chyba: Nejste přihlášen.");
-    header("Location: /burza/code/login.php");
+    header("Location: " . $BASE_URL . "code/login.php");
     exit;
 }
 

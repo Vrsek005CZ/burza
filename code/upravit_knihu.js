@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     let removedImages = [];
+    const previewDiv = document.querySelector("#preview");
+
     // Použijeme DataTransfer pro manipulaci se soubory u inputu
     let dt = new DataTransfer();
     const fileInput = document.querySelector("#fileInput");
@@ -45,11 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Mazání existujících fotek – kliknutím na fotku v sekci "Fotky"
-    document.querySelector("#preview").addEventListener("click", function (event) {
+    previewDiv.addEventListener("click", function (event) {
         if (event.target.classList.contains("preview-img")) {
             let fileName = event.target.getAttribute("data-file");
             removedImages.push(fileName);
-            event.target.remove();
+            event.target.remove(); // Odstranění obrázku z DOM
         }
     });
 

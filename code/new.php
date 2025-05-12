@@ -85,13 +85,25 @@ function pridatUcebnici($conn, $data, $files) {
                 foreach ($files['fotky']['tmp_name'] as $key => $tmp_name) {
                     if (!empty($tmp_name)) { // Kontrola, zda soubor existuje
                         $fileName = $id; // Název souboru bez přípony
-                        $targetDir = $_SERVER['DOCUMENT_ROOT'] . "/burza/foto/ucebnice/"; // Cesta ke složce
+                        $targetDir = $_SERVER['DOCUMENT_ROOT'] . "/-/vrseka/burza/foto/ucebnice/"; // Cesta ke složce
+
+                        // Zkontrolujte, zda složka existuje, pokud ne, vytvořte ji
+                        if (!is_dir($targetDir)) {
+                            if (!mkdir($targetDir, 0777, true)) {
+                                return "❌ Nelze vytvořit složku: $targetDir";
+                            }
+                        }
+
                         $targetFilePath = $targetDir . $fileName . ".webp"; // Výstupní cesta
             
                         try {
                             $image = new Imagick($tmp_name);
+                            // Automatická orientace podle EXIF
+                            if ($image->getImageOrientation() != Imagick::ORIENTATION_UNDEFINED) {
+                                $image->autoOrient();
+                            }
                             $image->setImageFormat('webp');  // Nastavení formátu WebP
-                            $image->setImageCompressionQuality(90); // Nastavení kvality
+                            $image->setImageCompressionQuality(10); // Nastavení kvality
                             $image->writeImage($targetFilePath); // Uložení obrázku
                             $image->clear();
                             $image->destroy();
@@ -112,4 +124,4 @@ function pridatUcebnici($conn, $data, $files) {
         return "Chyba: " . $conn->error;
     }
 }
-?> 
+?>

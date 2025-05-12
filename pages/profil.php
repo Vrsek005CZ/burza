@@ -137,5 +137,12 @@ $prodaneUcebnice = array_filter($prodavaneUcebnice, fn($ucebnice) => $ucebnice['
 </div>
 
 <?php $conn->close(); ?>
+
+<?php
+// Zápatí stránku
+require_once "../footer.php"; 
+getFooter();
+?>
+
 </body>
 </html>

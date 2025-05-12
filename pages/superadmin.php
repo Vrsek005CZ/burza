@@ -6,6 +6,7 @@ session_start();
 require_once "../code/is_admin.php";
 require_once "../code/connect.php";
 require_once "../code/super_admin.php";
+require_once "../header.php";
 
 // Načtení seznamu tabulek
 $tables = getTables($conn);
@@ -40,7 +41,7 @@ if ($selected_table && in_array($selected_table, $tables)) {
     <!-- ========================================= -->
     <div class="bg-white shadow-md rounded-md p-5 mb-5">
       <h1 class="text-3xl font-bold text-yellow-600 text-center">
-        <a href="/burza/index.php" class="hover:underline">Online Burza Učebnic - Superadmin</a>
+        <a href="<?php echo ($BASE_URL . "index.php") ?>" class="hover:underline">Online Burza Učebnic - Superadmin</a>
       </h1>
     </div>
     
@@ -122,5 +123,12 @@ if ($selected_table && in_array($selected_table, $tables)) {
       </div>
     <?php endif; ?>
   </div>
+
+<?php
+// Zápatí stránku
+require_once "../footeradmin.php"; 
+getFooter();
+?>
+  
 </body>
 </html>

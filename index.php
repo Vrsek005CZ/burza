@@ -124,6 +124,12 @@ function filterBooks() {
 }
 </script>
 
+<?php
+// Zápatí stránku
+require_once "footer.php";
+getFooter();
+?>
+
 
 </body>
 </html>
